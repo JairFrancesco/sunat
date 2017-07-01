@@ -1,0 +1,5 @@
+app/repo/*
+.idea/*
+.git/*
+homo/*
+app/coneccion.php
