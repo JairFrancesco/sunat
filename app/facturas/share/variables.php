@@ -19,6 +19,7 @@
         if (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'D') {
             // obteniendo el detalle
             // =====================
+            /*
             $sql_dds = "begin PKG_ELECTRONICA.dds('".$gem."','".$emp."',".$num_doc.",'".$cla_doc."','PEN',:dds); end;";
             $stid_dds = oci_parse($conn,$sql_dds);
             $curs_dds = oci_new_cursor($conn);
@@ -28,7 +29,66 @@
             while (($row_dds = oci_fetch_array($curs_dds, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
                 $dets[] = $row_dds;
             }
+            */
             $valor_detalle = 'COCRD';
+
+            $sql_repuestos = oci_parse($conn, "select
+                'NIU' as codUnidadMedida0, -- 0
+                to_char(round(ddr_can_pro,2),'FM99990.00') as ctdUnidadItem1, -- 1
+                ddr_cod_pro as codProducto2, -- 2
+                '0000' as codProductoSUNAT3, -- 3
+                (select lpr_des_pro from LIS_PRE_REP where lpr_cod_gen=ddr_cod_gen and lpr_cod_pro=ddr_cod_pro) as desItem4, -- 4
+                to_char(decode('".$moneda."','PEN',ddr_vvp_sol, ddr_vvp_dol),'FM99990.00') as mtoValorUnitario5, -- 5
+                to_char(decode('".$moneda."','PEN',((ddr_can_pro*ddr_vvp_sol)*(ddr_por_des/100)),((ddr_can_pro*ddr_vvp_dol)*(ddr_por_des/100))),'FM99990.00') as mtoDsctoItem6, --6
+                to_char(decode('".$moneda."','PEN',(((ddr_can_pro*ddr_vvp_sol)-((ddr_can_pro*ddr_vvp_sol)*(ddr_por_des/100)))*0.18),(((ddr_can_pro*ddr_vvp_dol)-((ddr_can_pro*ddr_vvp_dol)*(ddr_por_des/100)))*0.18)),'FM99990.00') as mtoIgvItem7, -- 7
+                '10' as tipAfeIGV8, -- 8
+                '0.00' as mtoIscItem9, -- 9
+                '02' as tipSisISC10, -- 10
+                to_char(decode('".$moneda."','PEN',(ddr_can_pro*ddr_vvp_sol),(ddr_can_pro*ddr_vvp_dol)),'FM99990.00')  as mtoPrecioVentaItem11, -- 11
+                to_char(decode('".$moneda."','PEN',((ddr_can_pro*ddr_vvp_sol)-((ddr_can_pro*ddr_vvp_sol)*(ddr_por_des/100))), ((ddr_can_pro*ddr_vvp_dol)-((ddr_can_pro*ddr_vvp_dol)*(ddr_por_des/100)))),'FM99990.00') as mtoValorVentaItem12 --12
+                from DET_DOC_REP where DDR_COD_GEN='".$gem."' and DDR_COD_EMP='".$emp."' and DDR_NUM_DOC='".$num_doc."' and DDR_CLA_DOC='".$cla_doc."' ORDER BY rowid Desc");
+            oci_execute($sql_repuestos);
+            while($res_repuestos = oci_fetch_array($sql_repuestos)){ $dets[] = $res_repuestos; }
+
+            $sql_servicios = oci_parse($conn, "select
+                'NIU' as codUnidadMedida0, -- 0
+                to_char(round(dds_can_pro,2),'FM99990.00') as ctdUnidadItem1, -- 1
+                dds_cod_pro as codProducto2, -- 2
+                '0000' as codProductoSUNAT3, -- 3
+                dds_des_001 as desItem4, -- 4
+                to_char(round((decode('".$moneda."','PEN',dds_vvp_sol,dds_vvp_dol)),2),'FM99990.00') as mtoValorUnitario5, -- 5
+                to_char(round(decode('".$moneda."','PEN',((dds_can_pro*dds_vvp_sol)*(dds_por_des/100)), ((dds_can_pro*dds_vvp_dol)*(dds_por_des/100))),2),'FM99990.00') as mtoDsctoItem6, -- 6
+                to_char(round(decode('".$moneda."','PEN',(((dds_can_pro*dds_vvp_sol)-((dds_can_pro*dds_vvp_sol)*(dds_por_des/100)))*0.18), (((dds_can_pro*dds_vvp_dol)-((dds_can_pro*dds_vvp_dol)*(dds_por_des/100)))*0.18)),2),'FM99990.00') as mtoIgvItem7, -- 7
+                '10' as tipAfeIGV8, -- 8
+                '0.00' as mtoIscItem9, -- 9
+                '02' as tipSisISC10, -- 10
+                to_char(round(decode('".$moneda."','PEN',(dds_can_pro*dds_vvp_sol),(dds_can_pro*dds_vvp_dol)),2),'FM99990.00') as mtoPrecioVentaItem11, -- 11 importe
+                to_char(round(decode('".$moneda."','PEN',((dds_can_pro*dds_vvp_sol)-((dds_can_pro*dds_vvp_sol)*(dds_por_des/100))), ((dds_can_pro*dds_vvp_dol)-((dds_can_pro*dds_vvp_dol)*(dds_por_des/100)))),2),'FM99990.00') as mtoValorVentaItem12 -- 12        
+                from DET_DOC_SER where DDS_COD_GEN='".$gem."' and DDS_COD_EMP='".$emp."' and DDS_NUM_DOC='".$num_doc."' and DDS_CLA_DOC='".$cla_doc."' ORDER BY rowid Desc");
+            oci_execute($sql_servicios);
+            while($res_servicios = oci_fetch_array($sql_servicios)){ $dets[] = $res_servicios; }
+
+            $sql_otros = oci_parse($conn, "select
+                'NIU' as codUnidadMedida0, -- 0
+                to_char(round(0,2),'FM99990.00') as ctdUnidadItem1, -- 1
+                '0' as codProducto2, -- 2
+                '0' as codProductoSUNAT3, -- 3
+                ddo_des_otr as desItem4, -- 4
+                '0.00' as mtoValorUnitario5, -- 5
+                '0.00' as mtoDsctoItem6, -- 6
+                '0.00' as mtoIgvItem7, -- 7
+                '30' as tipAfeIGV8, -- 8
+                '0.00' as mtoIscItem9, -- 9
+                '02' as tipSisISC10, -- 10
+                '0.00' as mtoPrecioVentaItem11, -- 11 importe
+                '0.00' as mtoValorVentaItem12, -- 12
+                'A' as orden
+                from DET_DOC_OTR where DDO_COD_GEN='".$gem."' and DDO_COD_EMP='".$emp."' and DDO_NUM_DOC='".$num_doc."' and DDO_CLA_DOC='".$cla_doc."'");
+            oci_execute($sql_otros);
+            while($res_otros = oci_fetch_array($sql_otros)){ $dets[] = $res_otros; }
+
+
+
         } elseif (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'R') {
             // detalle unico de resumen
             // ========================
@@ -69,6 +129,7 @@
         if (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'D') {
             // detalles
             // ========
+            /*
             $sql_dds = "begin PKG_ELECTRONICA.dds('".$gem."','".$emp."',".$num_doc.",'".$cla_doc."','".$moneda."',:dds); end;";
             $stid_dds = oci_parse($conn,$sql_dds);
             $curs_dds = oci_new_cursor($conn);
@@ -78,7 +139,66 @@
             while (($row_dds = oci_fetch_array($curs_dds, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
                 $dets[] = $row_dds;
             }
+            */
             $valor_detalle = 'ARAND';
+
+
+            $sql_repuestos = oci_parse($conn, "select
+                'NIU' as codUnidadMedida0, -- 0
+                to_char(round(ddr_can_pro,2),'FM99990.00') as ctdUnidadItem1, -- 1
+                ddr_cod_pro as codProducto2, -- 2
+                '0000' as codProductoSUNAT3, -- 3
+                (select lpr_des_pro from LIS_PRE_REP where lpr_cod_gen=ddr_cod_gen and lpr_cod_pro=ddr_cod_pro) as desItem4, -- 4
+                to_char(decode('".$moneda."','PEN',ddr_vvp_sol, ddr_vvp_dol),'FM99990.00') as mtoValorUnitario5, -- 5
+                to_char(decode('".$moneda."','PEN',((ddr_can_pro*ddr_vvp_sol)*(ddr_por_des/100)),((ddr_can_pro*ddr_vvp_dol)*(ddr_por_des/100))),'FM99990.00') as mtoDsctoItem6, --6
+                to_char(decode('".$moneda."','PEN',(((ddr_can_pro*ddr_vvp_sol)-((ddr_can_pro*ddr_vvp_sol)*(ddr_por_des/100)))*0.18),(((ddr_can_pro*ddr_vvp_dol)-((ddr_can_pro*ddr_vvp_dol)*(ddr_por_des/100)))*0.18)),'FM99990.00') as mtoIgvItem7, -- 7
+                '10' as tipAfeIGV8, -- 8
+                '0.00' as mtoIscItem9, -- 9
+                '02' as tipSisISC10, -- 10
+                to_char(decode('".$moneda."','PEN',(ddr_can_pro*ddr_vvp_sol),(ddr_can_pro*ddr_vvp_dol)),'FM99990.00')  as mtoPrecioVentaItem11, -- 11
+                to_char(decode('".$moneda."','PEN',((ddr_can_pro*ddr_vvp_sol)-((ddr_can_pro*ddr_vvp_sol)*(ddr_por_des/100))), ((ddr_can_pro*ddr_vvp_dol)-((ddr_can_pro*ddr_vvp_dol)*(ddr_por_des/100)))),'FM99990.00') as mtoValorVentaItem12 --12
+                from DET_DOC_REP where DDR_COD_GEN='".$gem."' and DDR_COD_EMP='".$emp."' and DDR_NUM_DOC='".$num_doc."' and DDR_CLA_DOC='".$cla_doc."' ORDER BY rowid Desc");
+            oci_execute($sql_repuestos);
+            while($res_repuestos = oci_fetch_array($sql_repuestos)){ $dets[] = $res_repuestos; }
+
+            $sql_servicios = oci_parse($conn, "select
+                'NIU' as codUnidadMedida0, -- 0
+                to_char(round(dds_can_pro,2),'FM99990.00') as ctdUnidadItem1, -- 1
+                dds_cod_pro as codProducto2, -- 2
+                '0000' as codProductoSUNAT3, -- 3
+                dds_des_001 as desItem4, -- 4
+                to_char(round((decode('".$moneda."','PEN',dds_vvp_sol,dds_vvp_dol)),2),'FM99990.00') as mtoValorUnitario5, -- 5
+                to_char(round(decode('".$moneda."','PEN',((dds_can_pro*dds_vvp_sol)*(dds_por_des/100)), ((dds_can_pro*dds_vvp_dol)*(dds_por_des/100))),2),'FM99990.00') as mtoDsctoItem6, -- 6
+                to_char(round(decode('".$moneda."','PEN',(((dds_can_pro*dds_vvp_sol)-((dds_can_pro*dds_vvp_sol)*(dds_por_des/100)))*0.18), (((dds_can_pro*dds_vvp_dol)-((dds_can_pro*dds_vvp_dol)*(dds_por_des/100)))*0.18)),2),'FM99990.00') as mtoIgvItem7, -- 7
+                '10' as tipAfeIGV8, -- 8
+                '0.00' as mtoIscItem9, -- 9
+                '02' as tipSisISC10, -- 10
+                to_char(round(decode('".$moneda."','PEN',(dds_can_pro*dds_vvp_sol),(dds_can_pro*dds_vvp_dol)),2),'FM99990.00') as mtoPrecioVentaItem11, -- 11 importe
+                to_char(round(decode('".$moneda."','PEN',((dds_can_pro*dds_vvp_sol)-((dds_can_pro*dds_vvp_sol)*(dds_por_des/100))), ((dds_can_pro*dds_vvp_dol)-((dds_can_pro*dds_vvp_dol)*(dds_por_des/100)))),2),'FM99990.00') as mtoValorVentaItem12 -- 12        
+                from DET_DOC_SER where DDS_COD_GEN='".$gem."' and DDS_COD_EMP='".$emp."' and DDS_NUM_DOC='".$num_doc."' and DDS_CLA_DOC='".$cla_doc."' ORDER BY rowid Desc");
+            oci_execute($sql_servicios);
+            while($res_servicios = oci_fetch_array($sql_servicios)){ $dets[] = $res_servicios; }
+
+            $sql_otros = oci_parse($conn, "select
+                'NIU' as codUnidadMedida0, -- 0
+                to_char(round(0,2),'FM99990.00') as ctdUnidadItem1, -- 1
+                '0' as codProducto2, -- 2
+                '0' as codProductoSUNAT3, -- 3
+                ddo_des_otr as desItem4, -- 4
+                '0.00' as mtoValorUnitario5, -- 5
+                '0.00' as mtoDsctoItem6, -- 6
+                '0.00' as mtoIgvItem7, -- 7
+                '30' as tipAfeIGV8, -- 8
+                '0.00' as mtoIscItem9, -- 9
+                '02' as tipSisISC10, -- 10
+                '0.00' as mtoPrecioVentaItem11, -- 11 importe
+                '0.00' as mtoValorVentaItem12, -- 12
+                'A' as orden
+                from DET_DOC_OTR where DDO_COD_GEN='".$gem."' and DDO_COD_EMP='".$emp."' and DDO_NUM_DOC='".$num_doc."' and DDO_CLA_DOC='".$cla_doc."'");
+            oci_execute($sql_otros);
+            while($res_otros = oci_fetch_array($sql_otros)){ $dets[] = $res_otros; }
+
+
         } elseif ($co_cr_an == 'AN') {
             // Detalle
             // =======
@@ -132,7 +252,11 @@
 
     // Cliente
     $c6 = 'Cliente';
-    $c7 = $cab['RZNSOCIALUSUARIO5'];
+
+    $no_permitidas= array ("&");
+    $c7 = str_replace($no_permitidas, '' ,$cab['RZNSOCIALUSUARIO5']);
+
+    //$c7 = preg_replace('([^A-Za-z0-9])', '', $cab['RZNSOCIALUSUARIO5']) ;
 
     // Nombre
     $c8 = 'Nombre';
@@ -228,7 +352,7 @@
 
     $c41 = '';
     $c42 = 'Total';
-    $c43 = $cab['MTOIMPVENTA16'];
+    $c43 = number_format($cab['MTOIMPVENTA16'], 2, '.', '');
     $leyenda_100 = convertir_a_letras($c43);
     $c44 = '';
 
@@ -328,3 +452,5 @@
         }
     }
 //print_r($cab);
+//print_r($dets2);
+//print_r($dets);

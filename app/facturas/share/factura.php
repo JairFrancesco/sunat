@@ -59,7 +59,9 @@
 
     <?php
         // si hay detalle
+
         if ($c18 == 'COCRD') {
+            //sort($dets, SORT_FLAG_CASE);
             foreach ($dets as $det ) {
                 echo '<tr>';
                 echo '<td>'.$det['CODPRODUCTO2'].'</td>';
@@ -93,6 +95,7 @@
             echo '<td>--</td>';
             echo '</tr>';
         } elseif ($c18 == 'ARAND') {
+            //sort($dets, SORT_FLAG_CASE);
             foreach ($dets as $det ) {
                 echo '<tr>';
                 echo '<td>'.$det['CODPRODUCTO2'].'</td>';

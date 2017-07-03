@@ -226,7 +226,7 @@ if (!file_exists($ruta)) {
 }
 $xml->save($ruta.$f8.'.xml');
 
-
+//echo $c7;
 
 
 
