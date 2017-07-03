@@ -451,6 +451,23 @@
             }
         }
     }
-//print_r($cab);
-//print_r($dets2);
+
+    //UBIGEO
+    $ubigeo = '';
+    $sql_ubigeo1 = oci_parse($conn, "select ubi_nombre from ubigeo where ubi_id='".$cab['CDG_UBI_GEO'][0].$cab['CDG_UBI_GEO'][1]."0000'");
+    oci_execute($sql_ubigeo1);
+    while($res_ubigeo1 = oci_fetch_array($sql_ubigeo1)){ $ubigeo = ucwords(strtolower(trim($res_ubigeo1['UBI_NOMBRE']))); }
+
+
+    $sql_ubigeo2 = oci_parse($conn, "select ubi_nombre from ubigeo where ubi_id='".$cab['CDG_UBI_GEO'][0].$cab['CDG_UBI_GEO'][1].$cab['CDG_UBI_GEO'][2].$cab['CDG_UBI_GEO'][3]."00'");
+    oci_execute($sql_ubigeo2);
+    while($res_ubigeo2 = oci_fetch_array($sql_ubigeo2)){ $ubigeo = $ubigeo.'-'.ucwords(strtolower(trim($res_ubigeo2['UBI_NOMBRE']))); }
+
+    $sql_ubigeo3 = oci_parse($conn, "select ubi_nombre from ubigeo where ubi_id='".$cab['CDG_UBI_GEO']."'");
+    oci_execute($sql_ubigeo3);
+    while($res_ubigeo3 = oci_fetch_array($sql_ubigeo3)){ $ubigeo = $ubigeo.'-'.ucwords(strtolower(trim($res_ubigeo3['UBI_NOMBRE']))); }
+
+
+//echo $ubigeo;
+//print_r($cab['CDG_UBI_GEO'][0].$cab['CDG_UBI_GEO'][1]);
 //print_r($dets);

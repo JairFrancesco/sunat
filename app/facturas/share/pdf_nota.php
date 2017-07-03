@@ -132,38 +132,31 @@ $pdf->SetLineWidth(0.02);
 $pdf->SetFillColor(0,0,0);
 $pdf->image("./archs_graf/Membrete_Fact.jpg",1, 1, 10, 2.5);
 
-
 // Direccion surmotriz
 $pdf->SetTextColor(0,0,0);
 $pdf->SetFont('arial','',7);
-$pdf->SetXY(3.3,1.1);
-$pdf->Cell(1, 0.35, utf8_decode("PRINCIPAL: Av. Leguia 1870 Tacna. Telef.: (052) 426368 - 244015"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.3,1.5);
-$pdf->Cell(1, 0.35, utf8_decode("Cel.:952869639 (Repuestos) Cel.: 992566630 (Servicio)"), 0, 1,'L', 0);
+$pdf->SetXY(3.2,1.1);
+$pdf->Cell(1, 0.35, utf8_decode("TACNA: Av. Leguia 1870 Tacna. Telef.: (052) 426368 - 244015"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.3,1.9);
-$pdf->Cell(1, 0.35, utf8_decode("RPM #945625993 email: tacna@surmotriz.com"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.3,2.3);
-$pdf->Cell(1, 0.35, utf8_decode("SUCURSAL: Urb Vera Vera Mz C Lote 06 Moque. Mariscal Nieto"), 0, 1,'L', 0);
+$pdf->SetXY(3.2,1.45);
+$pdf->Cell(1, 0.35, utf8_decode("cel.:952869639 (repuestos) cel.: 992566630 (servicios)"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.3,2.7);
-$pdf->Cell(1, 0.35, utf8_decode("Telf (053) 792646 Cel 953922105 email: moquegua@surmotriz.com"), 0, 1,'L', 0);
+$pdf->SetXY(3.2,1.8);
+$pdf->Cell(1, 0.35, utf8_decode("email: tacna@surmotriz.com y repuestos@surmotriz.com"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.3,3.1);
-$pdf->Cell(1, 0.35, utf8_decode("Reparacion y Mantenimiento con accesorios legitimos de Toyota."), 0, 1,'L', 0);
+$pdf->SetXY(3.2,2.15);
+$pdf->Cell(1, 0.35, utf8_decode("MOQUEGUA:Sector Yaracachi Mz.D Lte.09 Mariscal Nieto/Moquegua"), 0, 1,'L', 0);
 
+$pdf->SetXY(3.2,2.5);
+$pdf->Cell(1, 0.35, utf8_decode("Telef:(53) 479365 Cel: #953922105 email: moquegua@surmotriz.com"), 0, 1,'L', 0);
+
+$pdf->SetXY(3.2,2.85);
+$pdf->Cell(1, 0.35, utf8_decode("Venta de vehiculos-repuestos y accesorios legitimos Toyota"), 0, 1,'L', 0);
+
+$pdf->SetXY(3.2,3.2);
+$pdf->Cell(1, 0.35, utf8_decode("Reparacion y mantenimiento de automoviles y camionetas."), 0, 1,'L', 0);
 
 $pdf->RoundedRect(12, 1, 8, 2.5, 0.2, '');
 

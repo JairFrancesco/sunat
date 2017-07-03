@@ -25,8 +25,8 @@
     <tr>
         <td colspan="1"><?php echo $c6 ?></td>
         <td colspan="2"><?php echo $c7 ?></td>
-        <td colspan="1"><?php echo $c8 ?></td>
-        <td colspan="3" class="text-right"><?php echo $c9 ?></td>
+        <td colspan="1">Ubigeo</td>
+        <td colspan="3" class="text-right"><?php echo $ubigeo ?></td>
     </tr>
 
     <!-- Dni o ruc customer - ruc supplier -->

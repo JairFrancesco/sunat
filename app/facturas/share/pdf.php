@@ -141,34 +141,28 @@ $pdf->image("./archs_graf/Membrete_Fact.jpg",1, 1, 10, 2.5);
 // Direccion surmotriz
 $pdf->SetTextColor(0,0,0);
 $pdf->SetFont('arial','',7);
-$pdf->SetXY(3.2,1.1);
-$pdf->Cell(1, 0.35, utf8_decode("PRINCIPAL: Av. Leguia 1870 Tacna. Telef.: (052) 426368 - 244015"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.2,1.5);
+$pdf->SetXY(3.2,1.1);
+$pdf->Cell(1, 0.35, utf8_decode("TACNA: Av. Leguia 1870 Tacna. Telef.: (052) 426368 - 244015"), 0, 1,'L', 0);
+
+
+$pdf->SetXY(3.2,1.45);
 $pdf->Cell(1, 0.35, utf8_decode("cel.:952869639 (repuestos) cel.: 992566630 (servicios)"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.2,1.9);
-$pdf->Cell(1, 0.35, utf8_decode("email: tacna@surmotriz.com"), 0, 1,'L', 0);
+$pdf->SetXY(3.2,1.8);
+$pdf->Cell(1, 0.35, utf8_decode("email: tacna@surmotriz.com y repuestos@surmotriz.com"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.2,2.3);
-$pdf->Cell(1, 0.35, utf8_decode("SUCURSAL: Sector Yaracachi Mz.D Lte.09 Mariscal Nieto/Moquegua"), 0, 1,'L', 0);
+$pdf->SetXY(3.2,2.15);
+$pdf->Cell(1, 0.35, utf8_decode("MOQUEGUA:Sector Yaracachi Mz.D Lte.09 Mariscal Nieto/Moquegua"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.2,2.7);
+$pdf->SetXY(3.2,2.5);
 $pdf->Cell(1, 0.35, utf8_decode("Telef:(53) 479365 Cel: #953922105 email: moquegua@surmotriz.com"), 0, 1,'L', 0);
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',7);
-$pdf->SetXY(3.2,3.1);
-$pdf->Cell(1, 0.35, utf8_decode("Reparacion y Mantenimiento con accesorios legitimos de Toyota."), 0, 1,'L', 0);
+$pdf->SetXY(3.2,2.85);
+$pdf->Cell(1, 0.35, utf8_decode("Venta de vehiculos-repuestos y accesorios legitimos Toyota"), 0, 1,'L', 0);
 
+$pdf->SetXY(3.2,3.2);
+$pdf->Cell(1, 0.35, utf8_decode("Reparacion y mantenimiento de automoviles y camionetas."), 0, 1,'L', 0);
 
 $pdf->RoundedRect(12, 1, 8, 2.5, 0.2, '');
 
@@ -268,6 +262,27 @@ if ($Moneda == 'PEN') {
 }
 $pdf->SetXY(4.7,4.4+(0.6*4));
 $pdf->Cell(1, 0.35, utf8_decode($Moneda), 0, 1,'L', 0);
+
+// poniendo fuente negrita
+$pdf->SetTextColor(0,0,0);
+$pdf->SetFont('arial','B',10);
+
+// Condicion de pago nombre
+$pdf->SetXY(7.5,4.4+(0.6*2));
+$pdf->Cell(1, 0.35, utf8_decode("Forma de Pago : "), 0, 1,'L', 0);
+// ubigeo nombre
+$pdf->SetXY(7.5,4.4+(0.6*3));
+$pdf->Cell(1, 0.35, utf8_decode("Ubigeo : "), 0, 1,'L', 0);
+
+// poniendo fuente normal
+$pdf->SetTextColor(0,0,0);
+$pdf->SetFont('arial','',10);
+// condicion de pago
+$pdf->SetXY(10.5,4.4+(0.6*2));
+$pdf->Cell(1, 0.35, utf8_decode($c5), 0, 1,'L', 0);
+// ubigeo
+$pdf->SetXY(10.5,4.4+(0.6*3));
+$pdf->Cell(3, 0.35, utf8_decode($ubigeo), 0, 1,'L', 0);
 
 $X = 0;
 $Y = 0;
@@ -484,10 +499,10 @@ if ($anticipo_current == 1) {
 }
 
 // Codigo de barras
-$pdf->image($ruta.$f8.".png",0.67, $Y+10.7, 8.65, 2);
+$pdf->image($ruta.$f8.".png",0.67, 21.9, 8.65, 2);
 $pdf->SetTextColor(0,0,0);
 $pdf->SetFont('arial','',9);
-$pdf->SetXY(1.12,$Y+12.7);
+$pdf->SetXY(1.12,23.9);
 $pdf->Cell(8, 0.25, utf8_decode("Representación impresa de la factura electrónica."), 0, 1,'C', 0);
 
 $pdf->line(1, 24.8, 20.5, 24.8);
