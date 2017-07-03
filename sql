@@ -56,7 +56,7 @@ create or replace package body PKG_ELECTRONICA as
         cdg_cod_emp,
         cdg_exi_fra,
         cdg_exi_ant
-        from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_fec_gen >= to_date(fecha1,'dd-mm-yyyy') and  cdg_fec_gen < (to_date(fecha2,'dd-mm-yyyy')+1) order by cdg_tip_doc Asc) a where  ROWNUM<=p_final)where rn>=p_inicial;
+        from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_fec_gen >= to_date(fecha1,'dd-mm-yyyy') and  cdg_fec_gen < (to_date(fecha2,'dd-mm-yyyy')+1) order by cdg_tip_doc Asc) a where  ROWNUM<=p_final)where rn>=p_inicial ;
     end if;
 
   end;
@@ -69,7 +69,7 @@ create or replace package body PKG_ELECTRONICA as
         '000' as codLocalEmisor2,
         decode((select c_c_tipo_documento from cliente where cod_gen=cdg_cod_gen and rtrim(c_c_codigo)=rtrim(cdg_cod_cli)),'01','6','02','1','4') as tipDocUsuario3,
         TRIM(cdg_doc_cli) as numDocUsuario4,
-        cdg_nom_cli as rznSocialUsuario5,
+        cdg_nom_cli as RZNSOCIALUSUARIO5,
         decode(cdg_tip_cam,0,'PEN','USD') as tipMoneda6,
         '0.00' as sumDsctoGlobal7,
         '0.00' as sumOtrosCargos8,
@@ -163,7 +163,13 @@ create or replace package body PKG_ELECTRONICA as
         cdg_tip_doc,
         cdg_num_doc,
         decode(cdg_tip_doc,'F','01','B','03','A','07','0') as cdg_tipo,
-        decode(cdg_tip_ref,'FS',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'FR',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'BS',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'BR',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'XXXX') as serie_doc
+        decode(cdg_tip_ref,'FS',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'FR',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'BS',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'BR',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'XXXX') as serie_doc,
+        cdg_exi_fra,
+        cdg_exi_ant,
+        CDG_TOT_FRA,
+        CDG_SER_FRA,
+        CDG_DOC_FRA,
+        CDG_TIP_FRA
       from cab_doc_gen b where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_tip_doc='A' and cdg_num_doc=num_doc;
   end;
   procedure dds(gen VARCHAR2,emp VARCHAR2, num_doc number, cla_doc VARCHAR2, moneda VARCHAR2, dds out sys_refcursor) is
@@ -171,19 +177,20 @@ create or replace package body PKG_ELECTRONICA as
     open dds for
       select
         'NIU' as codUnidadMedida0, -- 0
-        to_char(round(dds_can_pro,2),'FM99990.00') as ctdUnidadItem1, -- 1
-        dds_cod_pro as codProducto2, -- 2
-        '0000' as codProductoSUNAT3, -- 3
-        dds_des_001 as desItem4, -- 4
-        to_char(round((decode(moneda,'PEN',dds_vvp_sol,dds_vvp_dol)),2),'FM99990.00') as mtoValorUnitario5, -- 5
-        to_char(round(decode(moneda,'PEN',((dds_can_pro*dds_vvp_sol)*(dds_por_des/100)), ((dds_can_pro*dds_vvp_dol)*(dds_por_des/100))),2),'FM99990.00') as mtoDsctoItem6, -- 6
-        to_char(round(decode(moneda,'PEN',(((dds_can_pro*dds_vvp_sol)-((dds_can_pro*dds_vvp_sol)*(dds_por_des/100)))*0.18), (((dds_can_pro*dds_vvp_dol)-((dds_can_pro*dds_vvp_dol)*(dds_por_des/100)))*0.18)),2),'FM99990.00') as mtoIgvItem7, -- 7
-        '10' as tipAfeIGV8, -- 8
+        to_char(round(0,2),'FM99990.00') as ctdUnidadItem1, -- 1
+        '0' as codProducto2, -- 2
+        '0' as codProductoSUNAT3, -- 3
+        ddo_des_otr as desItem4, -- 4
+        '0.00' as mtoValorUnitario5, -- 5
+        '0.00' as mtoDsctoItem6, -- 6
+        '0.00' as mtoIgvItem7, -- 7
+        '30' as tipAfeIGV8, -- 8
         '0.00' as mtoIscItem9, -- 9
         '02' as tipSisISC10, -- 10
-        to_char(round(decode(moneda,'PEN',(dds_can_pro*dds_vvp_sol),(dds_can_pro*dds_vvp_dol)),2),'FM99990.00') as mtoPrecioVentaItem11, -- 11 importe
-        to_char(round(decode(moneda,'PEN',((dds_can_pro*dds_vvp_sol)-((dds_can_pro*dds_vvp_sol)*(dds_por_des/100))), ((dds_can_pro*dds_vvp_dol)-((dds_can_pro*dds_vvp_dol)*(dds_por_des/100)))),2),'FM99990.00') as mtoValorVentaItem12 -- 12
-      from DET_DOC_SER where DDS_COD_GEN=gen and DDS_COD_EMP=emp and DDS_NUM_DOC=num_doc and DDS_CLA_DOC=cla_doc
+        '0.00' as mtoPrecioVentaItem11, -- 11 importe
+        '0.00' as mtoValorVentaItem12, -- 12
+        'A' as orden
+      from DET_DOC_OTR where DDO_COD_GEN=gen and DDO_COD_EMP=emp and DDO_NUM_DOC=num_doc and DDO_CLA_DOC=cla_doc
       union
       select
         'NIU' as codUnidadMedida0, -- 0
@@ -198,24 +205,28 @@ create or replace package body PKG_ELECTRONICA as
         '0.00' as mtoIscItem9, -- 9
         '02' as tipSisISC10, -- 10
         to_char(decode(moneda,'PEN',(ddr_can_pro*ddr_vvp_sol),(ddr_can_pro*ddr_vvp_dol)),'FM99990.00')  as mtoPrecioVentaItem11, -- 11
-        to_char(decode(moneda,'PEN',((ddr_can_pro*ddr_vvp_sol)-((ddr_can_pro*ddr_vvp_sol)*(ddr_por_des/100))), ((ddr_can_pro*ddr_vvp_dol)-((ddr_can_pro*ddr_vvp_dol)*(ddr_por_des/100)))),'FM99990.00') as mtoValorVentaItem12 --12
+        to_char(decode(moneda,'PEN',((ddr_can_pro*ddr_vvp_sol)-((ddr_can_pro*ddr_vvp_sol)*(ddr_por_des/100))), ((ddr_can_pro*ddr_vvp_dol)-((ddr_can_pro*ddr_vvp_dol)*(ddr_por_des/100)))),'FM99990.00') as mtoValorVentaItem12, --12
+        'B' as orden
       from DET_DOC_REP where DDR_COD_GEN=gen and DDR_COD_EMP=emp and DDR_NUM_DOC=num_doc and DDR_CLA_DOC=cla_doc
       union
       select
         'NIU' as codUnidadMedida0, -- 0
-        to_char(round(0,2),'FM99990.00') as ctdUnidadItem1, -- 1
-        '0' as codProducto2, -- 2
-        '0' as codProductoSUNAT3, -- 3
-        ddo_des_otr as desItem4, -- 4
-        '0.00' as mtoValorUnitario5, -- 5
-        '0.00' as mtoDsctoItem6, -- 6
-        '0.00' as mtoIgvItem7, -- 7
-        '30' as tipAfeIGV8, -- 8
+        to_char(round(dds_can_pro,2),'FM99990.00') as ctdUnidadItem1, -- 1
+        dds_cod_pro as codProducto2, -- 2
+        '0000' as codProductoSUNAT3, -- 3
+        dds_des_001 as desItem4, -- 4
+        to_char(round((decode(moneda,'PEN',dds_vvp_sol,dds_vvp_dol)),2),'FM99990.00') as mtoValorUnitario5, -- 5
+        to_char(round(decode(moneda,'PEN',((dds_can_pro*dds_vvp_sol)*(dds_por_des/100)), ((dds_can_pro*dds_vvp_dol)*(dds_por_des/100))),2),'FM99990.00') as mtoDsctoItem6, -- 6
+        to_char(round(decode(moneda,'PEN',(((dds_can_pro*dds_vvp_sol)-((dds_can_pro*dds_vvp_sol)*(dds_por_des/100)))*0.18), (((dds_can_pro*dds_vvp_dol)-((dds_can_pro*dds_vvp_dol)*(dds_por_des/100)))*0.18)),2),'FM99990.00') as mtoIgvItem7, -- 7
+        '10' as tipAfeIGV8, -- 8
         '0.00' as mtoIscItem9, -- 9
         '02' as tipSisISC10, -- 10
-        '0.00' as mtoPrecioVentaItem11, -- 11 importe
-        '0.00' as mtoValorVentaItem12 -- 12
-      from DET_DOC_OTR where DDO_COD_GEN=gen and DDO_COD_EMP=emp and DDO_NUM_DOC=num_doc and DDO_CLA_DOC=cla_doc;
+        to_char(round(decode(moneda,'PEN',(dds_can_pro*dds_vvp_sol),(dds_can_pro*dds_vvp_dol)),2),'FM99990.00') as mtoPrecioVentaItem11, -- 11 importe
+        to_char(round(decode(moneda,'PEN',((dds_can_pro*dds_vvp_sol)-((dds_can_pro*dds_vvp_sol)*(dds_por_des/100))), ((dds_can_pro*dds_vvp_dol)-((dds_can_pro*dds_vvp_dol)*(dds_por_des/100)))),2),'FM99990.00') as mtoValorVentaItem12, -- 12
+        'C' as orden
+      from DET_DOC_SER where DDS_COD_GEN=gen and DDS_COD_EMP=emp and DDS_NUM_DOC=num_doc and DDS_CLA_DOC=cla_doc order by orden Asc;
+
+
   end;
   procedure baja(gen VARCHAR2,emp VARCHAR2, num_doc number, cla_doc VARCHAR2, baja out sys_refcursor) is
   begin
