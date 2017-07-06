@@ -292,10 +292,10 @@
         }
 
         $tip_doc_ref = 'Documento Afectado';
-        $num_doc_ref = $cab['SERIE'];
+        $num_doc_ref = $cab['SERIE']; // documento relacionado nota credito
 
         $dir_doc_name = 'Fecha que Doc Modf';
-        $dir_doc_value = $fecha;
+        $dir_doc_value = $fecha; // fecha relacionado nota credito
 
         $motivo = $cab['DESMOTIVO2'];
 
@@ -411,14 +411,18 @@
     }
 
     // Anticipo Franquicia o Anticipo
-    if ($cab['CDG_EXI_FRA'] == 'N'){
-        if ($cab['CDG_EXI_ANT'] == 'AN'){
+    if ($cab['CDG_TIP_DOC'] != 'A'){
+        if ($cab['CDG_EXI_FRA'] == 'N'){
+            if ($cab['CDG_EXI_ANT'] == 'AN'){
+                $anticipo_current = 1; // sale anticipo
+            }else {
+                $anticipo_current = 0; // no sale anticipo
+            }
+        } elseif ($cab['CDG_EXI_FRA'] == 'S') {
             $anticipo_current = 1;
-        }else {
+        } else {
             $anticipo_current = 0;
         }
-    } elseif ($cab['CDG_EXI_FRA'] == 'S') {
-        $anticipo_current = 1;
     } else {
         $anticipo_current = 0;
     }
@@ -468,6 +472,15 @@
     while($res_ubigeo3 = oci_fetch_array($sql_ubigeo3)){ $ubigeo = $ubigeo.'-'.ucwords(strtolower(trim($res_ubigeo3['UBI_NOMBRE']))); }
 
 
-//echo $ubigeo;
+    // cabezera
+    if ($cab['CDG_CLA_DOC']=='FS' || $cab['CDG_CLA_DOC']=='BS' ){
+        $cabezera_tipo = 2; // solo cuando tiene 2 se muestran detalles en la cabezera
+    } elseif ($cab['CDG_CLA_DOC']=='FR' || $cab['CDG_CLA_DOC']=='BR' || $cab['CDG_CLA_DOC']=='FC'){
+        $cabezera_tipo = 1;
+    } elseif ($cab['CDG_CLA_DOC']=='AR' || $cab['CDG_CLA_DOC']=='AS'){
+        $cabezera_tipo = 3; // aqui se muestra abajo documento relacionado
+    }
+
+echo $cabezera_tipo;
 print_r($cab);
 //print_r($dets);

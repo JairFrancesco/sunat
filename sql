@@ -102,7 +102,8 @@ create or replace package body PKG_ELECTRONICA as
         CDG_SER_FRA,
         CDG_DOC_FRA,
         CDG_TIP_FRA,
-        CDG_UBI_GEO
+        CDG_UBI_GEO,
+        CDG_CLA_DOC
       from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_num_doc=num_doc and cdg_cla_doc=cla_doc;
   end;
 
@@ -171,7 +172,8 @@ create or replace package body PKG_ELECTRONICA as
         CDG_SER_FRA,
         CDG_DOC_FRA,
         CDG_TIP_FRA,
-        CDG_UBI_GEO
+        CDG_UBI_GEO,
+        CDG_CLA_DOC
       from cab_doc_gen b where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_tip_doc='A' and cdg_num_doc=num_doc;
   end;
   procedure dds(gen VARCHAR2,emp VARCHAR2, num_doc number, cla_doc VARCHAR2, moneda VARCHAR2, dds out sys_refcursor) is

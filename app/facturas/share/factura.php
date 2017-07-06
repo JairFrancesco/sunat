@@ -2,7 +2,7 @@
 
     <!-- Titulo  -->
 
-    <tr class="thead-default well">
+    <tr class="thead-default info">
         <th colspan="7" class="text-center">
             <h3><?php echo $c1;?></h3>
         </th>
@@ -10,44 +10,95 @@
 
     <!-- Fecha y forma de pago -->
     <tr>
-        <td colspan="1" width="15%"><?php echo $c2 ?></td>
+        <td colspan="1" width="15%" class="info"><strong>Fecha</strong></td>
         <td colspan="2" width="35%">
             <?php
                 $time = strtotime($c3 );
                 echo date('d-m-Y',$time);
             ?>
         </td>
-        <td colspan="1" width="15%"><?php echo $c4 ?></td>
-        <td colspan="3" width="35%" class="text-right"><?php echo $c5 ?></td>
+        <?php
+        if ($cabezera_tipo == 1 || $cabezera_tipo == 3){
+            echo '<td colspan="4" class="text-right"></td>';
+        } else {
+            echo '<td colspan="1" width="15%" class="info"><strong>Ord. Trab</strong></td>';
+            echo '<td colspan="3" width="35%" class="text-right"></td>';
+        }
+        ?>
     </tr>
 
     <!-- Nombre cliente o empresa customer - Nombre de la empresa supplier -->
     <tr>
-        <td colspan="1"><?php echo $c6 ?></td>
+        <td colspan="1" class="info"><strong>Cliente</strong></td>
         <td colspan="2"><?php echo $c7 ?></td>
-        <td colspan="1">Ubigeo</td>
-        <td colspan="3" class="text-right"><?php echo $ubigeo ?></td>
+        <?php
+            if ($cabezera_tipo == 1 || $cabezera_tipo == 3){
+                echo '<td colspan="4" class="text-right"></td>';
+            } else {
+                echo '<td colspan="1" class="info"><strong>Placa/Serie</strong></td>';
+                echo '<td colspan="3" class="text-right"></td>';
+            }
+        ?>
     </tr>
 
     <!-- Dni o ruc customer - ruc supplier -->
     <tr>
-        <td colspan="1"><?php echo $c10 ?></td>
+        <td colspan="1" class="info"><strong><?php echo $c10 ?></strong></td>
         <td colspan="2"><?php echo $c11 ?></td>
-        <td colspan="1"><?php echo $c12 ?></td>
-        <td colspan="3" class="text-right"><?php echo $c13 ?></td>
+        <?php
+            if ($cabezera_tipo == 1 || $cabezera_tipo == 3){
+                echo '<td colspan="4" class="text-right"></td>';
+            } else {
+                echo '<td colspan="1" class="info"><strong>Modelo/Año</strong></td>';
+                echo '<td colspan="3" class="text-right"><?php echo $c13 ?></td>';
+            }
+        ?>
     </tr>
 
     <!-- Direccion Customer - Direccion Supplier -->
     <tr>
-        <td colspan="1"><?php echo $c14 ?></td>
+        <td colspan="1" class="info"><strong>Direccion</strong></td>
         <td colspan="2"><?php echo $c15 ?></td>
-        <td colspan="1"><?php echo $c16 ?></td>
-        <td colspan="3" class="text-right"><?php echo $c17 ?></td>
+        <?php
+            if ($cabezera_tipo == 1 || $cabezera_tipo == 3){
+                echo '<td colspan="4" class="text-right"></td>';
+            } else {
+                echo '<td colspan="1" class="info"><strong>Motor/Chasis</strong></td>';
+                echo '<td colspan="3" class="text-right"><?php echo $c17 ?></td>';
+            }
+        ?>
+    </tr>
+    <tr>
+        <td colspan="1" class="info"><strong>Forma de Pago</strong></td>
+        <td colspan="2"><?php echo $c5 ?></td>
+        <?php
+            if ($cabezera_tipo == 1 || $cabezera_tipo == 3){
+                echo '<td colspan="4" class="text-right"></td>';
+            } else {
+                echo '<td colspan="1" class="info"><strong>Color</strong></td>';
+                echo '<td colspan="3" class="text-right"></td>';
+            }
+        ?>
+    </tr>
+    <tr>
+        <td colspan="1" class="info"><strong>Ubigeo</strong></td>
+        <td colspan="2"><?php echo $ubigeo ?></td>
+        <?php
+            if ($cabezera_tipo == 1 || $cabezera_tipo == 3){
+                echo '<td colspan="4" class="text-right"></td>';
+            } else {
+                echo '<td colspan="1" class="info"><strong>Km</strong></td>';
+                echo '<td colspan="3" class="text-right"></td>';
+            }
+        ?>
+
+
+
     </tr>
 
     <!-- Delatalles -->
 
-    <tr class="thead-default well">
+    <tr class="thead-default info">
         <th>Nº Pieza</th>
         <th>Descripcion</th>
         <th>Cantidad</th>
@@ -170,17 +221,29 @@
             <td class="well"><?php echo $c19 ?></td>
             <td class="text-right well"><?php echo $c40 ?></td>
         </tr>
-    <?php }else {?>
-        <tr>
-            <td colspan="4"><?php echo $c38 ?></td>
-            <td class="well"><?php echo $c39 ?></td>
-            <td class="well"><?php echo $c19 ?></td>
-            <td class="text-right well"><?php echo $c40 ?></td>
-        </tr>
-    <?php } ?>
+    <?php
+        }else {
+            if ($cabezera_tipo==3){
+                // cuando hay documento relacionado con nota de credito
+                echo '<tr>';
+                echo '<td colspan="4">'.$c38.'</td>';
+                echo '<td class="well">'.$c39.'</td>';
+                echo '<td class="well">'.$c19.'</td>';
+                echo '<td class="text-right well">'.$c40.'</td>';
+                echo '</tr>';
+            } else {
+                // cuando es una impresion normal
+                echo '<tr>';
+                echo '<td colspan="4">'.$c38.'</td>';
+                echo '<td class="well">'.$c39.'</td>';
+                echo '<td class="well">'.$c19.'</td>';
+                echo '<td class="text-right well">'.$c40.'</td>';
+                echo '</tr>';
+            }
+        }
+        ?>
 
-
-    <tr class="thead-default well">
+    <tr class="thead-default info">
         <th colspan="4"><?php echo $c41 ?></th>
         <th><?php echo $c42 ?></th>
         <th><?php echo $c19 ?></th>
