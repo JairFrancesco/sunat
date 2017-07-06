@@ -469,5 +469,5 @@
 
 
 //echo $ubigeo;
-//print_r($cab['CDG_UBI_GEO'][0].$cab['CDG_UBI_GEO'][1]);
+print_r($cab);
 //print_r($dets);
