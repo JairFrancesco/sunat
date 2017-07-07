@@ -209,44 +209,37 @@
         <td class="text-right well"><?php echo $c28 ?></td>
     </tr>
 
-    <?php if ($anticipo_current != 0) { ?>
-        <tr>
-            <td colspan="4">
-                Documento Anticipo : <?php echo $anticipo_doc; ?>
-                Documento Cliente : <?php echo $anticipo_documento; ?>
-                ANTICIPO : <?php echo $anticipo_tot; ?> <?php echo $anticipo_moneda; ?>
+    <tr>
+        <td colspan="4"><?php echo $c38 ?></td>
+        <td class="well"><?php echo $c39 ?></td>
+        <td class="well"><?php echo $c19 ?></td>
+        <td class="text-right well"><?php echo $c40 ?></td>
+    </tr>
 
-            </td>
-            <td class="well"><?php echo $c39 ?></td>
-            <td class="well"><?php echo $c19 ?></td>
-            <td class="text-right well"><?php echo $c40 ?></td>
-        </tr>
+
     <?php
+        echo '<tr class="thead-default info">';
+        if ($anticipo_current != 0) {
+            echo '<th colspan="4"> Documento Anticipo :'.$anticipo_doc.' Documento Cliente : '.$anticipo_documento.' ANTICIPO : '.$anticipo_tot.' '.$anticipo_moneda.'</th>';
+            echo '<th class="well">'.$c42.'</th>';
+            echo '<th class="well">'.$c19.'</th>';
+            echo '<th class="text-right well">'.$c43.'</th>';
         }else {
             if ($cabezera_tipo==3){
                 // cuando hay documento relacionado con nota de credito
-                echo '<tr>';
-                echo '<td colspan="4">'.$c38.'</td>';
-                echo '<td class="well">'.$c39.'</td>';
-                echo '<td class="well">'.$c19.'</td>';
-                echo '<td class="text-right well">'.$c40.'</td>';
-                echo '</tr>';
+                echo '<th colspan="4">Documento Relacionado : B001-19874 Fecha : 17-07-2017</th>';
+                echo '<th class="well">'.$c42.'</th>';
+                echo '<th class="well">'.$c19.'</th>';
+                echo '<th class="text-right well">'.$c43.'</th>';
             } else {
                 // cuando es una impresion normal
-                echo '<tr>';
-                echo '<td colspan="4">'.$c38.'</td>';
-                echo '<td class="well">'.$c39.'</td>';
-                echo '<td class="well">'.$c19.'</td>';
-                echo '<td class="text-right well">'.$c40.'</td>';
-                echo '</tr>';
+                echo '<th colspan="4">'.$c41.'</th>';
+                echo '<th class="well">'.$c42.'</th>';
+                echo '<th class="well">'.$c19.'</th>';
+                echo '<th class="text-right">'.$c43.'</th>';
             }
         }
-        ?>
+        echo '</tr>';
+    ?>
 
-    <tr class="thead-default info">
-        <th colspan="4"><?php echo $c41 ?></th>
-        <th><?php echo $c42 ?></th>
-        <th><?php echo $c19 ?></th>
-        <th class="text-right"><?php echo $c43 ?></th>
-    </tr>
 </table>
