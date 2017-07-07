@@ -227,7 +227,7 @@
         }else {
             if ($cabezera_tipo==3){
                 // cuando hay documento relacionado con nota de credito
-                echo '<th colspan="4">Documento Relacionado : B001-19874 Fecha : 17-07-2017</th>';
+                echo '<th colspan="4">Documento Relacionado : '.$num_doc_ref.' Fecha : '.date('d-m-Y',strtotime($dir_doc_value)).'</th>';
                 echo '<th class="well">'.$c42.'</th>';
                 echo '<th class="well">'.$c19.'</th>';
                 echo '<th class="text-right well">'.$c43.'</th>';
@@ -243,3 +243,4 @@
     ?>
 
 </table>
+

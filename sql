@@ -1,10 +1,8 @@
 create or replace package PKG_ELECTRONICA as
   procedure docs(gen VARCHAR2,emp VARCHAR2, pag NUMBER,fecha1 VARCHAR2, fecha2 VARCHAR2, docs out sys_refcursor);
   procedure fbc(gen VARCHAR2,emp VARCHAR2, num_doc NUMBER, cla_doc VARCHAR2,fbc out sys_refcursor);
-  procedure adfbc(gen VARCHAR2,emp VARCHAR2, num_doc NUMBER, cla_doc VARCHAR2, adfbc out sys_refcursor);
   procedure ncc(gen VARCHAR2,emp VARCHAR2, num_doc NUMBER, ncc out sys_refcursor);
   procedure dds(gen VARCHAR2,emp VARCHAR2, num_doc number, cla_doc VARCHAR2, moneda VARCHAR2, dds out sys_refcursor);
-  procedure baja(gen VARCHAR2,emp VARCHAR2, num_doc number, cla_doc VARCHAR2, baja out sys_refcursor);
 end PKG_ELECTRONICA;
 
 
@@ -107,25 +105,6 @@ create or replace package body PKG_ELECTRONICA as
       from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_num_doc=num_doc and cdg_cla_doc=cla_doc;
   end;
 
-  procedure adfbc(gen VARCHAR2,emp VARCHAR2,num_doc NUMBER, cla_doc VARCHAR2, adfbc out sys_refcursor) is
-  begin
-    open adfbc for
-      select
-        '' as codRegPercepcion0,
-        '' as mtoBaseImponiblePercepcion1,
-        '' as mtoPercepcion2,
-        '' as mtoTotalIncPercepcion3,
-        '' as mtoOperGratuitas4,
-        '' as mtoTotalAnticipo5,
-        '' as codPaisCliente6,
-        '' as codUbigeoCliente7,
-        cdg_dir_cli as desDireccionCliente8,
-        '' as codPaisEntrega9,
-        '' as codUbigeoEntrega10,
-        '' as desDireccionEntrega11,
-        to_char(cdg_fec_ven,'yyyy-mm-dd') as fecVencimiento12
-      from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_cla_doc=cla_doc and cdg_num_doc=num_doc;
-  end;
 
   procedure ncc(gen VARCHAR2,emp VARCHAR2, num_doc NUMBER,ncc out sys_refcursor) is
   begin
@@ -160,7 +139,7 @@ create or replace package body PKG_ELECTRONICA as
         to_char(round(decode(cdg_exi_fra,'S',((cdg_vvp_tot-cdg_des_tot)-(cdg_tot_fra/(1+cdg_por_igv/100))),decode(cdg_tip_cam,0,cdg_vvp_tot,cdg_vvp_dol)),2),'FM99990.00') as SUBTOTAL14,
         cdg_doc_ref as doc_ref,
         cdg_tip_ref as tip_ref,
-        decode(cdg_tip_ref,'FS','F00','FR','F00','BS','B00','BR','B00','FC','F00','') || (select cdg_ser_doc from cab_doc_gen where cdg_num_doc=b.cdg_doc_ref and cdg_cla_doc=b.cdg_tip_ref and cdg_cod_gen=b.cdg_cod_gen and cdg_cod_emp=b.cdg_cod_emp) || '-' || lpad(cdg_doc_ref,8,0)  as serie,
+        decode(cdg_tip_ref,'FS','F00','FR','F00','BS','B00','BR','B00','FC','F00','') || (select cdg_ser_doc from cab_doc_gen where cdg_num_doc=b.cdg_doc_ref and cdg_cla_doc=b.cdg_tip_ref and cdg_cod_gen=b.cdg_cod_gen and cdg_cod_emp=b.cdg_cod_emp) || '-' || cdg_doc_ref  as serie,
         decode(cdg_tip_ref,'FS','01','FR','01','FC','01','BS','03','BR','03','') as tiporef,
         cdg_tip_doc,
         cdg_num_doc,
@@ -231,17 +210,5 @@ create or replace package body PKG_ELECTRONICA as
       from DET_DOC_SER where DDS_COD_GEN=gen and DDS_COD_EMP=emp and DDS_NUM_DOC=num_doc and DDS_CLA_DOC=cla_doc order by orden Asc;
 
 
-  end;
-  procedure baja(gen VARCHAR2,emp VARCHAR2, num_doc number, cla_doc VARCHAR2, baja out sys_refcursor) is
-  begin
-    open baja for
-        select
-          to_char(cdg_fec_gen,'yyyy-mm-dd') as fec_gen1,
-          to_char(sysdate,'yyyy-mm-dd') as fec_com2,
-          decode(cdg_tip_doc,'F','01','B','03','07') as tip_doc_baja3,
-          decode(cdg_tip_doc,'F',decode(cdg_ser_doc,1,'F001',2,'F002',3,'F003',4,'F004','F000'),'B',decode(cdg_ser_doc,1,'B001',2,'B002',3,'B003',4,'B004','B000'),'MMMM') ||'-'||lpad(cdg_num_doc,8,0) as num_doc_baja4,
-          'Descripcion detalle baja' as des_motivo_baja5,
-          '20532710066-' || 'RA-' || to_char(sysdate,'yyyymmdd') || '-' || SUBSTR(cdg_num_doc,3) || '.CBA' as nombre6
-        from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_num_doc=num_doc and cdg_cla_doc=cla_doc;
   end;
 end PKG_ELECTRONICA;

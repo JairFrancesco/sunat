@@ -17,6 +17,7 @@
         }
 
         if (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'D') {
+            //echo 'ingreso';
             // obteniendo el detalle
             // =====================
             /*
@@ -31,6 +32,8 @@
             }
             */
             $valor_detalle = 'COCRD';
+
+
 
             $sql_repuestos = oci_parse($conn, "select
                 'NIU' as codUnidadMedida0, -- 0
@@ -127,6 +130,7 @@
 
 
         if (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'D') {
+            echo 'salio aqui dos';
             // detalles
             // ========
             /*
@@ -475,12 +479,21 @@
     // cabezera
     if ($cab['CDG_CLA_DOC']=='FS' || $cab['CDG_CLA_DOC']=='BS' ){
         $cabezera_tipo = 2; // solo cuando tiene 2 se muestran detalles en la cabezera
+
+
+        $sql_otros = oci_parse($conn, "");
+        oci_execute($sql_otros);
+        while($res_otros = oci_fetch_array($sql_otros)){ $dets[] = $res_otros; }
+
+
+
     } elseif ($cab['CDG_CLA_DOC']=='FR' || $cab['CDG_CLA_DOC']=='BR' || $cab['CDG_CLA_DOC']=='FC'){
-        $cabezera_tipo = 1;
+        $cabezera_tipo = 1; // aqui no se muestra nada solo una lado
     } elseif ($cab['CDG_CLA_DOC']=='AR' || $cab['CDG_CLA_DOC']=='AS'){
         $cabezera_tipo = 3; // aqui se muestra abajo documento relacionado
     }
 
-echo $cabezera_tipo;
+//echo $cabezera_tipo;
 print_r($cab);
 //print_r($dets);
+//print_r($det);
