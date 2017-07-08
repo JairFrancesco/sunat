@@ -22,7 +22,7 @@
             echo '<td colspan="4" class="text-right"></td>';
         } else {
             echo '<td colspan="1" width="15%" class="info"><strong>Ord. Trab</strong></td>';
-            echo '<td colspan="3" width="35%" class="text-right"></td>';
+            echo '<td colspan="3" width="35%" class="text-left">'.$ord_trab.'</td>';
         }
         ?>
     </tr>
@@ -36,7 +36,7 @@
                 echo '<td colspan="4" class="text-right"></td>';
             } else {
                 echo '<td colspan="1" class="info"><strong>Placa/Serie</strong></td>';
-                echo '<td colspan="3" class="text-right"></td>';
+                echo '<td colspan="3" class="text-left">'.$placa.'</td>';
             }
         ?>
     </tr>
@@ -50,7 +50,7 @@
                 echo '<td colspan="4" class="text-right"></td>';
             } else {
                 echo '<td colspan="1" class="info"><strong>Modelo/Año</strong></td>';
-                echo '<td colspan="3" class="text-right"><?php echo $c13 ?></td>';
+                echo '<td colspan="3" class="text-left">'.$modelo_anho.'</td>';
             }
         ?>
     </tr>
@@ -64,7 +64,7 @@
                 echo '<td colspan="4" class="text-right"></td>';
             } else {
                 echo '<td colspan="1" class="info"><strong>Motor/Chasis</strong></td>';
-                echo '<td colspan="3" class="text-right"><?php echo $c17 ?></td>';
+                echo '<td colspan="3" class="text-left">'.$motor_chasis.'</td>';
             }
         ?>
     </tr>
@@ -76,7 +76,7 @@
                 echo '<td colspan="4" class="text-right"></td>';
             } else {
                 echo '<td colspan="1" class="info"><strong>Color</strong></td>';
-                echo '<td colspan="3" class="text-right"></td>';
+                echo '<td colspan="3" class="text-left">'.$color.'</td>';
             }
         ?>
     </tr>
@@ -88,7 +88,7 @@
                 echo '<td colspan="4" class="text-right"></td>';
             } else {
                 echo '<td colspan="1" class="info"><strong>Km</strong></td>';
-                echo '<td colspan="3" class="text-right"></td>';
+                echo '<td colspan="3" class="text-left">'.number_format($kilometraje, 0, ',', ',').'</td>';
             }
         ?>
 

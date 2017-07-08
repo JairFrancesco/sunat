@@ -481,11 +481,23 @@
         $cabezera_tipo = 2; // solo cuando tiene 2 se muestran detalles en la cabezera
 
 
-        $sql_otros = oci_parse($conn, "");
-        oci_execute($sql_otros);
-        while($res_otros = oci_fetch_array($sql_otros)){ $dets[] = $res_otros; }
+        $sql_extendido = oci_parse($conn, "
+          select * from cab_doc_gen 
+          inner join det_ing_ser on dis_cod_cli=cab_doc_gen.cdg_cod_cli
+          inner join cab_fam_veh on cfv_cod_gen=cab_doc_gen.cdg_cod_gen and cfv_cod_mar=det_ing_ser.dis_mar_veh and cfv_cod_fam=det_ing_ser.dis_cod_fam
+          where cdg_num_doc='13504' order by cdg_fec_gen Desc");
+        oci_execute($sql_extendido);
+        while($res_extendido = oci_fetch_array($sql_extendido)){
+            $ord_trab = $res_extendido['CDG_ORD_TRA'];
+            $placa = $res_extendido['DIS_PLA_VEH'];
+            $modelo_anho = $res_extendido['CFV_DES_FAM'].' - '.$res_extendido['DIS_ANO_VEH'];
+            $motor_chasis = $res_extendido['DIS_CHA_VEH'];
+            $color = $res_extendido['DIS_COL_VEH'];
+            $kilometraje = $res_extendido['DIS_KIL_VEH'];
+            $extendido[] = $res_extendido;
+        }
 
-
+    //print_r($extendido);
 
     } elseif ($cab['CDG_CLA_DOC']=='FR' || $cab['CDG_CLA_DOC']=='BR' || $cab['CDG_CLA_DOC']=='FC'){
         $cabezera_tipo = 1; // aqui no se muestra nada solo una lado
@@ -494,6 +506,6 @@
     }
 
 //echo $cabezera_tipo;
-print_r($cab);
+//print_r($cab);
 //print_r($dets);
 //print_r($det);
