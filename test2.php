@@ -79,14 +79,11 @@
                 if ($co_cr_an=='CO' || $co_cr_an=='CR') {
                     if ($tip_imp == 'D') {
                         require("app/facturas/share/variables.php");
-                        // require ("app/facturas/notacreditorepuestoservicio_cocr_detalle.php");
                     }elseif($tip_imp=='R'){
-                        require ("app/facturas/notacreditorepuestoservicio_cocr_resumen.php");
+                        require("app/facturas/share/variables.php");
                     }
                 }elseif($co_cr_an=='AN'){
                     require("app/facturas/share/variables.php");
-                    //echo $c18;
-                    //require ("app/facturas/notacreditorepuestoservicio_anticipo.php");
                 }
             }
             //print_r($cab);
