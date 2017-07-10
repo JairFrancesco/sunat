@@ -130,7 +130,6 @@
 
 
         if (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'D') {
-            echo 'salio aqui dos';
             // detalles
             // ========
             /*
