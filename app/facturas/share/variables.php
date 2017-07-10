@@ -109,7 +109,7 @@
             $boleta_anticipo_descriptcion = oci_parse($conn, $sql_boleta_anticipo_descriptcion);
             oci_execute($boleta_anticipo_descriptcion);
             while ($boleta_anticipo_descriptcion_detalle = oci_fetch_array($boleta_anticipo_descriptcion, OCI_ASSOC + OCI_RETURN_NULLS)) {
-                $det = $boleta_anticipo_descriptcion_detalle['CDG_NOT_001'].'<br>'.$boleta_anticipo_descriptcion_detalle['CDG_NOT_002'].'<br>'.$boleta_anticipo_descriptcion_detalle['CDG_NOT_003'];
+                $det = $boleta_anticipo_descriptcion_detalle['CDG_NOT_001'].' '.$boleta_anticipo_descriptcion_detalle['CDG_NOT_002'].' '.$boleta_anticipo_descriptcion_detalle['CDG_NOT_003'];
             }
             $valor_detalle = 'AND';
         }
