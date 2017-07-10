@@ -196,18 +196,6 @@ $pdf->SetXY(12,2.9);
 $pdf->Cell(8, 0.25, $num_doc, 0, 1,'C', 0);
 
 
-$pdf->RoundedRect(1, 4.2, 19, 3.2, 0.1, '');
-
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','B',10);
-
-$pdf->SetXY(1.1,4.4);
-$pdf->Cell(1, 0.35, utf8_decode("Señores: "), 0, 1,'L', 0);
-
-$pdf->SetXY(1.1,4.4+0.6);
-$pdf->Cell(1, 0.35, utf8_decode("Dirección: "), 0, 1,'L', 0);
-
-
 // ruc o dni del cliente
 $tipo_doc_cli = $DOM->getElementsByTagName('AdditionalAccountID')->item(1)->nodeValue;
 if ($tipo_doc_cli == '1'){
@@ -217,40 +205,29 @@ if ($tipo_doc_cli == '1'){
 } elseif ($tipo_doc_cli == '4'){
     $tipo_doc_cli_nom = 'CARNET EXTRANJERIA';
 }
-$pdf->SetXY(1.1,4.4+(0.6*2));
-$pdf->Cell(1, 0.35, utf8_decode($tipo_doc_cli_nom.": "), 0, 1,'L', 0);
 
+//********************* Primera fila cabezera **********************************//
+//********************************************************************************
+// los 6 lineas primeras
+$pdf->RoundedRect(1, 4.2, 19, 3.25, 0.1, ''); $pdf->SetTextColor(0,0,0); $pdf->SetFont('arial','B',9); // border del cuadrado
+$pdf->SetXY(1.1,4.4); $pdf->Cell(3, 0.35, utf8_decode("Fecha"), 0, 1,'L', 0);
+$pdf->SetXY(1.1,4.4+0.5); $pdf->Cell(3, 0.35, utf8_decode("Cliente "), 0, 1,'L', 0);
+$pdf->SetXY(1.1,4.4+(0.5*2)); $pdf->Cell(3, 0.35, utf8_decode($tipo_doc_cli_nom), 0, 1,'L', 0);
+$pdf->SetXY(1.1,4.4+(0.5*3)); $pdf->Cell(3, 0.35, utf8_decode("Dirección"), 0, 1,'L', 0);
+$pdf->SetXY(1.1,4.4+(0.5*4)); $pdf->Cell(3, 0.35, utf8_decode("Forma de Pago"), 0, 1,'L', 0);
+$pdf->SetXY(1.1,4.4+(0.5*5)); $pdf->Cell(3, 0.35, utf8_decode("Ubigeo"), 0, 1,'L', 0);
 
-$pdf->SetXY(1.1,4.4+(0.6*3));
-$pdf->Cell(1, 0.35, utf8_decode("Fecha de emisión: "), 0, 1,'L', 0);
-
-$pdf->SetXY(1.1,4.4+(0.6*4));
-$pdf->Cell(1, 0.35, utf8_decode("Moneda: "), 0, 1,'L', 0);
-
-
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',10);
-
+$pdf->SetTextColor(0,0,0); $pdf->SetFont('arial','',9);
 // razon social del cliente
 $CliNomRazSoc = $DOM->getElementsByTagName('RegistrationName')->item(2)->nodeValue;
-$pdf->SetXY(4.7,4.4);
-$pdf->Cell(1, 0.35, utf8_decode($CliNomRazSoc), 0, 1,'L', 0);
-
+$pdf->SetXY(4.1,4.4); $pdf->Cell(8, 0.35, utf8_decode(': '.$FecEmi), 0, 1,'L', 0);
 // Direccion cliente
-$CliDirecc = $DOM->getElementsByTagName('StreetName')->item(1)->nodeValue;
-$pdf->SetXY(4.7,4.4+0.6);
-$pdf->Cell(1, 0.35, utf8_decode($CliDirecc), 0, 1,'L', 0);
-
-
+$CliDirecc = $DOM->getElementsByTagName('StreetName')->item(1)->nodeValue; 
+$pdf->SetXY(4.1,4.4+0.5); $pdf->Cell(8, 0.35, utf8_decode(': '.$CliNomRazSoc), 0, 1,'L', 0);
 // Obteniendo RUC
 $RUC = $DOM->getElementsByTagName('CustomerAssignedAccountID')->item(1)->nodeValue;
-
-$pdf->SetXY(4.7,4.4+(0.6*2));
-$pdf->Cell(1, 0.35, utf8_decode($RUC), 0, 1,'L', 0);
-
-$pdf->SetXY(4.7,4.4+(0.6*3));
-$pdf->Cell(1, 0.35, utf8_decode($FecEmi), 0, 1,'L', 0);
-
+$pdf->SetXY(4.1,4.4+(0.5*2)); $pdf->Cell(8, 0.35, utf8_decode(': '.$RUC), 0, 1,'L', 0);
+$pdf->SetXY(4.1,4.4+(0.5*3)); $pdf->Cell(8, 0.35, utf8_decode(': '.$CliDirecc), 0, 1,'L', 0);
 // Tipo moneda
 $Moneda = $DOM->getElementsByTagName('DocumentCurrencyCode')->item(0)->nodeValue;
 if ($Moneda == 'PEN') {
@@ -260,29 +237,34 @@ if ($Moneda == 'PEN') {
     $Moneda = 'DOLARES';
     $MonedaRes = '$';
 }
-$pdf->SetXY(4.7,4.4+(0.6*4));
-$pdf->Cell(1, 0.35, utf8_decode($Moneda), 0, 1,'L', 0);
+$pdf->SetXY(4.1,4.4+(0.5*4)); $pdf->Cell(8, 0.35, utf8_decode(': '.$c5), 0, 1,'L', 0);
+$pdf->SetXY(4.1,4.4+(0.5*5)); $pdf->Cell(8, 0.35, utf8_decode(': '.$ubigeo), 0, 1,'L', 0);
 
-// poniendo fuente negrita
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','B',10);
 
-// Condicion de pago nombre
-$pdf->SetXY(7.5,4.4+(0.6*2));
-$pdf->Cell(1, 0.35, utf8_decode("Forma de Pago : "), 0, 1,'L', 0);
-// ubigeo nombre
-$pdf->SetXY(7.5,4.4+(0.6*3));
-$pdf->Cell(1, 0.35, utf8_decode("Ubigeo : "), 0, 1,'L', 0);
 
-// poniendo fuente normal
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',10);
-// condicion de pago
-$pdf->SetXY(10.5,4.4+(0.6*2));
-$pdf->Cell(1, 0.35, utf8_decode($c5), 0, 1,'L', 0);
-// ubigeo
-$pdf->SetXY(10.5,4.4+(0.6*3));
-$pdf->Cell(3, 0.35, utf8_decode($ubigeo), 0, 1,'L', 0);
+//********************* Segunda fila cabezera **********************************//
+//********************************************************************************
+if ($cabezera_tipo==2){
+    $pdf->SetTextColor(0,0,0); $pdf->SetFont('arial','B',9);
+    $pdf->SetXY(13,4.4); $pdf->Cell(2.5, 0.35, utf8_decode("Ord. Trab"), 0, 1,'L', 0);
+    $pdf->SetXY(13,4.4+(0.5)*1); $pdf->Cell(2.5, 0.35, utf8_decode("Placa/Serie"), 0, 1,'L', 0);
+    $pdf->SetXY(13,4.4+(0.5)*2); $pdf->Cell(2.5, 0.35, utf8_decode("Modelo/Año"), 0, 1,'L', 0);
+    $pdf->SetXY(13,4.4+(0.5)*3); $pdf->Cell(2.5, 0.35, utf8_decode("Motor/Chasis"), 0, 1,'L', 0);
+    $pdf->SetXY(13,4.4+(0.5)*4); $pdf->Cell(2.5, 0.35, utf8_decode("Color"), 0, 1,'L', 0);
+    $pdf->SetXY(13,4.4+(0.5)*5); $pdf->Cell(2.5, 0.35, utf8_decode("Km"), 0, 1,'L', 0);
+
+
+    $pdf->SetTextColor(0,0,0); $pdf->SetFont('arial','',9);
+    $pdf->SetXY(15.8,4.4); $pdf->Cell(3.8, 0.35, utf8_decode(': '.$ord_trab), 0, 1,'L', 0);
+    $pdf->SetXY(15.8,4.4+(0.5)*1); $pdf->Cell(3.8, 0.35, utf8_decode(': '.$placa), 0, 1,'L', 0);
+    $pdf->SetXY(15.8,4.4+(0.5)*2); $pdf->Cell(3.8, 0.35, utf8_decode(': '.$modelo_anho), 0, 1,'L', 0);
+    $pdf->SetXY(15.8,4.4+(0.5)*3); $pdf->Cell(3.8, 0.35, utf8_decode(': '.$motor_chasis), 0, 1,'L', 0);
+    $pdf->SetXY(15.8,4.4+(0.5)*4); $pdf->Cell(3.8, 0.35, utf8_decode(': '.$color), 0, 1,'L', 0);
+    $pdf->SetXY(15.8,4.4+(0.5)*5); $pdf->Cell(3.8, 0.35, utf8_decode(': '.$kilometraje), 0, 1,'L', 0);
+
+}
+
+
 
 $X = 0;
 $Y = 0;
