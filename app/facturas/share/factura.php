@@ -13,8 +13,7 @@
         <td colspan="1" width="15%" class="info"><strong>Fecha</strong></td>
         <td colspan="2" width="35%">
             <?php
-                $time = strtotime($c3 );
-                echo date('d-m-Y',$time);
+                echo date('d-m-Y',strtotime($c3));
             ?>
         </td>
         <?php

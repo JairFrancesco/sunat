@@ -182,10 +182,8 @@ if ($tipo_documento == '01'){
 } elseif ($tipo_documento == '07'){
     $t_document = 'NOTA CREDITO ELECTRONICA';
 }
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','B',14);
-$pdf->SetXY(12,2.2);
-$pdf->Cell(8, 0.25, utf8_decode($t_document), 0, 1,'C', 0);
+$pdf->SetTextColor(0,0,0); $pdf->SetFont('arial','B',14);
+$pdf->SetXY(12,2.2); $pdf->Cell(8, 0.25, utf8_decode($t_document), 0, 1,'C', 0);
 
 
 
