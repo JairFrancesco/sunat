@@ -460,7 +460,7 @@ $pdf->SetXY(18,$Y+12); $pdf->Cell(2, 0.5, number_format($importe_total,2), 1, 1,
 if ($cab['CDG_TIP_DOC'] == 'F' && $importe_total > 700 ){
     // Detraccion
     $pdf->SetXY(1,$Y+13); $pdf->Cell(2, 0.5, utf8_decode('Operación sujeta al Sitema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco. '), 0, 1,'L', 0);
-    $pdf->SetXY(1,$Y+13.5); $pdf->Cell(2, 0.5, utf8_decode('Nación no. 00-151-084257'.$cab['CDG_TIP_DOC']), 0, 1,'L', 0);
+    $pdf->SetXY(1,$Y+13.5); $pdf->Cell(2, 0.5, utf8_decode('Nación no. 00-151-084257'), 0, 1,'L', 0);
 }
 
 // anticipo
