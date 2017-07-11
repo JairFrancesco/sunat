@@ -1,4 +1,5 @@
 app/repo/*
+app/resumenes/*
 .idea/*
 .git/*
 homo/*
