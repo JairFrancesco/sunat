@@ -480,7 +480,7 @@ if ($anticipo_current == 1) {
     $pdf->SetXY(6.5, $Y + 9.5);
     $pdf->Cell(2.5, 0.5, utf8_decode("Monto"), 1, 1, 'C', 0);
     $pdf->SetXY(6.5, $Y + 10);
-    $pdf->Cell(2.5, 0.5, utf8_decode($anticipo_tot . ' ' . $anticipo_moneda_pdf), 1, 1, 'C', 0);
+    $pdf->Cell(2.5, 0.5, utf8_decode($anticipo_tot.' '.$anticipo_moneda_pdf), 1, 1, 'C', 0);
 }
 
 // Detraccion

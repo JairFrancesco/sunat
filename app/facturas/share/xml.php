@@ -178,7 +178,7 @@ $cac_accounting = $xml->createElement('cac:AccountingSupplierParty'); $cac_accou
 if ($anticipo_current == 1){
 $PrepaidPayment = $xml->createElement('cac:PrepaidPayment'); $PrepaidPayment = $Invoice->appendChild($PrepaidPayment);
     $cbc = $xml->createElement('cbc:ID',$anticipo_doc); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('schemeID', $anticipo_SchemaID);
-    $cbc = $xml->createElement('cbc:PaidAmount',$anticipo_tot); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('currencyID', $anticipo_moneda);
+    $cbc = $xml->createElement('cbc:PaidAmount',($anticipo_tot/1.18)); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('currencyID', $anticipo_moneda);
     $cbc = $xml->createElement('cbc:InstructionID',$anticipo_documento); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('schemeID', $anticipo_document_type);
 }
 
