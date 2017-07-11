@@ -393,8 +393,7 @@ foreach($DocXML as $Nodo){
     $i++;
 }
 
-$pdf->SetXY(1,$Y+8.5);
-$pdf->Cell(11, 0.5, utf8_decode('Son : '.$leyenda_100), 0, 1,'L', 0);
+$pdf->SetXY(1,$Y+8.5); $pdf->Cell(11, 0.5, utf8_decode('Son : '.$leyenda_100), 0, 1,'L', 0);
 
 $pdf->SetXY(14,$Y+8.5);
 $pdf->Cell(4, 0.5, utf8_decode("Sub Total ".$MonedaRes." : "), 1, 1,'R', 0);

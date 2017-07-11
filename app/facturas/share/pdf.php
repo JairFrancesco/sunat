@@ -201,7 +201,7 @@ if ($tipo_doc_cli == '1'){
 } elseif ($tipo_doc_cli == '6'){
     $tipo_doc_cli_nom = 'RUC';
 } elseif ($tipo_doc_cli == '4'){
-    $tipo_doc_cli_nom = 'CARNET EXTRANJERIA';
+    $tipo_doc_cli_nom = 'Carnet Extranjeria';
 }
 
 //********************* Primera fila cabezera **********************************//
@@ -374,8 +374,7 @@ if ($c18 == 'COCRD'){
 }
 
 
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',9.5);
+$pdf->SetTextColor(0,0,0); $pdf->SetFont('arial','',9.5);
 
 // operaciones
 $DocXML = $DOM->getElementsByTagName('PayableAmount');
@@ -415,8 +414,10 @@ foreach($DocXML as $Nodo){
     $i++;
 }
 
-$pdf->SetXY(1,$Y+8.5);
-$pdf->Cell(11, 0.5, utf8_decode('Son : '.$leyenda_100), 0, 1,'L', 0);
+
+
+// leyenda
+$pdf->SetXY(1,$Y+8.5); $pdf->Cell(11, 0.5, utf8_decode('Son : '.$leyenda_100), 0, 1,'L', 0);
 
 $pdf->SetXY(12,$Y+8.5);
 $pdf->Cell(6, 0.5, utf8_decode("Sub Total ".$MonedaRes." : "), 1, 1,'R', 0);
@@ -453,10 +454,14 @@ $pdf->Cell(6, 0.5, utf8_decode("I.G.V. 18% ".$MonedaRes." : "), 1, 1,'R', 0);
 $pdf->SetXY(18,$Y+11.5);
 $pdf->Cell(2, 0.5, number_format($total_igv_,2), 1, 1,'R', 0);
 
-$pdf->SetXY(12,$Y+12);
-$pdf->Cell(6, 0.5, utf8_decode("IMPORTE TOTAL ".$MonedaRes." : "), 1, 1,'R', 0);
-$pdf->SetXY(18,$Y+12);
-$pdf->Cell(2, 0.5, number_format($importe_total,2), 1, 1,'R', 0);
+$pdf->SetXY(12,$Y+12); $pdf->Cell(6, 0.5, utf8_decode("IMPORTE TOTAL ".$MonedaRes." : "), 1, 1,'R', 0);
+$pdf->SetXY(18,$Y+12); $pdf->Cell(2, 0.5, number_format($importe_total,2), 1, 1,'R', 0);
+
+if ($cab['CDG_TIP_DOC'] == 'F' && $importe_total > 700 ){
+    // Detraccion
+    $pdf->SetXY(1,$Y+13); $pdf->Cell(2, 0.5, utf8_decode('Operación sujeta al Sitema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco. '), 0, 1,'L', 0);
+    $pdf->SetXY(1,$Y+13.5); $pdf->Cell(2, 0.5, utf8_decode('Nación no. 00-151-084257'.$cab['CDG_TIP_DOC']), 0, 1,'L', 0);
+}
 
 // anticipo
 if ($anticipo_current == 1) {
@@ -477,6 +482,9 @@ if ($anticipo_current == 1) {
     $pdf->SetXY(6.5, $Y + 10);
     $pdf->Cell(2.5, 0.5, utf8_decode($anticipo_tot . ' ' . $anticipo_moneda_pdf), 1, 1, 'C', 0);
 }
+
+// Detraccion
+$pdf->SetXY(1,$Y+9); $pdf->Cell(11, 0.5, utf8_decode(''), 0, 1,'L', 0);
 
 // Codigo de barras
 $pdf->image($ruta.$f8.".png",0.67, 21.9, 8.65, 2);

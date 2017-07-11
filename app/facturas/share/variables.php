@@ -279,7 +279,7 @@
     }elseif($cab['TIPDOCUSUARIO3'] == '1'){
         $documento = 'DNI';
     }else{
-        $documento = 'Carnet Extranjero';
+        $documento = 'Carnet Extranjeria';
     }
     $c10 = $documento;
     $c11 = $cab['NUMDOCUSUARIO4'];
@@ -403,7 +403,7 @@
     } elseif (strlen($cab['NUMDOCUSUARIO4']) == 8){
         $f9 = 1;
     } else {
-        $f9 == 4;
+        $f9 = 4;
     }
     //$f9 = $cab['TIPDOCUSUARIO3'];
 
