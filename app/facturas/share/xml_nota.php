@@ -340,7 +340,11 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
 }
 
 //URL para enviar las solicitudes a SUNAT
-$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+// beta $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+
+// produccion
+$wsdlURL = 'https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService?wsdl';
+
 
 //Estructura del XML para la conexión
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
@@ -348,8 +352,8 @@ $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
  <soapenv:Header>
      <wsse:Security>
          <wsse:UsernameToken Id="ABC-123">
-             <wsse:Username>20532710066MODDATOS</wsse:Username>
-             <wsse:Password>MODDATOS</wsse:Password>
+             <wsse:Username>20532710066ROMANTRE</wsse:Username>
+             <wsse:Password>T3E4A5M6S7</wsse:Password>
          </wsse:UsernameToken>
      </wsse:Security>
  </soapenv:Header>
