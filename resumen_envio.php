@@ -1,12 +1,12 @@
 <?php
-
+    date_default_timezone_set('America/Lima');
     $hace = $_GET['h'];
     $gen = $_GET['gen'];
     $emp = $_GET['emp'];
 
     if ($hace == 0){
-        //$dia = date('d-m-Y');
-        $dia = '2017-04-13';
+        $dia = date('Y-m-d');
+        //$dia = '2017-04-13';
     }elseif ($hace == 1){
         $fecha = date('Y-m-d');
         //$dia = date("d-m-Y", strtotime("$fecha -1 day"));
