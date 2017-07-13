@@ -458,8 +458,8 @@ $pdf->SetTextColor(0,0,0);
 $pdf->SetFont('arial','',9);
 $pdf->SetXY(1,25);
 $pdf->MultiCell(19.5, 0.35, utf8_decode("Representación Impresa de la Factura ElectrónicaCódigo Hash: $CodHash
-Autorizado para ser Emisor electrónico mediante la Resolución de Intendencia N° 0180050002185/SUNAT
-Para consultar el comprobante ingresar a : https://portal.efacturacion.pe/appefacturacion"), 0, 'C');
+Autorizado para ser Emisor electrónico mediante la Resolución de Intendencia N° 112-005-0000143/SUNAT
+Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php"), 0, 'C');
 
 //==============================================================================
 $pdf->Output($ruta.$NomArchPDF, 'F'); // Se graba el documento .PDF en el disco duro o unidad de estado sólido.
