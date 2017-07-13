@@ -196,7 +196,7 @@ if ($tipo_doc_cli == '1'){
 } elseif ($tipo_doc_cli == '6'){
     $tipo_doc_cli_nom = 'RUC';
 } elseif ($tipo_doc_cli == '4'){
-    $tipo_doc_cli_nom = 'CARNET EXTRANJERIA';
+    $tipo_doc_cli_nom = 'Carnet Extranjeria';
 }
 
 $pdf->RoundedRect(1, 4.2, 19, 3.25, 0.1, ''); $pdf->SetTextColor(0,0,0); $pdf->SetFont('arial','B',9); // border del cuadrado

@@ -123,9 +123,9 @@ class PDF extends FPDF{
 }
 
 // nombre del pdf
-$nombre_pdf = '20532710066-'.$DOM->getElementsByTagName('InvoiceTypeCode')->item(0)->nodeValue.'-'.$DOM->getElementsByTagName('ID')->item(6)->nodeValue;
-$NomArchPDF = $nombre_pdf.'.pdf';
-
+//$nombre_pdf = '20532710066-'.$DOM->getElementsByTagName('InvoiceTypeCode')->item(0)->nodeValue.'-'.$DOM->getElementsByTagName('ID')->item(6)->nodeValue;
+$NomArchPDF = $f6.'.pdf';
+echo $f6;
 $pdf=new PDF('P','cm','Letter');
 $pdf->AliasNbPages();
 $pdf->AddPage();
@@ -505,4 +505,5 @@ Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consul
 //==============================================================================
 $pdf->Output($ruta.$NomArchPDF, 'F'); // Se graba el documento .PDF en el disco duro o unidad de estado sólido.
 chmod ($ruta.$NomArchPDF,0777);  // Se dan permisos de lectura y escritura.
-$pdf->Output($ruta.$NomArchPDF, 'I'); // Se muestra el documento .PDF en el navegador.
+//$pdf->Output($ruta.$NomArchPDF, 'I'); // Se muestra el documento .PDF en el navegador.
+//echo $NomArchPDF;
