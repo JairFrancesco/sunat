@@ -490,9 +490,10 @@
 
         $sql_extendido = oci_parse($conn, "
           select * from cab_doc_gen 
-          inner join det_ing_ser on dis_cod_cli=cab_doc_gen.cdg_cod_cli
+          inner join cab_ord_ser on cos_num_ot=cab_doc_gen.cdg_ord_tra
+          inner join det_ing_ser on dis_pla_veh=cab_ord_ser.cos_pla_veh
           inner join cab_fam_veh on cfv_cod_gen=cab_doc_gen.cdg_cod_gen and cfv_cod_mar=det_ing_ser.dis_mar_veh and cfv_cod_fam=det_ing_ser.dis_cod_fam
-          where cdg_num_doc='13504' order by cdg_fec_gen Desc");
+          where cdg_num_doc='".$num_doc."' and cdg_cla_doc='".$cla_doc."' and cdg_cod_emp='".$emp."' and cdg_cod_gen='".$gem."' order by cdg_fec_gen Desc");
         oci_execute($sql_extendido);
         while($res_extendido = oci_fetch_array($sql_extendido)){
             $ord_trab = $res_extendido['CDG_ORD_TRA'];
