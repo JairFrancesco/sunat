@@ -1,8 +1,8 @@
 <?php
 //$soap = new SoapClient('https://www.sunat.gob.pe:443/ol-ti-itcpgem-sqa/billService?wsdl');
 //$soap = new SoapClient('https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl');
-//var_dump($soap->__getFunctions()); 35 73 84
-$nameXml = '20532710066-RA-20170712-1';
+//var_dump($soap->__getFunctions());
+$nameXml = '20532710066-01-F001-1';
 
 // 2.- Firmar documento xml
 // ========================
@@ -31,7 +31,7 @@ $objDSig->sign($objKey);
 // Agregue la clave pública asociada a la firma
 $objDSig->add509Cert(file_get_contents('./archivos_pem/public_key.pem'), true, false, array('subjectName' => true)); // array('issuerSerial' => true, 'subjectName' => true));
 // Anexar la firma al XML
-$objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(0));
+$objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(1));
 // Guardar el XML firmado
 $doc->save('homo/'.$nameXml.'.xml');
 chmod('homo/'.$nameXml.'.xml', 0777);
@@ -96,18 +96,17 @@ xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-s
 </wsse:Security>
 </soapenv:Header>
 <soapenv:Body>
-<ser:sendSummary>
+<ser:sendBill>
 <fileName>'.$nameXml.'.zip</fileName>
 <contentFile>' . base64_encode(file_get_contents('./homo/'.$nameXml.'.zip')) . '</contentFile>
-</ser:sendSummary>
+</ser:sendBill>
 </soapenv:Body>
 </soapenv:Envelope>';
 
 //echo $XMLString;
 //Realizamos la llamada a nuestra función
 $result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
-echo $result;
-/*
+
 //Descargamos el Archivo Response
 $archivo = fopen('homo/'.'C'.$nameXml.'.xml','w+');
 fputs($archivo,$result);
@@ -128,8 +127,8 @@ if ($archive->extract('homo/')==0) {
 }else{
     chmod('homo/'.$nameXml.'.xml', 0777);
 }
-
+*/
 //Eliminamos el Archivo Response
 unlink('homo/'.'C'.$nameXml.'.xml');
-*/
+
 ?>
