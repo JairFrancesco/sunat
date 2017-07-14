@@ -1,6 +1,10 @@
 app/repo/*
 app/resumenes/*
+app/bajas/*
 .idea/*
 .git/*
 homo/*
 app/coneccion.php
+.idea/
+app/repo/
+homo/

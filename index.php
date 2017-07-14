@@ -48,7 +48,6 @@
 		$fecha_inicio = $_GET['fecha_inicio'];
 		$fecha_final = $_GET['fecha_final'];    	
 		$pagina = $_GET['pagina'];
-
 		
 	}else{
 		$fecha_inicio = 'N';
@@ -135,7 +134,11 @@
 					while (($row = oci_fetch_array($curs, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
 						//if ($row['CDG_TIP_REF'] !='BR' &&  $row['CDG_TIP_REF'] !='BS' ) {
                         if ($row['CDG_SUN_ENV']=='S'){
-                            $sunat = 'success';
+                            if ($row['ANU_SN11']=='S' && $row['DOC_ANU12']=='S'){
+                                $sunat = 'danger';
+                            } else {
+                                $sunat = 'success';
+                            }
                         }else {
                             $sunat = '';
                         }
@@ -155,9 +158,13 @@
                             }
                             echo '<td>';
                             if ($row['CDG_SUN_ENV']=='S'){
-                                echo '<a class="btn btn-success btn-xs" href="./app/repo/'.$row['NOMBRE_DOC'].'.pdf" target="_blank"><span class="glyphicon glyphicon-ok"></span> Imprimir</a>';
+                                if ($row['ANU_SN11']=='S' && $row['DOC_ANU12']=='S') {
+                                    echo '<a class="btn btn-danger btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="glyphicon glyphicon-repeat"></span> Dar Baja</a>';
+                                } else {
+                                    echo '<a class="btn btn-success btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="glyphicon glyphicon-ok"></span> Imprimir</a>';
+                                }
                             }else{
-                                echo '<a class="btn btn-primary btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'" target="_blank"><span class="glyphicon glyphicon-repeat"></span> Facturar</a>';
+                                echo '<a class="btn btn-primary btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="glyphicon glyphicon-repeat"></span> Facturar</a>';
                             }
 					        echo '</td></tr>';
 

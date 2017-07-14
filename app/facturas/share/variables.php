@@ -1,5 +1,6 @@
 <?php
 
+
     if ( $cla_doc=='FS' || $cla_doc=='FR' || $cla_doc=='FC' || $cla_doc=='BS' || $cla_doc=='BR') {
 
         // obtener cabezera
@@ -13,7 +14,7 @@
         while (($row_cab = oci_fetch_array($curs_cab, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
             // cab es todas las variables de cabezera
             $cab = $row_cab;
-            //print_r($cab);
+            //print_r($row_cab);
         }
 
         if (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'D') {
@@ -125,6 +126,7 @@
         oci_execute($curs_ncc);
         while (($row_ncc = oci_fetch_array($curs_ncc, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
             $cab = $row_ncc;
+            //print_r($row_ncc);
         }
 
 
