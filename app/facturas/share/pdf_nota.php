@@ -464,5 +464,16 @@ Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consul
 //==============================================================================
 $pdf->Output($ruta.$NomArchPDF, 'F'); // Se graba el documento .PDF en el disco duro o unidad de estado sólido.
 chmod ($ruta.$NomArchPDF,0777);  // Se dan permisos de lectura y escritura.
-
 $pdf->Output($ruta.$NomArchPDF, 'I'); // Se muestra el documento .PDF en el navegador.
+
+
+
+// Actualiza la cdg_cab_doc sun_env=S
+if (!file_exists($ruta.$NomArchPDF.'pdf')) {
+    $update = "update cab_doc_gen SET cdg_sun_env='S' WHERE cdg_num_doc='".$cab['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab['CDG_COD_EMP']."' and cdg_cod_gen='".$cab['CDG_COD_GEN']."'";
+    $stmt = oci_parse($conn, $update);
+    oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+    oci_free_statement($stmt);
+}
+
+//print_r($cab);
