@@ -31,8 +31,10 @@ create or replace package body PKG_ELECTRONICA as
         cdg_tip_ref,
         cdg_cod_emp,
         cdg_exi_fra,
-        cdg_exi_ant
-        from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy') = to_char(sysdate,'dd-mm-yyyy') and cdg_cod_gen=gen and cdg_cod_emp=emp order by cdg_tip_doc, cdg_num_doc Desc) a where  ROWNUM<=p_final)where rn>=p_inicial;
+        cdg_exi_ant,
+        cdg_sun_env,
+        to_char(CDG_FEC_GEN,'yyyy') || '/' || to_char(CDG_FEC_GEN,'mm') || '/' || to_char(CDG_FEC_GEN,'dd') || '/' || '20532710066-' || decode(cdg_tip_doc,'F','01','B','03','A','07','0') || '-' || decode(cdg_tip_doc,'F',decode(cdg_ser_doc,1,'F001',2,'F002',3,'F003',4,'F004','F000'),'B',decode(cdg_ser_doc,1,'B001',2,'B002',3,'B003',4,'B004','B000'),'A',decode(cdg_tip_ref,'FS',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'FR',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'BS',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'BR',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'XXXX'),'MMMM') || '-' || cdg_num_doc  as nombre_doc
+        from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy') = to_char(sysdate,'dd-mm-yyyy') and cdg_cod_gen=gen and cdg_cod_emp=emp order by cdg_fec_gen Desc) a where  ROWNUM<=p_final)where rn>=p_inicial;
     elsif fecha1 != 'N' and fecha2 != 'N' then
       open docs for
         select * from(select ROWNUM rn, a.* from(select
@@ -46,15 +48,17 @@ create or replace package body PKG_ELECTRONICA as
         cdg_imp_neto as vvp_tot7, -- 7
         decode(cdg_tip_cam,0,'PEN','USD')  as soles8, -- 8
         CDG_TIPO_FACTURA as tipo_factura9, -- 9
-        decode(cdg_tip_doc,'F','01','B','03','A','07','0') || '-' || decode(cdg_tip_doc,'F',decode(cdg_ser_doc,1,'F001',2,'F002',3,'F003',4,'F004','F000'),'B',decode(cdg_ser_doc,1,'B001',2,'B002',3,'B003',4,'B004','B000'),'A',decode(cdg_tip_ref,'FS',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'FR',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'BS',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'BR',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'XXXX'),'MMMM') || '-'|| lpad(cdg_num_doc,8,0) as nombre10, -- 0
+        decode(cdg_tip_doc,'F','01','B','03','A','07','0') || '-' || decode(cdg_tip_doc,'F',decode(cdg_ser_doc,1,'F001',2,'F002',3,'F003',4,'F004','F000'),'B',decode(cdg_ser_doc,1,'B001',2,'B002',3,'B003',4,'B004','B000'),'A',decode(cdg_tip_ref,'FS',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'FR',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'BS',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'BR',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'XXXX'),'MMMM') || '-'|| cdg_num_doc as nombre10, -- 0
         cdg_anu_sn as anu_sn11,
         cdg_doc_anu as doc_anu12,
         cdg_tip_doc,
         cdg_tip_ref,
         cdg_cod_emp,
         cdg_exi_fra,
-        cdg_exi_ant
-        from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_fec_gen >= to_date(fecha1,'dd-mm-yyyy') and  cdg_fec_gen < (to_date(fecha2,'dd-mm-yyyy')+1) order by cdg_tip_doc Asc) a where  ROWNUM<=p_final)where rn>=p_inicial ;
+        cdg_exi_ant,
+        cdg_sun_env,
+        to_char(CDG_FEC_GEN,'yyyy') || '/' || to_char(CDG_FEC_GEN,'mm') || '/' || to_char(CDG_FEC_GEN,'dd') || '/' || '20532710066-' || decode(cdg_tip_doc,'F','01','B','03','A','07','0') || '-' || decode(cdg_tip_doc,'F',decode(cdg_ser_doc,1,'F001',2,'F002',3,'F003',4,'F004','F000'),'B',decode(cdg_ser_doc,1,'B001',2,'B002',3,'B003',4,'B004','B000'),'A',decode(cdg_tip_ref,'FS',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'FR',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'BS',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'BR',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'XXXX'),'MMMM') || '-' || cdg_num_doc  as nombre_doc
+        from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_fec_gen >= to_date(fecha1,'dd-mm-yyyy') and  cdg_fec_gen < (to_date(fecha2,'dd-mm-yyyy')+1) order by cdg_fec_gen Desc) a where  ROWNUM<=p_final)where rn>=p_inicial ;
     end if;
 
   end;
@@ -72,7 +76,7 @@ create or replace package body PKG_ELECTRONICA as
         '0.00' as sumDsctoGlobal7,
         '0.00' as sumOtrosCargos8,
         to_char(round(decode(cdg_tip_cam,0,cdg_des_tot,cdg_des_dol),2),'FM99990.00') as mtoDescuentos9, -- Descuentos
-        to_char(round(decode(cdg_exi_fra,'S',((cdg_vvp_tot)-(cdg_tot_fra/(1+cdg_por_igv/100))),decode(cdg_tip_cam,0,cdg_vvp_tot-cdg_des_tot,cdg_vvp_dol-cdg_des_dol)),2),'FM99990.00') as mtoOperGravadas10,
+        to_char(round(decode(cdg_exi_fra,'S',((cdg_vvp_tot)-(cdg_tot_fra/(1+cdg_por_igv/100))-cdg_des_tot),decode(cdg_tip_cam,0,cdg_vvp_tot-cdg_des_tot,cdg_vvp_dol-cdg_des_dol)),2),'FM99990.00') as mtoOperGravadas10,
         '0.00' as mtoOperInafectas11,
         '0.00' as mtoOperExoneradas12,
         to_char(round(decode(cdg_exi_fra,'S',(cdg_igv_tot -(cdg_tot_fra/(1+cdg_por_igv/100))*(cdg_por_igv/100)),decode(cdg_tip_cam,0,cdg_igv_tot,cdg_igv_dol)),2),'FM99990.00') as mtoIGV13, -- IGV
@@ -85,7 +89,7 @@ create or replace package body PKG_ELECTRONICA as
         '20532710066' || '-' || decode(cdg_tip_doc,'F','01','B','03','A','07','0') || '-' || decode(cdg_tip_doc,'F',decode(cdg_ser_doc,1,'F001',2,'F002',3,'F003',4,'F004','F000'),'B',decode(cdg_ser_doc,1,'B001',2,'B002',3,'B003',4,'B004','B000'),'MMMM') || '-'|| cdg_num_doc || '.zip' as nombre20,
         cdg_anu_sn as anu_sn21,
         cdg_doc_anu as doc_anu22,
-        decode(cdg_co_cr,'CO','Contado','CR','Credito','AN','Anticipo','No Definido') as doc23,
+        decode(cdg_co_cr,'CO','Contado','CR','Credito','AN','Contado','No Definido') as doc23,
         cdg_dir_cli as DOC24,
         decode(cdg_tip_doc,'F','01','B','03','A','07','0') as tipodoc,
         decode(cdg_tip_doc,'F',decode(cdg_ser_doc,1,'F001',2,'F002',3,'F003',4,'F004','F000'),'B',decode(cdg_ser_doc,1,'B001',2,'B002',3,'B003',4,'B004','B000'),'MMMM') as serie,
@@ -102,7 +106,11 @@ create or replace package body PKG_ELECTRONICA as
         CDG_TIP_FRA,
         CDG_UBI_GEO,
         CDG_CLA_DOC,
-        CDG_ORD_TRA
+        CDG_ORD_TRA,
+        CDG_COD_EMP,
+        CDG_COD_GEN,
+        CDG_SUN_ENV,
+        CDG_CO_CR
       from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_num_doc=num_doc and cdg_cla_doc=cla_doc;
   end;
 
@@ -135,7 +143,7 @@ create or replace package body PKG_ELECTRONICA as
         '20532710066' || '-' || decode(cdg_tip_doc,'F','01','B','03','A','07','0') || '-' || decode(cdg_tip_ref,'FS',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'FR',decode(cdg_ser_doc,1,'FN01',2,'FN02',3,'FN03',4,'FN04','XXXX'),'BS',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'BR',decode(cdg_ser_doc,1,'BN01',2,'BN02',3,'BN03',4,'BN04','XXXX'),'XXXX') || '-'|| cdg_num_doc || '.det' as nombre20,
         cdg_anu_sn as anu_sn21,
         cdg_doc_anu as doc_anu22,
-        decode(cdg_co_cr,'CO','Contado','CR','Credito','AN','Anticipo','No Definido') as doc23,
+        decode(cdg_co_cr,'CO','Contado','CR','Credito','AN','Contado','No Definido') as doc23,
         CDG_DIR_CLI as doc24,
         to_char(round(decode(cdg_exi_fra,'S',((cdg_vvp_tot-cdg_des_tot)-(cdg_tot_fra/(1+cdg_por_igv/100))),decode(cdg_tip_cam,0,cdg_vvp_tot,cdg_vvp_dol)),2),'FM99990.00') as SUBTOTAL14,
         cdg_doc_ref as doc_ref,
@@ -154,7 +162,11 @@ create or replace package body PKG_ELECTRONICA as
         CDG_TIP_FRA,
         CDG_UBI_GEO,
         CDG_CLA_DOC,
-        CDG_ORD_TRA
+        CDG_ORD_TRA,
+        CDG_COD_EMP,
+        CDG_COD_GEN,
+        CDG_SUN_ENV,
+        CDG_CO_CR
       from cab_doc_gen b where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_tip_doc='A' and cdg_num_doc=num_doc;
   end;
   procedure dds(gen VARCHAR2,emp VARCHAR2, num_doc number, cla_doc VARCHAR2, moneda VARCHAR2, dds out sys_refcursor) is
