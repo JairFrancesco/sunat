@@ -436,7 +436,10 @@ $pdf->Cell(4, 0.5, utf8_decode("IMPORTE TOTAL ".$MonedaRes." : "), 1, 1,'R', 0);
 $pdf->SetXY(18,$Y+12);
 $pdf->Cell(2, 0.5, number_format($importe_total,2), 1, 1,'R', 0);
 
-
+//motivo anticipo
+if ($cab['CDG_CLA_DOC']=='AR' && $cab['CDG_CO_CR']=='AN'){
+$pdf->SetXY(1, $Y + 10.5); $pdf->Cell(8, 0.5, utf8_decode($nota), 0, 1, 'L', 0);
+}
 // relacionado
 $pdf->SetXY(1, $Y + 11.5); $pdf->Cell(8, 0.5, utf8_decode("Documento Relacionado"), 1, 1, 'C', 0);
 $pdf->SetXY(1, $Y + 12); $pdf->Cell(4, 0.5, utf8_decode("Doc. : ".$num_doc_ref), 1, 1, 'L', 0);
