@@ -108,7 +108,7 @@
                 </div>
             </div>
 
-		<table class="table table-hover table-bordered">
+		<table class="table table-hover table-bordered table-condensed">
 			<thead>
 				<tr class="well">
 					<th>Fecha</th>
@@ -132,24 +132,35 @@
 					oci_bind_by_name($stid, ":docs", $curs, -1, OCI_B_CURSOR);
 					oci_execute($stid);
 					oci_execute($curs);
- 
 					while (($row = oci_fetch_array($curs, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
 						//if ($row['CDG_TIP_REF'] !='BR' &&  $row['CDG_TIP_REF'] !='BS' ) {
+                        if ($row['CDG_SUN_ENV']=='S'){
+                            $sunat = 'success';
+                        }else {
+                            $sunat = '';
+                        }
 						    echo '
-						        <tr>
+						        <tr class="'.$sunat.'">
 						            <td>'.strtolower($row['FEC_GEN1']).'</td>
 						            <td>'.substr($row['NOMBRE10'],3,20).'</td>
 						            <td>'.strtolower(substr($row['NOM_CLI2'],0,25)).'</td>
 						            <td>'.$row['CLA_DOC3'].' '.$row['CO_CR_AN4'].' '.$row['TIP_IMP6'].' '.$row['FQ5'].' '.$row['CDG_EXI_FRA'].' '.$row['CDG_EXI_ANT'].'</td>
 						            <td>'.$row['ANU_SN11'].' '.$row['DOC_ANU12'].'</td>
 						            <td>'.$row['SOLES8'].'</td>
-						            <td>'.$row['VVP_TOT7'].'</td>
-						            <td><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>
-						            <td>
-						                <a class="dropdown-item" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'" target="_blank">Facturar</a>			
-					                </td>
-					            </tr>
-						    ';
+						            <td class="text-right">'.number_format($row['VVP_TOT7'], 2, ".", " ").'</td>';
+                            if ($row['CDG_SUN_ENV']=='S'){
+                                echo '<td class="text-center"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>';
+                            }else{
+                                echo '<td class="text-center"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>';
+                            }
+                            echo '<td>';
+                            if ($row['CDG_SUN_ENV']=='S'){
+                                echo '<a class="btn btn-success btn-xs" href="./app/repo/'.$row['NOMBRE_DOC'].'.pdf" target="_blank"><span class="glyphicon glyphicon-ok"></span> Imprimir</a>';
+                            }else{
+                                echo '<a class="btn btn-primary btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'" target="_blank"><span class="glyphicon glyphicon-repeat"></span> Facturar</a>';
+                            }
+					        echo '</td></tr>';
+                            
                         //}
                     }
 				?>
