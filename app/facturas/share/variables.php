@@ -94,9 +94,10 @@
 
 
         } elseif (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'R') {
+            //echo 'ingreso';
             // detalle unico de resumen
             // ========================
-            $sql_factura_detalle_resumen = "select cdg_ten_res from cab_doc_gen where cdg_num_doc=".$num_doc." and cdg_cod_gen=".$gem." and cdg_cod_emp=".$emp." and cdg_cla_doc='FS'";
+            $sql_factura_detalle_resumen = "select cdg_ten_res from cab_doc_gen where cdg_num_doc=".$num_doc." and cdg_cod_gen=".$gem." and cdg_cod_emp=".$emp." and cdg_cla_doc='".$cla_doc."'";
             $factura_detalle_resumen = oci_parse($conn, $sql_factura_detalle_resumen);
             oci_execute($factura_detalle_resumen);
             while ($fila_factura_detalle_resumen = oci_fetch_array($factura_detalle_resumen, OCI_ASSOC + OCI_RETURN_NULLS)) {
