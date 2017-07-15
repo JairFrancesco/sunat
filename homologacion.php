@@ -2,7 +2,7 @@
 //$soap = new SoapClient('https://www.sunat.gob.pe:443/ol-ti-itcpgem-sqa/billService?wsdl');
 //$soap = new SoapClient('https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl');
 //var_dump($soap->__getFunctions()); 35 73 84
-$nameXml = '20532710066-RA-20170712-1';
+$nameXml = '20532710066-RA-20170714-1';
 
 // 2.- Firmar documento xml
 // ========================
@@ -79,8 +79,9 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString){
     //print_r($client);
 }
 //URL para enviar las solicitudes a SUNAT
-$wsdlURL = 'https://www.sunat.gob.pe/ol-ti-itcpgem-sqa/billService?wsdl';
-//Estructura del XML para la conexión
+//$wsdlURL = 'https://www.sunat.gob.pe/ol-ti-itcpgem-sqa/billService?wsdl';
+//Estructura del XML para la conexión    https://www.sunat.gob.pe/ol-it-wsconscpegem/billConsultService?wsdl
+$wsdlURL = 'https://www.sunat.gob.pe/ol-ti-itemision-otroscpe-gem/billService?wsdl';
 
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope 
@@ -98,14 +99,14 @@ xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-s
 <soapenv:Body>
 <ser:sendSummary>
 <fileName>'.$nameXml.'.zip</fileName>
-<contentFile>' . base64_encode(file_get_contents('./homo/'.$nameXml.'.zip')) . '</contentFile>
+<contentFile>'.base64_encode(file_get_contents('./homo/'.$nameXml.'.zip')).'</contentFile>
 </ser:sendSummary>
 </soapenv:Body>
 </soapenv:Envelope>';
 
 //echo $XMLString;
 //Realizamos la llamada a nuestra función
-$result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
+$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
 echo $result;
 /*
 //Descargamos el Archivo Response
