@@ -244,7 +244,7 @@ if ($c18 == 'COCRD') {
                                 $cbc = $xml->createElement('cbc:Name', 'IGV'); $cbc = $taxscheme->appendChild($cbc);
                                 $cbc = $xml->createElement('cbc:TaxTypeCode', 'VAT'); $cbc = $taxscheme->appendChild($cbc);
                 $item = $xml->createElement('cac:Item'); $item = $InvoiceLine->appendChild($item);
-                    $cbc = $xml->createElement('cbc:Description', $det['DESITEM4']); $cbc = $item->appendChild($cbc);
+                    $cbc = $xml->createElement('cbc:Description', substr(preg_replace('([^A-Za-z0-9/\s\s+])', '', $det['DESITEM4']),0,200)); $cbc = $item->appendChild($cbc);
                     $sellers = $xml->createElement('cac:SellersItemIdentification'); $sellers = $item->appendChild($sellers);
                         $cbc = $xml->createElement('cbc:ID', $det['CODPRODUCTO2']); $cbc = $sellers->appendChild($cbc);
                 // precio sin igv ejm 83.05
@@ -288,7 +288,7 @@ if ($c18 == 'COCRD') {
                             $cbc = $xml->createElement('cbc:TaxTypeCode', 'VAT'); $cbc = $taxscheme->appendChild($cbc);
 
             $item = $xml->createElement('cac:Item'); $item = $InvoiceLine->appendChild($item);
-                $cbc = $xml->createElement('cbc:Description', $det); $cbc = $item->appendChild($cbc);
+                $cbc = $xml->createElement('cbc:Description', substr(preg_replace('([^A-Za-z0-9/\s\s+])', '', $det),0,200)); $cbc = $item->appendChild($cbc);
 
             $sellers = $xml->createElement('cac:SellersItemIdentification'); $sellers = $item->appendChild($sellers);
                 $cbc = $xml->createElement('cbc:ID', ''); $cbc = $sellers->appendChild($cbc);

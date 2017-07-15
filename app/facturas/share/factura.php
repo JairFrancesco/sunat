@@ -127,7 +127,7 @@
         }elseif ($c18 == 'COCRR') {
             echo '<tr>';
             echo '<td>--</td>';
-            echo '<td>'.$det.'</td>';
+            echo '<td>'.substr(preg_replace('([^A-Za-z0-9/\s\s+])', '', $det),0,200).'</td>';
             echo '<td>--</td>';
             echo '<td>--</td>';
             echo '<td>--</td>';
@@ -137,7 +137,7 @@
         } elseif ($c18 == 'AND') {
             echo '<tr>';
             echo '<td>--</td>';
-            echo '<td>'.$det.'</td>';
+            echo '<td>'.substr(preg_replace('([^A-Za-z0-9/\s\s+])', '', $det),0,200).'</td>';
             echo '<td>--</td>';
             echo '<td>--</td>';
             echo '<td>--</td>';
@@ -160,7 +160,7 @@
         } elseif ($c18 == 'NANDR') {
             echo '<tr>';
             echo '<td>--</td>';
-            echo '<td>'.$det.'</td>';
+            echo '<td>'.substr(preg_replace('([^A-Za-z0-9/\s\s+])', '', $det),0,200).'</td>';
             echo '<td>--</td>';
             echo '<td>--</td>';
             echo '<td>--</td>';
