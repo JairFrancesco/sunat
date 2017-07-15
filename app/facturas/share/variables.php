@@ -1,5 +1,6 @@
 <?php
 
+
     if ( $cla_doc=='FS' || $cla_doc=='FR' || $cla_doc=='FC' || $cla_doc=='BS' || $cla_doc=='BR') {
 
         // obtener cabezera
@@ -13,7 +14,7 @@
         while (($row_cab = oci_fetch_array($curs_cab, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
             // cab es todas las variables de cabezera
             $cab = $row_cab;
-            //print_r($cab);
+            //print_r($row_cab);
         }
 
         if (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'D') {
@@ -93,9 +94,10 @@
 
 
         } elseif (($co_cr_an=='CO' || $co_cr_an=='CR') && $tip_imp == 'R') {
+            //echo 'ingreso';
             // detalle unico de resumen
             // ========================
-            $sql_factura_detalle_resumen = "select cdg_ten_res from cab_doc_gen where cdg_num_doc=".$num_doc." and cdg_cod_gen=".$gem." and cdg_cod_emp=".$emp." and cdg_cla_doc='FS'";
+            $sql_factura_detalle_resumen = "select cdg_ten_res from cab_doc_gen where cdg_num_doc=".$num_doc." and cdg_cod_gen=".$gem." and cdg_cod_emp=".$emp." and cdg_cla_doc='".$cla_doc."'";
             $factura_detalle_resumen = oci_parse($conn, $sql_factura_detalle_resumen);
             oci_execute($factura_detalle_resumen);
             while ($fila_factura_detalle_resumen = oci_fetch_array($factura_detalle_resumen, OCI_ASSOC + OCI_RETURN_NULLS)) {
@@ -125,6 +127,7 @@
         oci_execute($curs_ncc);
         while (($row_ncc = oci_fetch_array($curs_ncc, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
             $cab = $row_ncc;
+            //print_r($row_ncc);
         }
 
 

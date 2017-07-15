@@ -424,7 +424,7 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
 
 //URL para enviar las solicitudes a SUNAT
 // beta $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
-
+// nueva ruta analizar https://www.sunat.gob.pe/ol-ti-itemision-otroscpe-gem/billService?wsdl
 // produccion
 //$wsdlURL = 'https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService?wsdl';
 $wsdlURL = "billService.wsdl";

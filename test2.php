@@ -36,6 +36,7 @@
         $tip_imp = $_GET['tip_imp'];
         $anu_sn = $_GET['anu_sn'];
         $doc_anu = $_GET['doc_anu'];
+        $sun_env = $_GET['sun_env'];
     ?>
     <div class="container">
         <div class="row">
@@ -50,10 +51,13 @@
             </div>
             <div class="col-lg-6 text-right">
                 <a href="index.php?emp=<?php echo $emp; ?>" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>
-                <a href="test3.php?gen=02&emp=<?php echo $emp; ?>&num_doc=<?php echo $num_doc ?>&cla_doc=<?php echo $cla_doc ?>&moneda=<?php echo $moneda ?>&co_cr_an=<?php echo $co_cr_an ?>&exi_fra=<?php echo $exi_fra ?>&tip_imp=<?php echo $tip_imp ?>&anu_sn=<?php echo $anu_sn ?>&doc_anu=<?php echo $doc_anu ?>" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-up"></span> Enviar Sunat</a>
-                <?php if ($anu_sn == 'S' and $doc_anu == 'S' and ($cla_doc=='FS' || $cla_doc=='FR' || $cla_doc=='FC' || $cla_doc=='BR' || $cla_doc=='BS') ) { ?>
-                    <a href="baja.php?gen=02&emp=01&num_doc=<?php echo $num_doc ?>&cla_doc=<?php echo $cla_doc ?>&moneda=<?php echo $moneda ?>&co_cr_an=<?php echo $co_cr_an ?>&exi_fra=<?php echo $exi_fra ?>&tip_imp=<?php echo $tip_imp ?>&anu_sn=<?php echo $anu_sn ?>&doc_anu=<?php echo $doc_anu ?>" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Baja Documento</a>
+                <?php  if ($anu_sn != 'S' && $doc_anu != 'S') { ?>
+                    <a href="test3.php?gen=02&emp=<?php echo $emp; ?>&num_doc=<?php echo $num_doc ?>&cla_doc=<?php echo $cla_doc ?>&moneda=<?php echo $moneda ?>&co_cr_an=<?php echo $co_cr_an ?>&exi_fra=<?php echo $exi_fra ?>&tip_imp=<?php echo $tip_imp ?>&anu_sn=<?php echo $anu_sn ?>&doc_anu=<?php echo $doc_anu ?>" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-up"></span> Enviar Sunat</a>
                 <?php } ?>
+                <?php if ($anu_sn == 'S' and $doc_anu == 'S' and ($cla_doc=='FS' || $cla_doc=='FR' || $cla_doc=='FC' || $cla_doc=='BR' || $cla_doc=='BS') ) {  if ($sun_env != 'C') { ?>
+
+                    <a href="baja.php?gen=02&emp=01&num_doc=<?php echo $num_doc ?>&cla_doc=<?php echo $cla_doc ?>&moneda=<?php echo $moneda ?>&co_cr_an=<?php echo $co_cr_an ?>&exi_fra=<?php echo $exi_fra ?>&tip_imp=<?php echo $tip_imp ?>&anu_sn=<?php echo $anu_sn ?>&doc_anu=<?php echo $doc_anu ?>&sun_env=<?php echo $sun_env ?>" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Baja Documento</a>
+                <?php } } ?>
             </div>
             <br>
             <br>
@@ -75,7 +79,6 @@
                     //require ("app/facturas/facturaboletaserviciorepuestocontable_anticipo.php");
                 }
             }elseif($cla_doc=='AR' || $cla_doc=='AS'){
-
                 if ($co_cr_an=='CO' || $co_cr_an=='CR') {
                     if ($tip_imp == 'D') {
                         require("app/facturas/share/variables.php");

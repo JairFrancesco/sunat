@@ -13,6 +13,7 @@
     $tip_imp = $_GET['tip_imp'];
     $anu_sn = $_GET['anu_sn'];
     $doc_anu = $_GET['doc_anu'];
+    $sun_env = $_GET['sun_env'];
 
     // Tipos de factura
     if ( $cla_doc=='FS' || $cla_doc=='FR' || $cla_doc=='FC' || $cla_doc=='BS' || $cla_doc=='BR') {
@@ -248,7 +249,7 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
     return $client->__getLastResponse();
 }
 
-//URL para enviar las solicitudes a SUNAT
+// URL para enviar las solicitudes a SUNAT
 $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
 
 //Estructura del XML para la conexión
@@ -272,6 +273,7 @@ $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
 ';
 
 //Realizamos la llamada a nuestra función
-$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
-echo $result;
+//$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
+//echo $result;
+print_r($cab);
 ?>
