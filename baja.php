@@ -250,16 +250,19 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
 }
 
 // URL para enviar las solicitudes a SUNAT
-$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+$wsdlURL = 'billService.wsdl';
 
 //Estructura del XML para la conexión
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+<soapenv:Envelope 
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:ser="http://service.sunat.gob.pe" 
+ xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
  <soapenv:Header>
      <wsse:Security>
          <wsse:UsernameToken Id="ABC-123">
-             <wsse:Username>20532710066MODDATOS</wsse:Username>
-             <wsse:Password>MODDATOS</wsse:Password>
+             <wsse:Username>20532710066SURMOTR1</wsse:Username>
+             <wsse:Password>TOYOTA2051</wsse:Password>
          </wsse:UsernameToken>
      </wsse:Security>
  </soapenv:Header>
@@ -273,7 +276,15 @@ $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
 ';
 
 //Realizamos la llamada a nuestra función
-//$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
-//echo $result;
-print_r($cab);
+$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
+// Actualiza la cdg_cab_doc sun_env=S
+
+    $update = "update cab_doc_gen SET cdg_sun_env='C' WHERE cdg_num_doc='".$cab['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab['CDG_COD_EMP']."' and cdg_cod_gen='".$cab['CDG_COD_GEN']."'";
+    $stmt = oci_parse($conn, $update);
+    oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+    oci_free_statement($stmt);
+
+
+echo $result;
+//print_r($cab);
 ?>

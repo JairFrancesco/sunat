@@ -139,7 +139,10 @@
                             } else {
                                 $sunat = 'success';
                             }
-                        }else {
+                        } elseif ($row['CDG_SUN_ENV']=='C'){
+                            $sunat = 'danger';
+                        }
+                        else {
                             $sunat = '';
                         }
 						    echo '
@@ -163,7 +166,10 @@
                                 } else {
                                     echo '<a class="btn btn-success btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="glyphicon glyphicon-ok"></span> Imprimir</a>';
                                 }
-                            }else{
+                            } elseif ($row['CDG_SUN_ENV']=='C'){
+                                echo '<a class="btn btn-success btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="glyphicon glyphicon-ok"></span> Imprimir</a>';
+                            }
+                            else{
                                 echo '<a class="btn btn-primary btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="glyphicon glyphicon-repeat"></span> Facturar</a>';
                             }
 					        echo '</td></tr>';
