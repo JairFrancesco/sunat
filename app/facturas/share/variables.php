@@ -516,7 +516,21 @@
         $cabezera_tipo = 3; // aqui se muestra abajo documento relacionado
     }
 
+    // filtra nota credito de repuestos
+    if ($cab['CDG_TIP_DOC']=='F'){
+        $pase = 'S';
+    }elseif($cab['CDG_TIP_DOC'] == 'B'){
+        $pase = 'N';
+    }elseif($cab['CDG_TIP_DOC'] == 'A'){
+        if ($cab['CDG_TIP_REF'] == 'FR' || $cab['CDG_TIP_REF'] == 'FS' || $cab['CDG_TIP_REF'] == 'FC'){
+            $pase = 'S';
+        }else{
+            $pase = 'N';
+        }
+    }
+
 //echo $cabezera_tipo;
 //print_r($cab);
 //print_r($dets);
 //print_r($det);
+//echo $pase;

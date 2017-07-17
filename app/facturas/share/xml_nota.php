@@ -342,9 +342,9 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
 //URL para enviar las solicitudes a SUNAT
 // beta $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
 
+
 // produccion
 $wsdlURL = 'https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService?wsdl';
-
 
 //Estructura del XML para la conexión
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
@@ -365,10 +365,7 @@ $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
  </soapenv:Body>
 </soapenv:Envelope>';
 
-if ($cab['TIP_REF'] != 'BR')
-{
-    if ($cab['TIP_REF'] != 'BS')
-    {
+    if ($pase == 'S') {
         //Realizamos la llamada a nuestra función
         $result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
 
@@ -399,6 +396,5 @@ if ($cab['TIP_REF'] != 'BR')
         /*Eliminamos el Archivo Response*/
         unlink($ruta.'C'.$f8.'.xml');
     }
-}
 //echo $cab['CDG_TIP_DOC'].$cab['TIP_REF'];
 ?>
