@@ -2,7 +2,7 @@
 //$soap = new SoapClient('https://www.sunat.gob.pe:443/ol-ti-itcpgem-sqa/billService?wsdl');
 //$soap = new SoapClient('https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl');
 //var_dump($soap->__getFunctions()); 35 73 84
-$nameXml = '20532710066-RA-20170714-1';
+$nameXml = '20532710066-RA-20170715-1';
 
 // 2.- Firmar documento xml
 // ========================
@@ -81,7 +81,7 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString){
 //URL para enviar las solicitudes a SUNAT
 //$wsdlURL = 'https://www.sunat.gob.pe/ol-ti-itcpgem-sqa/billService?wsdl';
 //Estructura del XML para la conexión    https://www.sunat.gob.pe/ol-it-wsconscpegem/billConsultService?wsdl
-$wsdlURL = 'https://www.sunat.gob.pe/ol-ti-itemision-otroscpe-gem/billService?wsdl';
+$wsdlURL = 'billService.wsdl';
 
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope 

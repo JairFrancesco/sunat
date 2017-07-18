@@ -31,6 +31,19 @@
             $cab = $row_cab;
         }
 
+        // filtra nota credito de repuestos
+        if ($cab['CDG_TIP_DOC']=='F'){
+            $pase = 'S';
+        }elseif($cab['CDG_TIP_DOC'] == 'B'){
+            $pase = 'N';
+        }elseif($cab['CDG_TIP_DOC'] == 'A'){
+            if ($cab['CDG_TIP_REF'] == 'FR' || $cab['CDG_TIP_REF'] == 'FS' || $cab['CDG_TIP_REF'] == 'FC'){
+                $pase = 'S';
+            }else{
+                $pase = 'N';
+            }
+        }
+
         /*
         if ($co_cr_an=='CO' || $co_cr_an=='CR') {
             if ($tip_imp == 'D') {
@@ -133,10 +146,11 @@
                 $sac = $xml->createElement('sac:VoidReasonDescription','Error Sistema'); $sac = $VoidedDocumentsLine->appendChild($sac);
         }
         */
-
-        $xml->formatOutput = true;
-        $strings_xml = $xml->saveXML();
-        $xml->save($ruta.'20532710066-RA-'.date('Ymd').'-'.($i).'.xml');
+        if($pase=='S'){
+            $xml->formatOutput = true;
+            $strings_xml = $xml->saveXML();
+            $xml->save($ruta.'20532710066-RA-'.date('Ymd').'-'.($i).'.xml');
+        }
 
     }
 
@@ -147,7 +161,7 @@
     require './robrichards/src/xmlseclibs.php';
     use RobRichards\XMLSecLibs\XMLSecurityDSig;
     use RobRichards\XMLSecLibs\XMLSecurityKey;
-
+if ($pase=='S'){
     // Cargar el XML a firmar
     $doc = new DOMDocument();
     $doc->load($ruta.'20532710066-RA-'.date('Ymd').'-'.($i).'.xml');
@@ -179,6 +193,7 @@
     // Anexar la firma al XML
     $objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(0));
 
+
     $doc->save($ruta.'20532710066-RA-'.date('Ymd').'-'.($i).'.xml');
     chmod($ruta.'20532710066-RA-'.date('Ymd').'-'.($i).'.xml', 0777);
 
@@ -195,7 +210,7 @@ $zip->create($ruta.'20532710066-RA-'.date('Ymd').'-'.($i).'.xml',PCLZIP_OPT_REMO
 chmod($ruta.'20532710066-RA-'.date('Ymd').'-'.($i).'.zip', 0777);
 
 
-
+    }
 # Procedimiento para enviar comprobante a la SUNAT
 class feedSoap extends SoapClient{
 
@@ -250,16 +265,20 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
 }
 
 // URL para enviar las solicitudes a SUNAT
-$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
-
+//$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+$wsdlURL = 'billService.wsdl';
+if ($pase == 'S') {
 //Estructura del XML para la conexión
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+<soapenv:Envelope 
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:ser="http://service.sunat.gob.pe" 
+ xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
  <soapenv:Header>
      <wsse:Security>
          <wsse:UsernameToken Id="ABC-123">
-             <wsse:Username>20532710066MODDATOS</wsse:Username>
-             <wsse:Password>MODDATOS</wsse:Password>
+             <wsse:Username>20532710066SURMOTR1</wsse:Username>
+             <wsse:Password>TOYOTA2051</wsse:Password>
          </wsse:UsernameToken>
      </wsse:Security>
  </soapenv:Header>
@@ -273,7 +292,16 @@ $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
 ';
 
 //Realizamos la llamada a nuestra función
-//$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
+$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
+}
+
+// Actualiza la cdg_cab_doc sun_env=S
+    $update = "update cab_doc_gen SET cdg_sun_env='C' WHERE cdg_num_doc='".$cab['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab['CDG_COD_EMP']."' and cdg_cod_gen='".$cab['CDG_COD_GEN']."'";
+    $stmt = oci_parse($conn, $update);
+    oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+    oci_free_statement($stmt);
+
+echo 'La factura '.$cab['SERIE'].'-'.$cab['DOCUMENTO'].' ha sido dado de baja. Cerrar esta ventana.';
 //echo $result;
-print_r($cab);
+//print_r($cab);
 ?>

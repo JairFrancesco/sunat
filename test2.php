@@ -51,7 +51,7 @@
             </div>
             <div class="col-lg-6 text-right">
                 <a href="index.php?emp=<?php echo $emp; ?>" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>
-                <?php  if ($anu_sn != 'S' && $doc_anu != 'S') { ?>
+                <?php  if (($anu_sn != 'S' && $doc_anu != 'S') || $cla_doc=='AS' || $cla_doc =='AR') { ?>
                     <a href="test3.php?gen=02&emp=<?php echo $emp; ?>&num_doc=<?php echo $num_doc ?>&cla_doc=<?php echo $cla_doc ?>&moneda=<?php echo $moneda ?>&co_cr_an=<?php echo $co_cr_an ?>&exi_fra=<?php echo $exi_fra ?>&tip_imp=<?php echo $tip_imp ?>&anu_sn=<?php echo $anu_sn ?>&doc_anu=<?php echo $doc_anu ?>" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-up"></span> Enviar Sunat</a>
                 <?php } ?>
                 <?php if ($anu_sn == 'S' and $doc_anu == 'S' and ($cla_doc=='FS' || $cla_doc=='FR' || $cla_doc=='FC' || $cla_doc=='BR' || $cla_doc=='BS') ) {  if ($sun_env != 'C') { ?>

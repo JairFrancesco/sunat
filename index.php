@@ -136,11 +136,17 @@
                         if ($row['CDG_SUN_ENV']=='S'){
                             if ($row['ANU_SN11']=='S' && $row['DOC_ANU12']=='S'){
                                 $sunat = 'danger';
+                                $icon = 'glyphicon glyphicon-remove';
                             } else {
                                 $sunat = 'success';
+                                $icon = 'glyphicon glyphicon-ok';
                             }
-                        }else {
+                        } elseif ($row['CDG_SUN_ENV']=='C'){
+                            $sunat = 'danger';
+                            $icon = 'glyphicon glyphicon-ok';
+                        } else {
                             $sunat = '';
+                            $icon = 'glyphicon glyphicon-remove';
                         }
 						    echo '
 						        <tr class="'.$sunat.'">
@@ -152,19 +158,24 @@
 						            <td>'.$row['SOLES8'].'</td>
 						            <td class="text-right">'.number_format($row['VVP_TOT7'], 2, ".", ",").'</td>';
                             if ($row['CDG_SUN_ENV']=='S'){
-                                echo '<td class="text-center"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></td>';
-                            }else{
-                                echo '<td class="text-center"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></td>';
+                                echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
+                            } elseif ($row['CDG_SUN_ENV']=='C'){
+                                echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
+                            } else{
+                                echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
                             }
                             echo '<td>';
                             if ($row['CDG_SUN_ENV']=='S'){
                                 if ($row['ANU_SN11']=='S' && $row['DOC_ANU12']=='S') {
-                                    echo '<a class="btn btn-danger btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="glyphicon glyphicon-repeat"></span> Dar Baja</a>';
+                                    echo '<a class="btn btn-'.$sunat.' btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="'.$icon.'"></span> Dar Baja</a>';
                                 } else {
-                                    echo '<a class="btn btn-success btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="glyphicon glyphicon-ok"></span> Imprimir</a>';
+                                    echo '<a class="btn btn-'.$sunat.' btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="'.$icon.'"></span> Imprimir</a>';
                                 }
-                            }else{
-                                echo '<a class="btn btn-primary btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="glyphicon glyphicon-repeat"></span> Facturar</a>';
+                            } elseif ($row['CDG_SUN_ENV']=='C'){
+                                echo '<a class="btn btn-'.$sunat.' btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="'.$icon.'"></span> Imprimir</a>';
+                            }
+                            else{
+                                echo '<a class="btn btn-primary btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="'.$icon.'"></span> Facturar</a>';
                             }
 					        echo '</td></tr>';
 

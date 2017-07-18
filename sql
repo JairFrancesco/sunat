@@ -110,7 +110,8 @@ create or replace package body PKG_ELECTRONICA as
         CDG_COD_EMP,
         CDG_COD_GEN,
         CDG_SUN_ENV,
-        CDG_CO_CR
+        CDG_CO_CR,
+        CDG_TIP_REF
       from cab_doc_gen where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_num_doc=num_doc and cdg_cla_doc=cla_doc;
   end;
 
@@ -123,7 +124,7 @@ create or replace package body PKG_ELECTRONICA as
         '03' as codMotivo1,
         cdg_not_001 as desMotivo2,
         decode(cdg_tip_ref,'FS','01','FR','01','FC','01','BR','03','BS','03','00') as tipDocAfectado3,
-        (select decode(cdg_tip_doc,'F',decode(cdg_ser_doc,1,'F001',2,'F002',3,'F003',4,'F004','F000'),'B',decode(cdg_ser_doc,1,'B001',2,'B002',3,'B003',4,'B004','B000'),'MMMM') ||'-'||lpad(cdg_num_doc,8,0) from cab_doc_gen a where a.cdg_cla_doc=b.cdg_tip_ref and a.cdg_num_doc=b.cdg_doc_ref) as numDocUsuario4,
+        (select decode(cdg_tip_doc,'F',decode(cdg_ser_doc,1,'F001',2,'F002',3,'F003',4,'F004','F000'),'B',decode(cdg_ser_doc,1,'B001',2,'B002',3,'B003',4,'B004','B000'),'MMMM') ||'-'||lpad(cdg_num_doc,8,0) from cab_doc_gen a where a.cdg_cla_doc=b.cdg_tip_ref and a.cdg_num_doc=b.cdg_doc_ref and a.cdg_cod_gen=b.cdg_cod_gen and a.cdg_cod_emp=b.cdg_cod_emp) as numDocUsuario4,
         decode((select c_c_tipo_documento from cliente where cod_gen=cdg_cod_gen and rtrim(c_c_codigo)=rtrim(cdg_cod_cli)),'01','6','02','1','4') as tipDocUsuario3,
         replace(cdg_doc_cli,'-','') as numDocUsuario4,
         cdg_nom_cli as rznSocialUsuario5,
@@ -166,7 +167,8 @@ create or replace package body PKG_ELECTRONICA as
         CDG_COD_EMP,
         CDG_COD_GEN,
         CDG_SUN_ENV,
-        CDG_CO_CR
+        CDG_CO_CR,
+        CDG_TIP_REF
       from cab_doc_gen b where cdg_cod_gen=gen and cdg_cod_emp=emp and cdg_tip_doc='A' and cdg_num_doc=num_doc;
   end;
   procedure dds(gen VARCHAR2,emp VARCHAR2, num_doc number, cla_doc VARCHAR2, moneda VARCHAR2, dds out sys_refcursor) is

@@ -423,34 +423,33 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
 }
 
 //URL para enviar las solicitudes a SUNAT
-// beta $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
-// nueva ruta analizar https://www.sunat.gob.pe/ol-ti-itemision-otroscpe-gem/billService?wsdl
-// produccion
-//$wsdlURL = 'https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService?wsdl';
+//$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+
 $wsdlURL = "billService.wsdl";
-/*
+
 //Estructura del XML para la conexión
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope 
+<soapenv:Envelope
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-xmlns:ser="http://service.sunat.gob.pe" 
+xmlns:ser="http://service.sunat.gob.pe"
 xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
  <soapenv:Header>
      <wsse:Security>
          <wsse:UsernameToken Id="ABC-123">
-             <wsse:Username>20532710066ROMANTRE</wsse:Username>
-             <wsse:Password>T3E4A5M6S7</wsse:Password>
+             <wsse:Username>20532710066SURMOTR1</wsse:Username>
+             <wsse:Password>TOYOTA2051</wsse:Password>
          </wsse:UsernameToken>
      </wsse:Security>
  </soapenv:Header>
  <soapenv:Body>
      <ser:sendBill>
         <fileName>'.$f8.'.zip</fileName>
-        <contentFile>' . base64_encode(file_get_contents($ruta.$f8.'.zip')) . '</contentFile>
+        <contentFile>'.base64_encode(file_get_contents($ruta.$f8.'.zip')).'</contentFile>
      </ser:sendBill>
  </soapenv:Body>
 </soapenv:Envelope>';
-*/
+
+/*
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
 <soapenv:Header>
@@ -468,8 +467,8 @@ $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
 </ser:sendBill>
 </soapenv:Body>
 </soapenv:Envelope>';
-
-if ($cab['CDG_TIP_DOC']!='B')
+*/
+if ($pase == 'S')
 {
     //Realizamos la llamada a nuestra función
     $result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
