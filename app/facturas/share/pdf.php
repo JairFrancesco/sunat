@@ -114,11 +114,12 @@ class PDF extends FPDF{
     }
 
     function Footer(){
-
+        /*
         $this->SetTextColor(0,0,0);
         $this->SetFont('arial','',12);
         $this->SetXY(18,26.2);
         $this->Cell(0.8, 0.25, utf8_decode("Pág. ").$this->PageNo().' de {nb}', 0, 1,'L', 0);
+        */
     }
 }
 
@@ -126,7 +127,7 @@ class PDF extends FPDF{
 //$nombre_pdf = '20532710066-'.$DOM->getElementsByTagName('InvoiceTypeCode')->item(0)->nodeValue.'-'.$DOM->getElementsByTagName('ID')->item(6)->nodeValue;
 $NomArchPDF = $f6.'.pdf';
 //echo $f6;
-$pdf=new PDF('P','cm','Letter');
+$pdf=new PDF('P','cm','A4');
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->AddFont('IDAutomationHC39M','','IDAutomationHC39M.php');
@@ -487,11 +488,20 @@ if ($anticipo_current == 1) {
 $pdf->SetXY(1,$Y+9); $pdf->Cell(11, 0.5, utf8_decode(''), 0, 1,'L', 0);
 
 // Codigo de barras
-$pdf->image($ruta.$f8.".png",0.67, 21.9, 8.65, 2);
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFont('arial','',9);
-$pdf->SetXY(1.12,23.9);
-$pdf->Cell(8, 0.25, utf8_decode("Representación impresa de la factura electrónica."), 0, 1,'C', 0);
+if ($Y+14>29){
+    $pdf->AddPage();
+    $pdf->image($ruta.$f8.".png",0.67, 2.5, 8.65, 2);
+    $pdf->SetTextColor(0,0,0);
+    $pdf->SetFont('arial','',9);
+    $pdf->SetXY(1.12,5); $pdf->Cell(8, 0.25, utf8_decode("Representación impresa de la factura electrónica."), 0, 1,'C', 0);
+
+}else {
+    $pdf->image($ruta.$f8.".png",0.67, $Y+13, 8.65, 2);
+    $pdf->SetTextColor(0,0,0);
+    $pdf->SetFont('arial','',9);
+    $pdf->SetXY(1.12,$Y+14); $pdf->Cell(8, 0.25, utf8_decode("Representación impresa de la factura electrónica."), 0, 1,'C', 0);
+
+}
 
 $pdf->line(1, 24.8, 20.5, 24.8);
 
