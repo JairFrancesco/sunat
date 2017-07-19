@@ -86,12 +86,15 @@ if ($hace == 0){
 */
 require("app/coneccion.php");
 
-$sql_boletas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_anu_sn !='S' and cdg_doc_anu !='S' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_fec_gen Asc"); oci_execute($sql_boletas);
-while($res_boletas = oci_fetch_array($sql_boletas)){ $boletas[] = $res_boletas;   }
+$sql_boletas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_anu_sn !='S' and cdg_doc_anu !='S' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_num_doc Asc"); oci_execute($sql_boletas);
+while($res_boletas = oci_fetch_array($sql_boletas)){
+    //echo $res_boletas['CDG_NUM_DOC'].' '.$res_boletas['CDG_FEC_GEN'].'<br>';
+    $boletas[] = $res_boletas;
+}
 
 
 
-$sql_notas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_tip_doc, cdg_fec_gen ASC"); oci_execute($sql_notas);
+$sql_notas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_num_doc ASC"); oci_execute($sql_notas);
 while($res_notas = oci_fetch_array($sql_notas)){ $notas[] = $res_notas; }
 
 //echo $res_notas['CDG_NUM_DOC'].' '.$res_notas['CDG_FEC_GEN'].'<br>';
