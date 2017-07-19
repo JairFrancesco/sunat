@@ -48,6 +48,8 @@
 		$fecha_inicio = $_GET['fecha_inicio'];
 		$fecha_final = $_GET['fecha_final'];    	
 		$pagina = $_GET['pagina'];
+
+
 		
 	}else{
 		$fecha_inicio = 'N';
@@ -76,7 +78,30 @@
             }
             echo '</div>';
             echo '<div class="col-lg-6 text-right">';
-            echo '<br><br><a class="btn btn-success" href="resumen.php?h=0&gen=02&emp='.$emp.'" target="_blank"><span class="glyphicon glyphicon-download-alt"></span> Resumen Diario</a>';
+
+
+            if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_final'])) {
+                if ($_GET['fecha_inicio'] == $_GET['fecha_final']) {
+                    $date1 = new DateTime($_GET['fecha_inicio']);
+                    $date2 = new DateTime(date('d-m-Y'));
+                    $diff = $date1->diff($date2);
+                    if (($diff->days) < 7) {
+                        $fecha = date("Y-m-d", strtotime($_GET['fecha_inicio']));
+                    } else {
+                        $fecha = 'N';
+                    }
+
+                } else {
+                    $fecha = 'N';
+                }
+            } else {
+                $fecha = date("Y-m-d");
+            }
+
+            if ($fecha != 'N'){
+                echo '<br><br><a class="btn btn-primary" href="resumen.php?h=0&gen=02&emp=' . $emp . '&fecha=' . $fecha . '" target="_blank"><span class="glyphicon glyphicon-download-alt"></span> Resumen Diario</a>';
+            }
+
             echo '</div>';
             echo '</div>';
 

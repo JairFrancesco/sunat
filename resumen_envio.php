@@ -66,6 +66,10 @@ if (isset($boletas)){
             $bols[$h][0] = $boleta['CDG_NUM_DOC'];
             $ant = $boleta['CDG_NUM_DOC'];
             $i++;
+            if (count($boletas)==1){
+                $bols[$h][1] = $boleta['CDG_NUM_DOC'];
+                $bols[$h][2] = $serie_boleta;
+            }
         }else {
             if (($ant+1) == $boleta['CDG_NUM_DOC']){
                 if ($boleta['CDG_NUM_DOC'] == $boletas[count($boletas)-1]['CDG_NUM_DOC']){
@@ -110,6 +114,10 @@ if (isset($notas)){
             $nots[$h][0] = $nota['CDG_NUM_DOC'];
             $ant = $nota['CDG_NUM_DOC'];
             $i++;
+            if (count($notas)==1){
+                $nots[$h][1] = $nota['CDG_NUM_DOC'];
+                $nots[$h][2] = $serie_nota;
+            }
         }else {
             if (($ant+1) == $nota['CDG_NUM_DOC']){
                 if ($nota['CDG_NUM_DOC'] == $notas[count($notas)-1]['CDG_NUM_DOC']){
