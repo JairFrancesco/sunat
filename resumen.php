@@ -92,7 +92,9 @@ while($res_boletas = oci_fetch_array($sql_boletas)){ $boletas[] = $res_boletas; 
 
 
 $sql_notas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_tip_doc, cdg_fec_gen ASC"); oci_execute($sql_notas);
-while($res_notas = oci_fetch_array($sql_notas)){ $notas[] = $res_notas; echo $res_notas['CDG_NUM_DOC'].' '.$res_notas['CDG_FEC_GEN'].'<br>'; }
+while($res_notas = oci_fetch_array($sql_notas)){ $notas[] = $res_notas; }
+
+//echo $res_notas['CDG_NUM_DOC'].' '.$res_notas['CDG_FEC_GEN'].'<br>';
 
 if ($emp == '01')
 {
@@ -201,7 +203,7 @@ if (isset($notas)){
     }
 }
 
-print_r($nots);
+//print_r($nots);
 
 
     if (isset($bols))
