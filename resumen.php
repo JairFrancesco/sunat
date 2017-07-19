@@ -48,7 +48,8 @@ $hace = $_GET['h'];
 $gen = $_GET['gen'];
 $emp = $_GET['emp'];
 date_default_timezone_set('America/Lima');
-
+$dia = date("d-m-Y", strtotime($_GET['fecha']));
+/*
 if ($hace == 0){
     $dia = date('d-m-Y');
     //$dia = '27-06-2017';     
@@ -81,7 +82,7 @@ if ($hace == 0){
     //$dia = date("d-m-Y", strtotime("$fecha -7 day"));
     $dia = '06-04-2017';
 }
-
+*/
 require("app/coneccion.php");
 
 $sql_boletas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_anu_sn !='S' and cdg_doc_anu !='S' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_fec_gen Asc"); oci_execute($sql_boletas);
