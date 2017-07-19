@@ -49,6 +49,7 @@ $gen = $_GET['gen'];
 $emp = $_GET['emp'];
 date_default_timezone_set('America/Lima');
 $dia = date("d-m-Y", strtotime($_GET['fecha']));
+//echo $dia;
 /*
 if ($hace == 0){
     $dia = date('d-m-Y');
@@ -86,10 +87,12 @@ if ($hace == 0){
 require("app/coneccion.php");
 
 $sql_boletas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_anu_sn !='S' and cdg_doc_anu !='S' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_fec_gen Asc"); oci_execute($sql_boletas);
-while($res_boletas = oci_fetch_array($sql_boletas)){ $boletas[] = $res_boletas; }
+while($res_boletas = oci_fetch_array($sql_boletas)){ $boletas[] = $res_boletas;   }
+
+
 
 $sql_notas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_tip_doc, cdg_fec_gen ASC"); oci_execute($sql_notas);
-while($res_notas = oci_fetch_array($sql_notas)){ $notas[] = $res_notas; }
+while($res_notas = oci_fetch_array($sql_notas)){ $notas[] = $res_notas; echo $res_notas['CDG_NUM_DOC'].' '.$res_notas['CDG_FEC_GEN'].'<br>'; }
 
 if ($emp == '01')
 {
@@ -198,7 +201,7 @@ if (isset($notas)){
     }
 }
 
-
+print_r($nots);
 
 
     if (isset($bols))
@@ -252,17 +255,16 @@ if (isset($nots)) {
             $grabadas = $grabadas + ($res_rnotas['CDG_VVP_TOT'] - $res_rnotas['CDG_DES_TOT']);
             $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
             $total = $total + $res_rnotas['CDG_IMP_NETO'];
-
-            $matriz_notas[$i][0]= $not[0];
-            $matriz_notas[$i][1]= $not[1];
-            $matriz_notas[$i][2]= $not[2];
-            $matriz_notas[$i][3]= $grabadas;
-            $matriz_notas[$i][4]= $igv;
-            $matriz_notas[$i][5]= $total;
-            $matriz_notas[$i][6]= $desc;
-            $matriz_notas[$i][7]= $sub;
-            $i++;
         }
+        $matriz_notas[$i][0]= $not[0];
+        $matriz_notas[$i][1]= $not[1];
+        $matriz_notas[$i][2]= $not[2];
+        $matriz_notas[$i][3]= $grabadas;
+        $matriz_notas[$i][4]= $igv;
+        $matriz_notas[$i][5]= $total;
+        $matriz_notas[$i][6]= $desc;
+        $matriz_notas[$i][7]= $sub;
+        $i++;
 
     }
 }
