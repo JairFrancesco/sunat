@@ -110,6 +110,10 @@ if (isset($boletas)){
             $bols[$h][0] = $boleta['CDG_NUM_DOC'];
             $ant = $boleta['CDG_NUM_DOC'];
             $i++;
+            if (count($boletas)==1){
+                $bols[$h][1] = $boleta['CDG_NUM_DOC'];
+                $bols[$h][2] = $serie_boleta;
+            }
         }else {
             if (($ant+1) == $boleta['CDG_NUM_DOC']){
                 if ($boleta['CDG_NUM_DOC'] == $boletas[count($boletas)-1]['CDG_NUM_DOC']){
@@ -154,6 +158,10 @@ if (isset($notas)){
             $nots[$h][0] = $nota['CDG_NUM_DOC'];
             $ant = $nota['CDG_NUM_DOC'];
             $i++;
+            if (count($notas)==1){
+                $nots[$h][1] = $nota['CDG_NUM_DOC'];
+                $nots[$h][2] = $serie_nota;
+            }
         }else {
             if (($ant+1) == $nota['CDG_NUM_DOC']){
                 if ($nota['CDG_NUM_DOC'] == $notas[count($notas)-1]['CDG_NUM_DOC']){
@@ -189,7 +197,77 @@ if (isset($notas)){
     }
 }
 
+
+
+
+    if (isset($bols))
+    {
+        $i = 0;
+        foreach ($bols as $bol)
+        {
+            $sub = 0;
+            $desc = 0;
+            $grabadas = 0;
+            $igv = 0;
+            $total = 0;
+        $sql_rboletas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_num_doc between ".$bol[0]." and ".$bol[1]." and cdg_tip_doc='B' order by cdg_fec_gen ASC"); oci_execute($sql_rboletas);
+            while($res_rboletas = oci_fetch_array($sql_rboletas))
+            {
+                $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
+                $desc = $desc + $res_rboletas['CDG_DES_TOT'];
+                $grabadas = $grabadas + ($res_rboletas['CDG_VVP_TOT'] - $res_rboletas['CDG_DES_TOT']);
+                $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
+                $total = $total + $res_rboletas['CDG_IMP_NETO'];
+            }
+
+            $matriz_boletas[$i][0]= $bol[0];
+            $matriz_boletas[$i][1]= $bol[1];
+            $matriz_boletas[$i][2]= $bol[2];
+            $matriz_boletas[$i][3]= $grabadas;
+            $matriz_boletas[$i][4]= $igv;
+            $matriz_boletas[$i][5]= $total;
+            $matriz_boletas[$i][6]= $desc;
+            $matriz_boletas[$i][7]= $sub;
+            $i++;
+        }
+    }
+
+
+
+
+// Notas
+if (isset($nots)) {
+    foreach ($nots as $not){
+        $sub = 0;
+        $grabadas = 0;
+        $igv = 0;
+        $total = 0;
+        $desc = 0;
+        $sql_rnotas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='" . $gen . "' and cdg_cod_emp='" . $emp . "' and cdg_num_doc between " . $not[0] . " and " . $not[1] . " and cdg_tip_doc='A' order by cdg_fec_gen ASC");
+        oci_execute($sql_rnotas);
+        while ($res_rnotas = oci_fetch_array($sql_rnotas)) {
+            $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
+            $desc = $desc + $res_rboletas['CDG_DES_TOT'];
+            $grabadas = $grabadas + ($res_rnotas['CDG_VVP_TOT'] - $res_rnotas['CDG_DES_TOT']);
+            $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
+            $total = $total + $res_rnotas['CDG_IMP_NETO'];
+
+            $matriz_notas[$i][0]= $not[0];
+            $matriz_notas[$i][1]= $not[1];
+            $matriz_notas[$i][2]= $not[2];
+            $matriz_notas[$i][3]= $grabadas;
+            $matriz_notas[$i][4]= $igv;
+            $matriz_notas[$i][5]= $total;
+            $matriz_notas[$i][6]= $desc;
+            $matriz_notas[$i][7]= $sub;
+            $i++;
+        }
+
+    }
+}
+//print_r($matriz_boletas);
 //print_r($dia);
+//echo count($boletas);
 ?>
 <div class="container">
     <div class="row">
@@ -212,48 +290,50 @@ if (isset($notas)){
     </div>
     <br>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-10">
 
             <table class="table table-bordered table-stripedd">
-                <tr>
+                <tr class="well">
                     <th>#Nro</th>
                     <th>Serie</th>
                     <th>Rango</th>
+                    <th>Sub Total</th>
+                    <th>Total Descuentos</th>
+                    <th>Operaciones Gravadas</th>
+                    <th>IGV 18%</th>
+                    <th class="text-right">Total</th>
                 </tr>
                 <?php
                     $i = 1;
                     if (isset($bols))
                     {
-                        foreach ($bols as $bol) {
+                        foreach ($matriz_boletas as $bol) {
                             echo '<tr>';
                             echo '<td>'.$i.'</td>';
-                            if ($_GET['emp'] == '01')
-                            {
-                                echo '<td>'.$bol[2].'</td>';
-                            } else
-                            {
-                                echo '<td>'.$bol[2].'</td>';
-                            }
-
+                            echo '<td>'.$bol[2].'</td>';
                             echo '<td>['.$bol[0].' - '.$bol[1].']</td>';
+                            echo '<td>'.$bol[7].'</td>';
+                            echo '<td>'.$bol[6].'</td>';
+                            /*Grabvadas*/echo '<td>'.$bol[3].'</td>';
+                            echo '<td>'.$bol[4].'</td>';
+                            echo '<td class="text-right">'.$bol[5].'</td>';
                             echo '</tr>';
                             $i++;
                         }
                     }
                     if (isset($nots))
                     {
-                        foreach ($nots as $bol) {
+                        foreach ($matriz_notas as $not) {
                             echo '<tr>';
                             echo '<td>'.$i.'</td>';
-                            if ($_GET['emp'] == '01')
-                            {
-                                echo '<td>'.$bol[2].'</td>';
-                            } else
-                            {
-                                echo '<td>'.$bol[2].'</td>';
-                            }
-
-                            echo '<td>['.$bol[0].' - '.$bol[1].']</td>';
+                            echo '<td>'.$not[2].'</td>';
+                            echo '<td>['.$not[0].' - '.$not[1].']</td>';
+                            echo '<td>'.number_format($not[7], 2, '.', ',').'</td>';
+                            echo '<td>'.number_format($not[6], 2, '.', ',').'</td>';
+                            /*Grabvadas*/echo '<td>'.number_format($not[3], 2, '.', ',').'</td>';
+                            echo '<td>'.$not[4].'</td>';
+                            echo '<td class="text-right">'.$not[5].'</td>';
+                            echo '</tr>';
                             echo '</tr>';
                             $i++;
                         }
