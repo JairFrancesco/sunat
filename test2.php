@@ -56,7 +56,7 @@
                 <?php } ?>
                 <?php if ($anu_sn == 'S' and $doc_anu == 'S' and ($cla_doc=='FS' || $cla_doc=='FR' || $cla_doc=='FC' || $cla_doc=='BR' || $cla_doc=='BS') ) {  if ($sun_env != 'C') { ?>
 
-                    <a href="baja.php?gen=02&emp=01&num_doc=<?php echo $num_doc ?>&cla_doc=<?php echo $cla_doc ?>&moneda=<?php echo $moneda ?>&co_cr_an=<?php echo $co_cr_an ?>&exi_fra=<?php echo $exi_fra ?>&tip_imp=<?php echo $tip_imp ?>&anu_sn=<?php echo $anu_sn ?>&doc_anu=<?php echo $doc_anu ?>&sun_env=<?php echo $sun_env ?>" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Baja Documento</a>
+                    <a href="baja.php?gen=<?php echo $gem ?>&emp=<?php echo $emp ?>&num_doc=<?php echo $num_doc ?>&cla_doc=<?php echo $cla_doc ?>&moneda=<?php echo $moneda ?>&co_cr_an=<?php echo $co_cr_an ?>&exi_fra=<?php echo $exi_fra ?>&tip_imp=<?php echo $tip_imp ?>&anu_sn=<?php echo $anu_sn ?>&doc_anu=<?php echo $doc_anu ?>&sun_env=<?php echo $sun_env ?>" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Baja Documento</a>
                 <?php } } ?>
             </div>
             <br>
