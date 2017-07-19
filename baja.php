@@ -30,7 +30,7 @@
             // cab es todas las variables de cabezera
             $cab = $row_cab;
         }
-        
+
         // filtra nota credito de repuestos
         if ($cab['CDG_TIP_DOC']=='F'){
             $pase = 'S';
