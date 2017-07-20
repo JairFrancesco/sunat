@@ -293,7 +293,7 @@ if (isset($nots)) {
         <div class="col-lg-6 text-right">
             <br>
             <a class="btn btn-primary" href="index.php?emp=<?php echo $_GET['emp']; ?>"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>
-            <a class="btn btn-success" href="resumen_envio.php?h=<?php echo $_GET['h']; ?>&gen=<?php echo $_GET['gen']; ?>&emp=<?php echo $_GET['emp']; ?>"> Enviar Resumen</a>
+            <a class="btn btn-success" href="resumen_envio.php?gen=<?php echo $_GET['gen']; ?>&emp=<?php echo $_GET['emp']; ?>&fecha=<?php echo $_GET['fecha']; ?>"> Enviar Resumen</a>
         </div>
     </div>
     <br>
