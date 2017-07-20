@@ -455,8 +455,8 @@ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
 
 //echo $XMLString;
 //Realizamos la llamada a nuestra función
-//$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
-//echo 'codigo de envio: '.$result.' se envio correctamente, cerrar esta ventana.';
+$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
+echo 'codigo de envio: '.$result.' se envio correctamente, cerrar esta ventana.';
 
 
 
