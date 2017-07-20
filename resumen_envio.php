@@ -214,11 +214,11 @@ if (isset($bols))
             $sac = $xml->createElement('sac:DocumentSerialID',$serie_boleta); $sac = $SummaryDocumentsLine->appendChild($sac);
             $sac = $xml->createElement('sac:StartDocumentNumberID',$bol[0]); $sac = $SummaryDocumentsLine->appendChild($sac);
             $sac = $xml->createElement('sac:EndDocumentNumberID',$bol[1]); $sac = $SummaryDocumentsLine->appendChild($sac);
-            $sac = $xml->createElement('sac:TotalAmount',$total); $sac = $SummaryDocumentsLine->appendChild($sac); $sac->setAttribute('currencyID',"PEN");
+            $sac = $xml->createElement('sac:TotalAmount', number_format($total, 2, '.', '')); $sac = $SummaryDocumentsLine->appendChild($sac); $sac->setAttribute('currencyID',"PEN");
 
             // Gravado
             $sac = $xml->createElement('sac:BillingPayment'); $sac = $SummaryDocumentsLine->appendChild($sac);
-                $cbc = $xml->createElement('cbc:PaidAmount',$grabadas); $cbc = $sac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
+                $cbc = $xml->createElement('cbc:PaidAmount', number_format($grabadas, 2, '.', '')); $cbc = $sac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
                 $cbc = $xml->createElement('cbc:InstructionID','01'); $cbc = $sac->appendChild($cbc);
             // Exonerado
             $sac = $xml->createElement('sac:BillingPayment'); $sac = $SummaryDocumentsLine->appendChild($sac);
@@ -244,9 +244,9 @@ if (isset($bols))
                             $cbc = $xml->createElement('cbc:TaxTypeCode','EXC'); $cbc = $TaxScheme->appendChild($cbc);
             // Total IGV
             $TaxTotal = $xml->createElement('cac:TaxTotal'); $TaxTotal =  $SummaryDocumentsLine->appendChild($TaxTotal);
-                $cbc = $xml->createElement('cbc:TaxAmount',$igv); $cbc = $TaxTotal->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
+                $cbc = $xml->createElement('cbc:TaxAmount', number_format($igv, 2, '.', '')); $cbc = $TaxTotal->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
                 $cac = $xml->createElement('cac:TaxSubtotal'); $cac = $TaxTotal->appendChild($cac);
-                    $cbc = $xml->createElement('cbc:TaxAmount',$igv); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
+                    $cbc = $xml->createElement('cbc:TaxAmount', number_format($igv, 2, '.', '')); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
                     $TaxCategory = $xml->createElement('cac:TaxCategory'); $TaxCategory = $cac->appendChild($TaxCategory);
                         $TaxScheme = $xml->createElement('cac:TaxScheme'); $TaxScheme = $TaxCategory->appendChild($TaxScheme);
                             $cbc = $xml->createElement('cbc:ID','1000'); $cbc = $TaxScheme->appendChild($cbc);
@@ -290,11 +290,11 @@ if (isset($nots)) {
             $sac = $xml->createElement('sac:DocumentSerialID',$serie_nota); $sac = $SummaryDocumentsLine->appendChild($sac);
             $sac = $xml->createElement('sac:StartDocumentNumberID',$not[0]); $sac = $SummaryDocumentsLine->appendChild($sac);
             $sac = $xml->createElement('sac:EndDocumentNumberID',$not[1]); $sac = $SummaryDocumentsLine->appendChild($sac);
-            $sac = $xml->createElement('sac:TotalAmount',$total); $sac = $SummaryDocumentsLine->appendChild($sac); $sac->setAttribute('currencyID',"PEN");
+            $sac = $xml->createElement('sac:TotalAmount', number_format($total, 2, '.', '')); $sac = $SummaryDocumentsLine->appendChild($sac); $sac->setAttribute('currencyID',"PEN");
 
             // Gravado
             $sac = $xml->createElement('sac:BillingPayment'); $sac = $SummaryDocumentsLine->appendChild($sac);
-                $cbc = $xml->createElement('cbc:PaidAmount',$grabadas); $cbc = $sac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
+                $cbc = $xml->createElement('cbc:PaidAmount', number_format($grabadas, 2, '.', '')); $cbc = $sac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
                 $cbc = $xml->createElement('cbc:InstructionID','01'); $cbc = $sac->appendChild($cbc);
             // Exonerado
             $sac = $xml->createElement('sac:BillingPayment'); $sac = $SummaryDocumentsLine->appendChild($sac);
@@ -320,9 +320,9 @@ if (isset($nots)) {
                             $cbc = $xml->createElement('cbc:TaxTypeCode','EXC'); $cbc = $TaxScheme->appendChild($cbc);
             // Total IGV
             $TaxTotal = $xml->createElement('cac:TaxTotal'); $TaxTotal =  $SummaryDocumentsLine->appendChild($TaxTotal);
-                $cbc = $xml->createElement('cbc:TaxAmount',$igv); $cbc = $TaxTotal->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
+                $cbc = $xml->createElement('cbc:TaxAmount', number_format($igv, 2, '.', '')); $cbc = $TaxTotal->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
                 $cac = $xml->createElement('cac:TaxSubtotal'); $cac = $TaxTotal->appendChild($cac);
-                    $cbc = $xml->createElement('cbc:TaxAmount',$igv); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
+                    $cbc = $xml->createElement('cbc:TaxAmount', number_format($igv, 2, '.', '')); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
                     $TaxCategory = $xml->createElement('cac:TaxCategory'); $TaxCategory = $cac->appendChild($TaxCategory);
                         $TaxScheme = $xml->createElement('cac:TaxScheme'); $TaxScheme = $TaxCategory->appendChild($TaxScheme);
                             $cbc = $xml->createElement('cbc:ID','1000'); $cbc = $TaxScheme->appendChild($cbc);
@@ -428,19 +428,20 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString){
     //print_r($client);
 }
 //URL para enviar las solicitudes a SUNAT
-$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+//$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+$wsdlURL = "billService.wsdl";
 //Estructura del XML para la conexión
 
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope 
 xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-xmlns:ser="http://service.sunat.gob.pe" 
-xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+ xmlns:ser="http://service.sunat.gob.pe" 
+ xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
 <soapenv:Header>
 <wsse:Security>
 <wsse:UsernameToken>
-<wsse:Username>20532710066MODDATOS</wsse:Username>
-<wsse:Password>MODDATOS</wsse:Password>
+<wsse:Username>20532710066SURMOTR1</wsse:Username>
+<wsse:Password>TOYOTA2051</wsse:Password>
 </wsse:UsernameToken>
 </wsse:Security>
 </soapenv:Header>
@@ -454,8 +455,9 @@ xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-s
 
 //echo $XMLString;
 //Realizamos la llamada a nuestra función
-//$result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
-//echo $result;
+//$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
+//echo 'codigo de envio: '.$result.' se envio correctamente, cerrar esta ventana.';
+
 
 
 ?>

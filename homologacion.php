@@ -2,7 +2,7 @@
 //$soap = new SoapClient('https://www.sunat.gob.pe:443/ol-ti-itcpgem-sqa/billService?wsdl');
 //$soap = new SoapClient('https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl');
 //var_dump($soap->__getFunctions()); 35 73 84
-$nameXml = '20532710066-RA-20170715-1';
+$nameXml = '20532710066-RC-20170719-3';
 
 // 2.- Firmar documento xml
 // ========================
