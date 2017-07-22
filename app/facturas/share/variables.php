@@ -239,6 +239,9 @@
     if ($cla_doc=='FS'){
         $f11 = 'FACTURA ELECTRONICA';
         $title = "Factura de Servicios ".$cab['SERIE_DOC'].'-'.$cab['CDG_NUM_DOC'];
+    }if ($cla_doc=='FC'){
+        $f11 = 'FACTURA CONTABILIDAD';
+        $title = "Factura de Servicios ".$cab['SERIE_DOC'].'-'.$cab['CDG_NUM_DOC'];
     } elseif ($cla_doc=='FR'){
         $title = "Factura de Repuestos ".$cab['SERIE_DOC'].'-'.$cab['CDG_NUM_DOC'];
         $f11 = 'FACTURA ELECTRONICA';
