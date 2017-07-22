@@ -425,8 +425,8 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
 //URL para enviar las solicitudes a SUNAT
 //$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
 
-$wsdlURL = "billService.wsdl";
-
+//$wsdlURL = "billService.wsdl";
+// 20532710066SURMOTR1 TOYOTA2051
 //Estructura del XML para la conexión
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
 <soapenv:Envelope
@@ -449,25 +449,6 @@ xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-s
  </soapenv:Body>
 </soapenv:Envelope>';
 
-/*
-$XMLString = '<?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-<soapenv:Header>
-<wsse:Security>
-<wsse:UsernameToken>
-<wsse:Username>20532710066SURMOTR1</wsse:Username>
-<wsse:Password>TOYOTA2051</wsse:Password>
-</wsse:UsernameToken>
-</wsse:Security>
-</soapenv:Header>
-<soapenv:Body>
-<ser:sendBill>
-<fileName>'.$f8.'.zip</fileName>
-<contentFile>'.base64_encode(file_get_contents($ruta.$f8.'.zip')).'</contentFile>
-</ser:sendBill>
-</soapenv:Body>
-</soapenv:Envelope>';
-*/
 if ($pase == 'S')
 {
     //Realizamos la llamada a nuestra función
