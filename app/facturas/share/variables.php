@@ -486,7 +486,7 @@
     while($res_ubigeo3 = oci_fetch_array($sql_ubigeo3)){ $ubigeo = $ubigeo.'-'.ucwords(strtolower(trim($res_ubigeo3['UBI_NOMBRE']))); }
 
 
-    // cabezera
+    // cabezera de datos de servicios
     if ($cab['CDG_CLA_DOC']=='FS' || $cab['CDG_CLA_DOC']=='BS' ){
         $cabezera_tipo = 2; // solo cuando tiene 2 se muestran detalles en la cabezera
 
@@ -494,7 +494,7 @@
         $sql_extendido = oci_parse($conn, "
           select * from cab_doc_gen 
           inner join cab_ord_ser on cos_num_ot=cab_doc_gen.cdg_ord_tra and cos_cod_gen=cab_doc_gen.cdg_cod_gen and cos_cod_emp=cab_doc_gen.cdg_cod_emp
-          inner join det_ing_ser on dis_pla_veh=cab_ord_ser.cos_pla_veh
+          inner join det_ing_ser on dis_pla_veh=cab_ord_ser.cos_pla_veh and dis_cod_gen=cab_doc_gen.cdg_cod_gen
           inner join cab_fam_veh on cfv_cod_gen=cab_doc_gen.cdg_cod_gen and cfv_cod_mar=det_ing_ser.dis_mar_veh and cfv_cod_fam=det_ing_ser.dis_cod_fam
           where cdg_num_doc='".$num_doc."' and cdg_cla_doc='".$cla_doc."' and cdg_cod_emp='".$emp."' and cdg_cod_gen='".$gem."' order by cdg_fec_gen Desc");
         oci_execute($sql_extendido);
@@ -504,7 +504,7 @@
             $modelo_anho = $res_extendido['CFV_DES_FAM'].' - '.$res_extendido['DIS_ANO_VEH'];
             $motor_chasis = $res_extendido['DIS_CHA_VEH'];
             $color = $res_extendido['DIS_COL_VEH'];
-            $kilometraje = $res_extendido['DIS_KIL_VEH'];
+            $kilometraje = $res_extendido['COS_KIL_VEH'];
             $extendido[] = $res_extendido;
         }
 
