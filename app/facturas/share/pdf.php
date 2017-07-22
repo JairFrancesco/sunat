@@ -352,7 +352,7 @@ if ($c18 == 'COCRD'){
     $pdf->SetTextColor(0,0,0);
     $pdf->SetFont('arial','',9);
     $pdf->SetXY($X + 1, $Y + 8);
-    $pdf->Cell(9.5, 0.5, utf8_decode(substr($det_descripcion,0,49)), 1, 1, 'L', 0); 
+    $pdf->Cell(9.5, 0.5, utf8_decode(substr($det_descripcion,0,60)), 1, 1, 'L', 0);
 
     $pdf->SetTextColor(0,0,0);
     $pdf->SetFont('arial','',9.5);
