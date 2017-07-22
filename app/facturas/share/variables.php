@@ -97,11 +97,12 @@
             //echo 'ingreso';
             // detalle unico de resumen
             // ========================
-            $sql_factura_detalle_resumen = "select cdg_ten_res from cab_doc_gen where cdg_num_doc=".$num_doc." and cdg_cod_gen=".$gem." and cdg_cod_emp=".$emp." and cdg_cla_doc='".$cla_doc."'";
+            $sql_factura_detalle_resumen = "select cdg_ten_res, cdg_not_001 from cab_doc_gen where cdg_num_doc=".$num_doc." and cdg_cod_gen=".$gem." and cdg_cod_emp=".$emp." and cdg_cla_doc='".$cla_doc."'";
             $factura_detalle_resumen = oci_parse($conn, $sql_factura_detalle_resumen);
             oci_execute($factura_detalle_resumen);
             while ($fila_factura_detalle_resumen = oci_fetch_array($factura_detalle_resumen, OCI_ASSOC + OCI_RETURN_NULLS)) {
-                $det = $fila_factura_detalle_resumen['CDG_TEN_RES'];
+                $det = $fila_factura_detalle_resumen['CDG_TEN_RES'].' '.$fila_factura_detalle_resumen['CDG_NOT_001'];
+                $det = strtolower($det);
             }
             $valor_detalle = 'COCRR';
         } elseif ($co_cr_an == 'AN' && $tip_imp == 'D'){
@@ -237,6 +238,9 @@
     // C1 nombre de la factura
     if ($cla_doc=='FS'){
         $f11 = 'FACTURA ELECTRONICA';
+        $title = "Factura de Servicios ".$cab['SERIE_DOC'].'-'.$cab['CDG_NUM_DOC'];
+    }if ($cla_doc=='FC'){
+        $f11 = 'FACTURA CONTABILIDAD';
         $title = "Factura de Servicios ".$cab['SERIE_DOC'].'-'.$cab['CDG_NUM_DOC'];
     } elseif ($cla_doc=='FR'){
         $title = "Factura de Repuestos ".$cab['SERIE_DOC'].'-'.$cab['CDG_NUM_DOC'];
@@ -486,7 +490,7 @@
     while($res_ubigeo3 = oci_fetch_array($sql_ubigeo3)){ $ubigeo = $ubigeo.'-'.ucwords(strtolower(trim($res_ubigeo3['UBI_NOMBRE']))); }
 
 
-    // cabezera
+    // cabezera de datos de servicios
     if ($cab['CDG_CLA_DOC']=='FS' || $cab['CDG_CLA_DOC']=='BS' ){
         $cabezera_tipo = 2; // solo cuando tiene 2 se muestran detalles en la cabezera
 
@@ -494,7 +498,7 @@
         $sql_extendido = oci_parse($conn, "
           select * from cab_doc_gen 
           inner join cab_ord_ser on cos_num_ot=cab_doc_gen.cdg_ord_tra and cos_cod_gen=cab_doc_gen.cdg_cod_gen and cos_cod_emp=cab_doc_gen.cdg_cod_emp
-          inner join det_ing_ser on dis_pla_veh=cab_ord_ser.cos_pla_veh
+          inner join det_ing_ser on dis_pla_veh=cab_ord_ser.cos_pla_veh and dis_cod_gen=cab_doc_gen.cdg_cod_gen
           inner join cab_fam_veh on cfv_cod_gen=cab_doc_gen.cdg_cod_gen and cfv_cod_mar=det_ing_ser.dis_mar_veh and cfv_cod_fam=det_ing_ser.dis_cod_fam
           where cdg_num_doc='".$num_doc."' and cdg_cla_doc='".$cla_doc."' and cdg_cod_emp='".$emp."' and cdg_cod_gen='".$gem."' order by cdg_fec_gen Desc");
         oci_execute($sql_extendido);
@@ -504,7 +508,7 @@
             $modelo_anho = $res_extendido['CFV_DES_FAM'].' - '.$res_extendido['DIS_ANO_VEH'];
             $motor_chasis = $res_extendido['DIS_CHA_VEH'];
             $color = $res_extendido['DIS_COL_VEH'];
-            $kilometraje = $res_extendido['DIS_KIL_VEH'];
+            $kilometraje = $res_extendido['COS_KIL_VEH'];
             $extendido[] = $res_extendido;
         }
 
