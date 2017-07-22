@@ -416,9 +416,13 @@ foreach($DocXML as $Nodo){
 }
 
 
+// notas
+if ($cab['NOTA'] != ''){
+    $pdf->SetXY(1,$Y+8.6); $pdf->Cell(11, 0.5, utf8_decode($cab['NOTA']), 0, 1,'L', 0);
+}
 
 // leyenda
-$pdf->SetXY(1,$Y+8.5); $pdf->Cell(11, 0.5, utf8_decode('Son : '.$leyenda_100), 0, 1,'L', 0);
+$pdf->SetXY(1,$Y+9); $pdf->Cell(11, 0.5, utf8_decode('Son : '.$leyenda_100), 0, 1,'L', 0);
 
 $pdf->SetXY(12,$Y+8.5);
 $pdf->Cell(6, 0.5, utf8_decode("Sub Total ".$MonedaRes." : "), 1, 1,'R', 0);
