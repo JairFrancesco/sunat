@@ -172,13 +172,13 @@
 
     <!-- Final Cabezera  -->
     <tr>
-        <td colspan="4">Son : <?php echo $leyenda_100; ?></td>
+        <td colspan="4"><?php echo $cab['NOTA']; ?></td>
         <td class="well"><?php echo $c36 ?></td>
         <td class="well"><?php echo $c19 ?></td>
         <td class="text-right well"><?php echo $c37 ?></td>
     </tr>
     <tr>
-        <td colspan="4"><?php echo $c32 ?></td>
+        <td colspan="4">Son : <?php echo $leyenda_100; ?></td>
         <td class="well"><?php echo $c33 ?></td>
         <td class="well"><?php echo $c19 ?></td>
         <td class="text-right well"><?php echo $c34 ?></td>
