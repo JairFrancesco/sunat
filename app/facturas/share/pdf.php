@@ -500,10 +500,10 @@ if ($Y+14>29){
     $pdf->SetXY(1.12,5); $pdf->Cell(8, 0.25, utf8_decode("Representación impresa de la factura electrónica."), 0, 1,'C', 0);
 
 }else {
-    $pdf->image($ruta.$f8.".png",0.67, $Y+13, 8.65, 2);
+    $pdf->image($ruta.$f8.".png",0.67, $Y+14, 8.65, 2);
     $pdf->SetTextColor(0,0,0);
     $pdf->SetFont('arial','',9);
-    $pdf->SetXY(1.12,$Y+14); $pdf->Cell(8, 0.25, utf8_decode("Representación impresa de la factura electrónica."), 0, 1,'C', 0);
+    $pdf->SetXY(1.12,$Y+16); $pdf->Cell(8, 0.25, utf8_decode("Representación impresa de la factura electrónica."), 0, 1,'C', 0);
 
 }
 
