@@ -278,7 +278,7 @@ if ($c18 == 'COCRD' || $c18 == 'ARAND'){
 
         //$det_importe = round($det_cantidad*$det_precio_unitario,2);
         $det_valor_venta = $dinvoiceLine->getElementsByTagName('LineExtensionAmount')->item(0)->nodeValue;
-        $det_precio_unitario = $det_valor_venta/$det_cantidad;
+        $det_precio_unitario = number_format($det_valor_venta/$det_cantidad, 2, '.', '');
 
         $Y = $Y + 0.5;
         $pdf->SetXY($X + 1, $Y + 8);
@@ -393,7 +393,13 @@ foreach($DocXML as $Nodo){
     $i++;
 }
 
-$pdf->SetXY(1,$Y+8.5); $pdf->Cell(11, 0.5, utf8_decode('Son : '.$leyenda_100), 0, 1,'L', 0);
+// nota
+if ($cab['NOTA'] != ''){
+    $pdf->SetXY(1,$Y+8.6); $pdf->Cell(11, 0.5, utf8_decode($cab['NOTA']), 0, 1,'L', 0);
+}
+
+// leyenda
+$pdf->SetXY(1,$Y+9); $pdf->Cell(11, 0.5, utf8_decode('Son : '.$leyenda_100), 0, 1,'L', 0);
 
 $pdf->SetXY(14,$Y+8.5);
 $pdf->Cell(4, 0.5, utf8_decode("Sub Total ".$MonedaRes." : "), 1, 1,'R', 0);
@@ -480,3 +486,4 @@ if (!file_exists($ruta.$NomArchPDF.'pdf')) {
 }
 
 //print_r($cab);
+//print_r($dets);
