@@ -418,7 +418,9 @@ foreach($DocXML as $Nodo){
 
 // notas
 if ($cab['NOTA'] != ''){
-    $pdf->SetXY(1,$Y+8.6); $pdf->Cell(11, 0.5, utf8_decode($cab['NOTA']), 0, 1,'L', 0);
+    if ($cab['CDG_CLA_DOC'] != 'BR' && $cab['CDG_CO_CR'] != 'AN'){ //   SI ES DIFERENTE DE ANTICIPO DE REPUESTO
+        $pdf->SetXY(1,$Y+8.6); $pdf->Cell(11, 0.5, utf8_decode($cab['NOTA']), 0, 1,'L', 0);
+    }
 }
 
 // leyenda
