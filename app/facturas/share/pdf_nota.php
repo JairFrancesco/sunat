@@ -387,15 +387,14 @@ foreach($DocXML as $Nodo){
     } elseif ($i==6){
         //$importe_total = $Nodo->nodeValue;
 
-
     }
 
     $i++;
 }
 
-// nota
+// nota para las notas de credito ya esta echo
 if ($cab['NOTA'] != ''){
-    $pdf->SetXY(1,$Y+8.6); $pdf->Cell(11, 0.5, utf8_decode($cab['NOTA']), 0, 1,'L', 0);
+    //$pdf->SetXY(1,$Y+8.6); $pdf->Cell(11, 0.5, utf8_decode($cab['NOTA']), 0, 1,'L', 0);
 }
 
 // leyenda
