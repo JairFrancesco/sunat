@@ -172,7 +172,15 @@
 
     <!-- Final Cabezera  -->
     <tr>
-        <td colspan="4"><?php echo $cab['NOTA']; ?></td>
+        <?php
+            if ($cab['NOTA'] != ''){
+                if ($cab['CDG_CLA_DOC'] != 'BR' && $cab['CDG_CO_CR'] != 'AN'){
+                    echo '<td colspan="4">'.$cab['NOTA'].'</td>';
+                }else {
+                    echo '<td colspan="4"></td>';
+                }
+            }
+        ?>
         <td class="well"><?php echo $c36 ?></td>
         <td class="well"><?php echo $c19 ?></td>
         <td class="text-right well"><?php echo $c37 ?></td>
@@ -242,4 +250,3 @@
     ?>
 
 </table>
-
