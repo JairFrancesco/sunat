@@ -174,7 +174,7 @@
                             $icon = 'glyphicon glyphicon-remove';
                         }
 						    echo '
-						        <tr class="'.$sunat.'">
+						        <tr class="'.$sunat.'">						            
 						            <td>'.strtolower($row['FEC_GEN1']).'</td>
 						            <td>'.substr($row['NOMBRE10'],3,20).'</td>
 						            <td>'.strtolower(substr($row['NOM_CLI2'],0,25)).'</td>
@@ -190,6 +190,21 @@
                                 echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
                             }
                             echo '<td>';
+                            echo '<a href="" class="btn btn-default btn-xs">PDF</a> ';
+                            if($row['CDG_TIP_DOC'] == 'F'){
+                                echo '<a href="" class="btn btn-default btn-xs">XML</a> ';
+                                echo '<a href="" class="btn btn-default btn-xs">COM</a> ';
+                            }elseif($row['CDG_TIP_DOC'] == 'B'){
+                                echo '<a href="" class="btn btn-default btn-xs" disabled="">XML</a> ';
+                                echo '<a href="" class="btn btn-default btn-xs" disabled="">COM</a> ';
+                            }elseif($row['CDG_TIP_DOC'] == 'a'){
+                                if ($row['CDG_TIP_REF'] !='BR' &&  $row['CDG_TIP_REF'] !='BS' ) {
+
+                                }else{
+
+                                }
+                            }
+
                             if ($row['CDG_SUN_ENV']=='S'){
                                 if ($row['ANU_SN11']=='S' && $row['DOC_ANU12']=='S') {
                                     echo '<a class="btn btn-'.$sunat.' btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="'.$icon.'"></span> Dar Baja</a>';
