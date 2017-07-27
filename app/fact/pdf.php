@@ -59,4 +59,27 @@
     $image = $renderer->render($codigo_barra);
     $image->save($ruta.'20532710066-'.$doc.'-'.$serie.'.png');
 
+
+class PDF extends FPDF{
+    function Header(){}
+    function Footer(){}
+}
+$pdf=new PDF('P','cm','A4');
+$pdf->AliasNbPages();
+$pdf->AddPage();
+$pdf->AddFont('IDAutomationHC39M','','IDAutomationHC39M.php');
+$pdf->AddFont('verdana','','verdana.php');
+$pdf->SetAutoPageBreak(true);
+//$pdf->SetMargins(0, 0, 0);
+//$pdf->SetLineWidth(0.02);
+//$pdf->SetFillColor(0,0,0);
+//$pdf->image($ruta.'20532710066-'.$doc.'-'.$serie.'.png',1, 1, 10, 2.5);
+
+$pdf->RoundedRect(1, 1, 10, 2.55, 0.2, '');
+$pdf->RoundedRect(12, 1, 8, 2.55, 0.2, '');
+
+$pdf->Output($ruta.'20532710066-'.$doc.'-'.$serie.'.pdf', 'F'); // Se graba el documento .PDF en el disco duro o unidad de estado sólido.
+chmod ($ruta.'20532710066-'.$doc.'-'.$serie.'.pdf',0777);  // Se dan permisos de lectura y escritura.
+$pdf->Output($ruta.'20532710066-'.$doc.'-'.$serie.'.pdf', 'I'); // Se muestra el documento .PDF en el navegador.
+
 ?>
