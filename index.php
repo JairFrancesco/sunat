@@ -189,19 +189,26 @@
                             } else{
                                 echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
                             }
+
                             echo '<td>';
-                            echo '<a href="" class="btn btn-default btn-xs">PDF</a> ';
+
                             if($row['CDG_TIP_DOC'] == 'F'){
-                                echo '<a href="" class="btn btn-default btn-xs">XML</a> ';
-                                echo '<a href="" class="btn btn-default btn-xs">COM</a> ';
+                                echo '<a href="app/fact/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
+                                echo '<a href="app/fact/xml_fb.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">XML</a> ';
+                                echo '<a href="app/fact/comp_fb.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">COM</a> ';
                             }elseif($row['CDG_TIP_DOC'] == 'B'){
+                                echo '<a href="app/fact/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
                                 echo '<a href="" class="btn btn-default btn-xs" disabled="">XML</a> ';
                                 echo '<a href="" class="btn btn-default btn-xs" disabled="">COM</a> ';
-                            }elseif($row['CDG_TIP_DOC'] == 'a'){
+                            }elseif($row['CDG_TIP_DOC'] == 'A'){
                                 if ($row['CDG_TIP_REF'] !='BR' &&  $row['CDG_TIP_REF'] !='BS' ) {
-
+                                    echo '<a href="app/fact/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
+                                    echo '<a href="app/fact/xml_n.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">XML</a> ';
+                                    echo '<a href="app/fact/comp_n.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">COM</a> ';
                                 }else{
-
+                                    echo '<a href="" class="btn btn-default btn-xs" disabled="">PDF</a> ';
+                                    echo '<a href="" class="btn btn-default btn-xs" disabled="">XML</a> ';
+                                    echo '<a href="" class="btn btn-default btn-xs" disabled="">COM</a> ';
                                 }
                             }
 

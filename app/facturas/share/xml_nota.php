@@ -344,8 +344,8 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
 
 
 // produccion
-//$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
-$wsdlURL = "billService.wsdl";
+$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+//$wsdlURL = "billService.wsdl";
 // 20532710066SURMOTR1 TOYOTA2051
 //Estructura del XML para la conexión
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
@@ -356,8 +356,8 @@ xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-s
  <soapenv:Header>
      <wsse:Security>
          <wsse:UsernameToken Id="ABC-123">
-             <wsse:Username>20532710066SURMOTR1</wsse:Username>
-             <wsse:Password>TOYOTA2051</wsse:Password>
+             <wsse:Username>20532710066MODDATOS</wsse:Username>
+             <wsse:Password>MODDATOS</wsse:Password>
          </wsse:UsernameToken>
      </wsse:Security>
  </soapenv:Header>
