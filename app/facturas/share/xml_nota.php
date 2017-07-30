@@ -356,8 +356,8 @@ xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-s
  <soapenv:Header>
      <wsse:Security>
          <wsse:UsernameToken Id="ABC-123">
-             <wsse:Username>20532710066MODDATOS</wsse:Username>
-             <wsse:Password>MODDATOS</wsse:Password>
+             <wsse:Username>20532710066SURMOTR1</wsse:Username>
+             <wsse:Password>TOYOTA2051</wsse:Password>
          </wsse:UsernameToken>
      </wsse:Security>
  </soapenv:Header>
