@@ -494,8 +494,6 @@
     if ($cab['CDG_CLA_DOC']=='FS' || $cab['CDG_CLA_DOC']=='BS'  ){
         if($cab['CDG_CO_CR'] != 'AN'){
             $cabezera_tipo = 2; // solo cuando tiene 2 se muestran detalles en la cabezera
-
-
             $sql_extendido = oci_parse($conn, "
               select * from cab_doc_gen 
               inner join cab_ord_ser on cos_num_ot=cab_doc_gen.cdg_ord_tra and cos_cod_gen=cab_doc_gen.cdg_cod_gen and cos_cod_emp=cab_doc_gen.cdg_cod_emp
