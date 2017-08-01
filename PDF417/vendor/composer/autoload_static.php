@@ -47,11 +47,11 @@ class ComposerStaticInit8279833758489f0f90c4a5e27b87ec29
     public static $prefixDirsPsr4 = array (
         'archon810\\' => 
         array (
-            0 => __DIR__ . '/..' . '/archon810/smartdomdocument/src',
+            0 => __DIR__ . '/..' . '/archon810/smartdomdocument/html2pdf',
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/html2pdf',
         ),
         'Intervention\\Image\\' => 
         array (
@@ -87,7 +87,7 @@ class ComposerStaticInit8279833758489f0f90c4a5e27b87ec29
         array (
             'ForceUTF8\\' => 
             array (
-                0 => __DIR__ . '/..' . '/neitanod/forceutf8/src',
+                0 => __DIR__ . '/..' . '/neitanod/forceutf8/html2pdf',
             ),
         ),
         'D' => 

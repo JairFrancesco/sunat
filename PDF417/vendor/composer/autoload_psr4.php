@@ -6,11 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'archon810\\' => array($vendorDir . '/archon810/smartdomdocument/src'),
-    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
-    'Intervention\\Image\\' => array($vendorDir . '/intervention/image/src/Intervention/Image'),
-    'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),
+    'archon810\\' => array($vendorDir . '/archon810/smartdomdocument/html2pdf'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/html2pdf'),
+    'Intervention\\Image\\' => array($vendorDir . '/intervention/image/html2pdf/Intervention/Image'),
+    'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/html2pdf'),
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/common/lib/Doctrine/Common'),
-    'BigFish\\PDF417\\' => array($vendorDir . '/bigfish/pdf417/src'),
+    'BigFish\\PDF417\\' => array($vendorDir . '/bigfish/pdf417/html2pdf'),
 );

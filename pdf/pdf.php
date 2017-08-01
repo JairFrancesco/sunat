@@ -88,21 +88,21 @@ $pdf->Row(array('','Operaciones Gratuitas S/ :','Descripcion'));
 $pdf->Row(array('','I.G.V. 18% S/ :','Descripcion'));
 $pdf->Row(array('','IMPORTE TOTAL S/ :','Descripcion'));
 
-//$pdf->MultiCell(100, 30, $pdf->image("../archs_graf/20532710066-07-FN03-2917.png",$pdf->GetX(), $pdf->GetY()+10, 80, 24,'PNG'), 0, 'R');
+//$librerias->MultiCell(100, 30, $librerias->image("../archs_graf/20532710066-07-FN03-2917.png",$librerias->GetX(), $librerias->GetY()+10, 80, 24,'PNG'), 0, 'R');
 $pdf->image("../archs_graf/20532710066-07-FN03-2917.png",$pdf->GetX(), $pdf->GetY()+10, 80, 24,'PNG');
 $pdf->SetXY($pdf->GetX()+90, $pdf->GetY()+10); $pdf->MultiCell(100, 5, utf8_decode('Operación sujeta al Sistema de pago de Oblig. trib. con el Gobierno Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco. '), 0, 'R');
 $pdf->SetXY($pdf->GetX(), $pdf->GetY()+12); $pdf->MultiCell(80, 5, utf8_decode("Representación impresa de la factura electrónica."), 0, 'C');
-//$pdf->line($pdf->GetX(), $pdf->GetY()+10, $pdf->GetX()+100, $pdf->GetY()+10);
-//$pdf->Ln();
+//$librerias->line($librerias->GetX(), $librerias->GetY()+10, $librerias->GetX()+100, $librerias->GetY()+10);
+//$librerias->Ln();
 $pdf->SetXY($pdf->GetX(), $pdf->GetY()+5); $pdf->MultiCell(190, 5, utf8_decode("SURMOTRIZ S.R.L Autorizado para ser Emisor electrónico mediante la Resolución de Intendencia N° 112-005-0000143/SUNAT. Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php"), 0, 'C');
 /*
-$x = $pdf->GetX(); $y = $pdf->GetY();
-$pdf->SetXY($x,$y); $pdf->MultiCell(146, 5, utf8_decode('Valor Venta'), 1,'L');
-$pdf->SetXY($x+146,$y); $pdf->MultiCell(44, 5, utf8_decode('Valor Venta Valor Venta Valor Venta Valor Venta'), 1,'L');
-$pdf->MultiCell(44, 5, utf8_decode('Valor Venta Valor Venta Valor Venta Valor Venta'), 1,'L');
+$x = $librerias->GetX(); $y = $librerias->GetY();
+$librerias->SetXY($x,$y); $librerias->MultiCell(146, 5, utf8_decode('Valor Venta'), 1,'L');
+$librerias->SetXY($x+146,$y); $librerias->MultiCell(44, 5, utf8_decode('Valor Venta Valor Venta Valor Venta Valor Venta'), 1,'L');
+$librerias->MultiCell(44, 5, utf8_decode('Valor Venta Valor Venta Valor Venta Valor Venta'), 1,'L');
 */
-//$pdf->Cell(146,5,'',0);
-//$pdf->Cell(44,5,'Valor Venta',1);
+//$librerias->Cell(146,5,'',0);
+//$librerias->Cell(44,5,'Valor Venta',1);
 $pdf->Output();
 
 

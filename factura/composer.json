@@ -1,0 +1,6 @@
+{
+    "require": {
+        "bigfish/pdf417": "^0.3.0",
+        "spipu/html2pdf": "^5.0"
+    }
+}

@@ -224,7 +224,7 @@ class PDF extends FPDF{
     }
 }
 
-$NomArchPDF = "factura.pdf";
+$NomArchPDF = "factura.librerias";
 
 
 $pdf=new PDF('P','cm','Letter');

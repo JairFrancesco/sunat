@@ -180,5 +180,5 @@
 	$scope.genpdf = function(doc){
 		var doc = new jsPDF();		
 		doc.text('PDF en construccion Surmotriz', 10, 10)
-		doc.save('documento_exportado.pdf')
+		doc.save('documento_exportado.librerias')
 	};

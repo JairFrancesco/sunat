@@ -123,9 +123,9 @@ class PDF extends FPDF{
     }
 }
 
-// nombre del pdf
+// nombre del librerias
 //$nombre_pdf = '20532710066-'.$DOM->getElementsByTagName('InvoiceTypeCode')->item(0)->nodeValue.'-'.$DOM->getElementsByTagName('ID')->item(6)->nodeValue;
-$NomArchPDF = $f6.'.pdf';
+$NomArchPDF = $f6.'.librerias';
 //echo $f6;
 $pdf=new PDF('P','cm','A4');
 $pdf->AliasNbPages();

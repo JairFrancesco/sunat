@@ -22,7 +22,7 @@ class ImageServiceProviderLaravel4 extends ServiceProvider
             $app = $this->app;
 
             // load imagecache config
-            $app['config']->package('intervention/imagecache', __DIR__.'/../../../../imagecache/src/config', 'imagecache');
+            $app['config']->package('intervention/imagecache', __DIR__.'/../../../../imagecache/html2pdf/config', 'imagecache');
             $config = $app['config'];
 
             // create dynamic manipulation route

@@ -312,7 +312,7 @@ class HTML2PDF_parsingHtml
         $param['style'] = '';
         if ($name == 'img') {
             $param['alt'] = '';
-            $param['src'] = '';
+            $param['html2pdf'] = '';
         }
         if ($name == 'a') {
             $param['href'] = '';
