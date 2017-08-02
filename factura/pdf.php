@@ -143,7 +143,9 @@
             $items[$i][1] = $repuesto['LPR_DES_PRO']; // descripcion
             $items[$i][2] = $repuesto['DDR_CAN_PRO']; // cantidad
             $items[$i][3] = $repuesto['DDR_VVP_SOL']; // precio unitario
-            $items[$i][4] = ($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']); // importe
+            $items[$i][4] = number_format(($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']), 2, '.',','); // importe
+            $items[$i][5] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100), 2, '.', ','); // descuento
+            $items[$i][6] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']) - (($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100)),2,'.',',');
             $i++;
         }
     }
@@ -154,11 +156,13 @@
         oci_execute($sql_servicios_parse);
         oci_fetch_all($sql_servicios_parse, $servicios, null, null, OCI_FETCHSTATEMENT_BY_ROW);
         foreach ($servicios as $servicio) {
-            $items[$i][0] = $servicio['DDS_COD_PRO'];
-            $items[$i][1] = $servicio['DDS_DES_001'];
-            $items[$i][2] = $servicio['DDS_CAN_PRO'];
-            $items[$i][3] = $servicio['DDS_VVP_SOL'];
-            $items[$i][4] = ($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']);
+            $items[$i][0] = $servicio['DDS_COD_PRO']; // codigo
+            $items[$i][1] = $servicio['DDS_DES_001']; // descripcion
+            $items[$i][2] = $servicio['DDS_CAN_PRO']; // cantidad
+            $items[$i][3] = $servicio['DDS_VVP_SOL']; // precio unitario
+            $items[$i][4] = number_format(($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']), 2, '.', ','); // importe
+            $items[$i][5] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100), 2, '.', ','); // descuento
+            $items[$i][6] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']) - (($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100)),2,'.',','); // valor venta
             $i++;
         }
     }
@@ -174,22 +178,26 @@
             $items[$i][2] = '';
             $items[$i][3] = '';
             $items[$i][4] = '';
+            $items[$i][5] = '';
+            $items[$i][6] = '';
             $i++;
         }
     }
 
     if($cab_doc_gen['CDG_TIP_IMP'] == 'R') {
         if ($cab_doc_gen['CDG_TEN_RES'] != '') {
-            $items[$i][0] = '';
+            $items[$i][0] = '-- -- --';
             $items[$i][1] = $cab_doc_gen['CDG_TEN_RES'];
-            $items[$i][2] = '';
+            $items[$i][2] = '1';
             $items[$i][3] = '';
             $items[$i][4] = '';
+            $items[$i][5] = '';
+            $items[$i][6] = '';
         }
     }
 
-
-    print_r($items);
+    //print_r($repuestos);
+    //print_r($items);
 
     ob_start();
 
@@ -330,18 +338,20 @@
             </td>
         </tr>
         <?php
-        for ($i = 1; $i <= 3; $i++) {
-            echo '<tr>';
-            echo '<td style="width: 5%; border-left: solid 1px #000;">' . $i . '</td>';
-            echo '<td style="width: 13%;">9046710183</td>';
-            echo '<td style="width: 37%;">JGO PASTILLA FRENO 1 JGO PASTILLA</td>';
-            echo '<td style="width: 5%; text-align: right;">5</td>';
-            echo '<td style="width: 10%; text-align: right;">5.00</td>';
-            echo '<td style="width: 10%; text-align: right;">5.00</td>';
-            echo '<td style="width: 10%; text-align: right;">5.00</td>';
-            echo '<td style="width: 10%; border-right: solid 1px #000; text-align: right;">5.00</td>';
-            echo '</tr>';
-        }
+            $i=1;
+            foreach($items as $item){
+                echo '<tr>';
+                echo '<td style="width: 5%; border-left: solid 1px #000;">' . $i . '</td>';
+                echo '<td style="width: 13%;">'.$item[0].'</td>';
+                echo '<td style="width: 37%;">'.$item[1].'</td>';
+                echo '<td style="width: 5%; text-align: right;">'.$item[2].'</td>';
+                echo '<td style="width: 10%; text-align: right;">'.$item[3].'</td>';
+                echo '<td style="width: 10%; text-align: right;">'.$item[4].'</td>';
+                echo '<td style="width: 10%; text-align: right;">'.$item[5].'</td>';
+                echo '<td style="width: 10%; border-right: solid 1px #000; text-align: right;">'.$item[6].'</td>';
+                echo '</tr>';
+                $i++;
+            }
         ?>
         <tr>
             <td colspan="4" rowspan="8"
@@ -395,6 +405,6 @@
     use Spipu\Html2Pdf\Html2Pdf;
     $html2pdf = new Html2Pdf('P', 'A4', 'es', true, 'UTF-8', array(8, 8, 8, 8));
     $html2pdf->writeHTML($content);
-    //$html2pdf->output('factura.pdf');
+    $html2pdf->output('factura.pdf');
 
 ?>
