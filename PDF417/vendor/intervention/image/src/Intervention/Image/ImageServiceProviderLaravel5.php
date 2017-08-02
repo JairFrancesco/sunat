@@ -62,7 +62,7 @@ class ImageServiceProviderLaravel5 extends ServiceProvider
     private function bootstrapImageCache()
     {
         $app = $this->app;
-        $config = __DIR__.'/../../../../imagecache/src/config/config.php';
+        $config = __DIR__.'/../../../../imagecache/html2pdf/config/config.php';
 
         $this->publishes(array(
             $config => config_path('imagecache.php')

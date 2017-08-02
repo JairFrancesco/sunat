@@ -691,7 +691,7 @@ function mimetype_from_extension($extension)
         'ogv' => 'video/ogg',
         'ogx' => 'application/ogg',
         'pbm' => 'image/x-portable-bitmap',
-        'pdf' => 'application/pdf',
+        'pdf' => 'application/librerias',
         'pgm' => 'image/x-portable-graymap',
         'png' => 'image/png',
         'pnm' => 'image/x-portable-anymap',

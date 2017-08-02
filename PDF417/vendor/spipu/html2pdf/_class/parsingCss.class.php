@@ -12,7 +12,7 @@
 class HTML2PDF_parsingCss
 {
     /**
-     * reference to the pdf object
+     * reference to the librerias object
      * @var TCPDF
      */
     protected $_pdf         = null;

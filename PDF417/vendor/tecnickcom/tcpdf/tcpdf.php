@@ -1847,7 +1847,7 @@ class TCPDF {
 		$this->font_obj_ids = array();
 		$this->page_obj_id = array();
 		$this->form_obj_id = array();
-		// set pdf/a mode
+		// set librerias/a mode
 		$this->pdfa_mode = $pdfa;
 		$this->force_srgb = false;
 		// set language direction
@@ -6194,17 +6194,17 @@ class TCPDF {
 	 * Generally, if you want to know the exact height for a block of content you can use the following alternative technique:
 	 * @pre
 	 *  // store current object
-	 *  $pdf->startTransaction();
+	 *  $librerias->startTransaction();
 	 *  // store starting values
-	 *  $start_y = $pdf->GetY();
-	 *  $start_page = $pdf->getPage();
+	 *  $start_y = $librerias->GetY();
+	 *  $start_page = $librerias->getPage();
 	 *  // call your printing functions with your parameters
 	 *  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	 *  $pdf->MultiCell($w=0, $h=0, $txt, $border=1, $align='L', $fill=false, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0);
+	 *  $librerias->MultiCell($w=0, $h=0, $txt, $border=1, $align='L', $fill=false, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0);
 	 *  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	 *  // get the new Y
-	 *  $end_y = $pdf->GetY();
-	 *  $end_page = $pdf->getPage();
+	 *  $end_y = $librerias->GetY();
+	 *  $end_page = $librerias->getPage();
 	 *  // calculate height
 	 *  $height = 0;
 	 *  if ($end_page == $start_page) {
@@ -6224,7 +6224,7 @@ class TCPDF {
 	 *  	}
 	 *  }
 	 *  // restore previous object
-	 *  $pdf = $pdf->rollbackTransaction();
+	 *  $librerias = $librerias->rollbackTransaction();
 	 *
 	 * @param $w (float) Width of cells. If 0, they extend up to the right margin of the page.
 	 * @param $txt (string) String for calculating his height
@@ -7545,7 +7545,7 @@ class TCPDF {
 	 * @since 1.0
 	 * @see Close()
 	 */
-	public function Output($name='doc.pdf', $dest='I') {
+	public function Output($name='doc.librerias', $dest='I') {
 		//Output PDF to some destination
 		//Finish document if necessary
 		if ($this->state < 3) {
@@ -7621,7 +7621,7 @@ class TCPDF {
 				}
 				if (php_sapi_name() != 'cli') {
 					// send output to a browser
-					header('Content-Type: application/pdf');
+					header('Content-Type: application/librerias');
 					if (headers_sent()) {
 						$this->Error('Some data has already been output to browser, can\'t send PDF file');
 					}
@@ -7656,9 +7656,9 @@ class TCPDF {
 					header('Content-Type: application/force-download');
 					header('Content-Type: application/octet-stream', false);
 					header('Content-Type: application/download', false);
-					header('Content-Type: application/pdf', false);
+					header('Content-Type: application/librerias', false);
 				} else {
-					header('Content-Type: application/pdf');
+					header('Content-Type: application/librerias');
 				}
 				// use the Content-Disposition header to supply a recommended filename
 				header('Content-Disposition: attachment; filename="'.basename($name).'"');
@@ -7678,7 +7678,7 @@ class TCPDF {
 				fclose($f);
 				if ($dest == 'FI') {
 					// send headers to browser
-					header('Content-Type: application/pdf');
+					header('Content-Type: application/librerias');
 					header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0, max-age=1');
 					//header('Cache-Control: public, must-revalidate, max-age=0'); // HTTP/1.1
 					header('Pragma: public');
@@ -7704,9 +7704,9 @@ class TCPDF {
 						header('Content-Type: application/force-download');
 						header('Content-Type: application/octet-stream', false);
 						header('Content-Type: application/download', false);
-						header('Content-Type: application/pdf', false);
+						header('Content-Type: application/librerias', false);
 					} else {
-						header('Content-Type: application/pdf');
+						header('Content-Type: application/librerias');
 					}
 					// use the Content-Disposition header to supply a recommended filename
 					header('Content-Disposition: attachment; filename="'.basename($name).'"');
@@ -7717,7 +7717,7 @@ class TCPDF {
 			}
 			case 'E': {
 				// return PDF as base64 mime multi-part email attachment (RFC 2045)
-				$retval = 'Content-Type: application/pdf;'."\r\n";
+				$retval = 'Content-Type: application/librerias;'."\r\n";
 				$retval .= ' name="'.$name.'"'."\r\n";
 				$retval .= 'Content-Transfer-Encoding: base64'."\r\n";
 				$retval .= 'Content-Disposition: attachment;'."\r\n";
@@ -8373,7 +8373,7 @@ class TCPDF {
 									$annots .= ' /A << /S /JavaScript /JS '.$this->_textstring($jsa, $annot_obj_id).'>>';
 								} else {
 									$parsedUrl = parse_url($pl['txt']);
-									if (empty($parsedUrl['scheme']) AND (strtolower(substr($parsedUrl['path'], -4)) == '.pdf')) {
+									if (empty($parsedUrl['scheme']) AND (strtolower(substr($parsedUrl['path'], -4)) == '.librerias')) {
 										// relative link to a PDF file
 										$dest = '[0 /Fit]'; // default page 0
 										if (!empty($parsedUrl['fragment'])) {
@@ -9434,7 +9434,7 @@ class TCPDF {
 
 	/**
 	 * Adds some Metadata information (Document Information Dictionary)
-	 * (see Chapter 14.3.3 Document Information Dictionary of PDF32000_2008.pdf Reference)
+	 * (see Chapter 14.3.3 Document Information Dictionary of PDF32000_2008.librerias Reference)
 	 * @return int object id
 	 * @protected
 	 */
@@ -9511,7 +9511,7 @@ class TCPDF {
 		$xmp .= '<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 4.2.1-c043 52.372728, 2009/01/18-15:08:04">'."\n";
 		$xmp .= "\t".'<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">'."\n";
 		$xmp .= "\t\t".'<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">'."\n";
-		$xmp .= "\t\t\t".'<dc:format>application/pdf</dc:format>'."\n";
+		$xmp .= "\t\t\t".'<dc:format>application/librerias</dc:format>'."\n";
 		$xmp .= "\t\t\t".'<dc:title>'."\n";
 		$xmp .= "\t\t\t\t".'<rdf:Alt>'."\n";
 		$xmp .= "\t\t\t\t\t".'<rdf:li xml:lang="x-default">'.TCPDF_STATIC::_escapeXML($this->title).'</rdf:li>'."\n";
@@ -9551,9 +9551,9 @@ class TCPDF {
 		$xmp .= "\t\t\t".'<xmp:ModifyDate>'.$docmoddate.'</xmp:ModifyDate>'."\n";
 		$xmp .= "\t\t\t".'<xmp:MetadataDate>'.$doccreationdate.'</xmp:MetadataDate>'."\n";
 		$xmp .= "\t\t".'</rdf:Description>'."\n";
-		$xmp .= "\t\t".'<rdf:Description rdf:about="" xmlns:pdf="http://ns.adobe.com/pdf/1.3/">'."\n";
-		$xmp .= "\t\t\t".'<pdf:Keywords>'.TCPDF_STATIC::_escapeXML($this->keywords).'</pdf:Keywords>'."\n";
-		$xmp .= "\t\t\t".'<pdf:Producer>'.TCPDF_STATIC::_escapeXML(TCPDF_STATIC::getTCPDFProducer()).'</pdf:Producer>'."\n";
+		$xmp .= "\t\t".'<rdf:Description rdf:about="" xmlns:librerias="http://ns.adobe.com/librerias/1.3/">'."\n";
+		$xmp .= "\t\t\t".'<librerias:Keywords>'.TCPDF_STATIC::_escapeXML($this->keywords).'</librerias:Keywords>'."\n";
+		$xmp .= "\t\t\t".'<librerias:Producer>'.TCPDF_STATIC::_escapeXML(TCPDF_STATIC::getTCPDFProducer()).'</librerias:Producer>'."\n";
 		$xmp .= "\t\t".'</rdf:Description>'."\n";
 		$xmp .= "\t\t".'<rdf:Description rdf:about="" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/">'."\n";
 		$uuid = 'uuid:'.substr($this->file_id, 0, 8).'-'.substr($this->file_id, 8, 4).'-'.substr($this->file_id, 12, 4).'-'.substr($this->file_id, 16, 4).'-'.substr($this->file_id, 20, 12);
@@ -9571,8 +9571,8 @@ class TCPDF {
 		$xmp .= "\t\t\t".'<pdfaExtension:schemas>'."\n";
 		$xmp .= "\t\t\t\t".'<rdf:Bag>'."\n";
 		$xmp .= "\t\t\t\t\t".'<rdf:li rdf:parseType="Resource">'."\n";
-		$xmp .= "\t\t\t\t\t\t".'<pdfaSchema:namespaceURI>http://ns.adobe.com/pdf/1.3/</pdfaSchema:namespaceURI>'."\n";
-		$xmp .= "\t\t\t\t\t\t".'<pdfaSchema:prefix>pdf</pdfaSchema:prefix>'."\n";
+		$xmp .= "\t\t\t\t\t\t".'<pdfaSchema:namespaceURI>http://ns.adobe.com/librerias/1.3/</pdfaSchema:namespaceURI>'."\n";
+		$xmp .= "\t\t\t\t\t\t".'<pdfaSchema:prefix>librerias</pdfaSchema:prefix>'."\n";
 		$xmp .= "\t\t\t\t\t\t".'<pdfaSchema:schema>Adobe PDF Schema</pdfaSchema:schema>'."\n";
 		$xmp .= "\t\t\t\t\t".'</rdf:li>'."\n";
 		$xmp .= "\t\t\t\t\t".'<rdf:li rdf:parseType="Resource">'."\n";
@@ -13680,7 +13680,7 @@ class TCPDF {
 	}
 
 	/**
-	 * Put pdf layers.
+	 * Put librerias layers.
 	 * @protected
 	 * @since 3.0.000 (2008-03-27)
 	 */
@@ -13704,7 +13704,7 @@ class TCPDF {
 	}
 
 	/**
-	 * Start a new pdf layer.
+	 * Start a new librerias layer.
 	 * @param $name (string) Layer name (only a-z letters and numbers). Leave empty for automatic name.
 	 * @param $print (boolean|null) Set to TRUE to print this layer, FALSE to not print and NULL to not set this option
 	 * @param $view (boolean) Set to true to view this layer.
@@ -18809,14 +18809,14 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 				break;
 			}
 			case 'img': {
-				if (!empty($tag['attribute']['src'])) {
-					if ($tag['attribute']['src'][0] === '@') {
+				if (!empty($tag['attribute']['html2pdf'])) {
+					if ($tag['attribute']['html2pdf'][0] === '@') {
 						// data stream
-						$tag['attribute']['src'] = '@'.base64_decode(substr($tag['attribute']['src'], 1));
+						$tag['attribute']['html2pdf'] = '@'.base64_decode(substr($tag['attribute']['html2pdf'], 1));
 						$type = '';
 					} else {
 						// get image type
-						$type = TCPDF_IMAGES::getImageFileType($tag['attribute']['src']);
+						$type = TCPDF_IMAGES::getImageFileType($tag['attribute']['html2pdf']);
 					}
 					if (!isset($tag['width'])) {
 						$tag['width'] = 0;
@@ -18884,11 +18884,11 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 						$ih = $this->getHTMLUnitToUnits($tag['height'], ($tag['fontsize'] / $this->k), 'px', false);
 					}
 					if (($type == 'eps') OR ($type == 'ai')) {
-						$this->ImageEps($tag['attribute']['src'], $xpos, $this->y, $iw, $ih, $imglink, true, $align, '', $border, true);
+						$this->ImageEps($tag['attribute']['html2pdf'], $xpos, $this->y, $iw, $ih, $imglink, true, $align, '', $border, true);
 					} elseif ($type == 'svg') {
-						$this->ImageSVG($tag['attribute']['src'], $xpos, $this->y, $iw, $ih, $imglink, $align, '', $border, true);
+						$this->ImageSVG($tag['attribute']['html2pdf'], $xpos, $this->y, $iw, $ih, $imglink, $align, '', $border, true);
 					} else {
-						$this->Image($tag['attribute']['src'], $xpos, $this->y, $iw, $ih, '', $imglink, $align, false, 300, '', false, false, $border, false, false, true);
+						$this->Image($tag['attribute']['html2pdf'], $xpos, $this->y, $iw, $ih, '', $imglink, $align, false, 300, '', false, false, $border, false, false, true);
 					}
 					switch($align) {
 						case 'T': {
@@ -19182,8 +19182,8 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 					}
 					case 'image': {
 						// THIS TYPE MUST BE FIXED
-						if (isset($tag['attribute']['src']) AND !TCPDF_STATIC::empty_string($tag['attribute']['src'])) {
-							$img = $tag['attribute']['src'];
+						if (isset($tag['attribute']['html2pdf']) AND !TCPDF_STATIC::empty_string($tag['attribute']['html2pdf'])) {
+							$img = $tag['attribute']['html2pdf'];
 						} else {
 							break;
 						}

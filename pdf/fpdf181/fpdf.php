@@ -991,7 +991,7 @@ function Output($dest='', $name='', $isUTF8=false)
 	if($dest=='')
 		$dest = 'I';
 	if($name=='')
-		$name = 'doc.pdf';
+		$name = 'doc.librerias';
 	switch(strtoupper($dest))
 	{
 		case 'I':
@@ -1000,7 +1000,7 @@ function Output($dest='', $name='', $isUTF8=false)
 			if(PHP_SAPI!='cli')
 			{
 				// We send to a browser
-				header('Content-Type: application/pdf');
+				header('Content-Type: application/librerias');
 				header('Content-Disposition: inline; '.$this->_httpencode('filename',$name,$isUTF8));
 				header('Cache-Control: private, max-age=0, must-revalidate');
 				header('Pragma: public');

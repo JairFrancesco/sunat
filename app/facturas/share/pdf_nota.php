@@ -117,9 +117,9 @@ class PDF extends FPDF{
     }
 }
 
-// nombre del pdf
+// nombre del librerias
 $nombre_pdf = '20532710066-07-'.$DOM->getElementsByTagName('ID')->item(4)->nodeValue;
-$NomArchPDF = $nombre_pdf.'.pdf';
+$NomArchPDF = $nombre_pdf.'.librerias';
 
 $pdf=new PDF('P','cm','Letter');
 $pdf->AliasNbPages();
@@ -234,7 +234,7 @@ $pdf->SetXY(4.1,4.4+(0.5*5)); $pdf->Cell(8, 0.35, utf8_decode(': '.$ubigeo), 0, 
 /*
 // Documento que Modifica
 $doc_afectado = $DOM->getElementsByTagName('ReferenceID')->item(0)->nodeValue;
-$pdf->SetXY(11,4.4+(0.6*2)); $pdf->Cell(3, 0.35, $doc_afectado, 0, 1,'L', 0);
+$librerias->SetXY(11,4.4+(0.6*2)); $librerias->Cell(3, 0.35, $doc_afectado, 0, 1,'L', 0);
 */
 $X = 0;
 $Y = 0;
@@ -394,7 +394,7 @@ foreach($DocXML as $Nodo){
 
 // nota para las notas de credito ya esta echo
 if ($cab['NOTA'] != ''){
-    //$pdf->SetXY(1,$Y+8.6); $pdf->Cell(11, 0.5, utf8_decode($cab['NOTA']), 0, 1,'L', 0);
+    //$librerias->SetXY(1,$Y+8.6); $librerias->Cell(11, 0.5, utf8_decode($cab['NOTA']), 0, 1,'L', 0);
 }
 
 // leyenda

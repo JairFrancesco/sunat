@@ -374,7 +374,7 @@ class HTML2PDF
      */
     public function Output($name = '', $dest = false)
     {
-        // close the pdf and clean up
+        // close the librerias and clean up
         $this->_cleanUp();
 
         // if on debug mode
@@ -388,14 +388,14 @@ class HTML2PDF
         if ($dest===false) $dest = 'I';
         if ($dest===true)  $dest = 'S';
         if ($dest==='')    $dest = 'I';
-        if ($name=='')     $name='document.pdf';
+        if ($name=='')     $name='document.librerias';
 
         // clean up the destination
         $dest = strtoupper($dest);
         if (!in_array($dest, array('I', 'D', 'F', 'S', 'FI','FD'))) $dest = 'I';
 
         // the name must be a PDF name
-        if (strtolower(substr($name, -4))!='.pdf') {
+        if (strtolower(substr($name, -4))!='.librerias') {
             throw new HTML2PDF_exception(0, 'The output document name "'.$name.'" is not a PDF name');
         }
 
@@ -2337,12 +2337,12 @@ class HTML2PDF
             // background
             $background = array();
             if (isset($param['backimg'])) {
-                $background['img']    = isset($param['backimg'])  ? $param['backimg']  : '';       // src of the image
+                $background['img']    = isset($param['backimg'])  ? $param['backimg']  : '';       // html2pdf of the image
                 $background['posX']   = isset($param['backimgx']) ? $param['backimgx'] : 'center'; // horizontale position of the image
                 $background['posY']   = isset($param['backimgy']) ? $param['backimgy'] : 'middle'; // vertical position of the image
                 $background['width']  = isset($param['backimgw']) ? $param['backimgw'] : '100%';   // width of the image (100% = page width)
 
-                // convert the src of the image, if parameters
+                // convert the html2pdf of the image, if parameters
                 $background['img'] = str_replace('&amp;', '&', $background['img']);
 
                 // convert the positions
@@ -4553,7 +4553,7 @@ class HTML2PDF
             $paramPUCE['style']['vertical-align']  = 'top';
             $paramPUCE['style']['width']           = $this->_listeGetWidth();
             $paramPUCE['style']['padding-right']   = $this->_listeGetPadding();
-            $paramPUCE['src'] = $inf[2];
+            $paramPUCE['html2pdf'] = $inf[2];
             $paramPUCE['sub_li'] = true;
         }
 
@@ -4574,7 +4574,7 @@ class HTML2PDF
             $tmpLst1 = $this->parsingHtml->code[$tmpPos+1];
             $tmpLst2 = $this->parsingHtml->code[$tmpPos+2];
             $this->parsingHtml->code[$tmpPos+1] = array();
-            $this->parsingHtml->code[$tmpPos+1]['name']    = (isset($paramPUCE['src'])) ? 'img' : 'write';
+            $this->parsingHtml->code[$tmpPos+1]['name']    = (isset($paramPUCE['html2pdf'])) ? 'img' : 'write';
             $this->parsingHtml->code[$tmpPos+1]['param']    = $paramPUCE; unset($this->parsingHtml->code[$tmpPos+1]['param']['style']['width']);
             $this->parsingHtml->code[$tmpPos+1]['close']    = 0;
             $this->parsingHtml->code[$tmpPos+2] = array();
@@ -4590,7 +4590,7 @@ class HTML2PDF
             // TD for the puce
             $this->_tag_open_TD($paramPUCE, 'li_sub');
             unset($paramPUCE['style']['width']);
-            if (isset($paramPUCE['src']))    $this->_tag_open_IMG($paramPUCE);
+            if (isset($paramPUCE['html2pdf']))    $this->_tag_open_IMG($paramPUCE);
             else                            $this->_tag_open_WRITE($paramPUCE);
             $this->_tag_close_TD($paramPUCE);
         }
@@ -5676,7 +5676,7 @@ class HTML2PDF
      */
     protected function _tag_open_IMG($param)
     {
-        $src    = str_replace('&amp;', '&', $param['src']);
+        $src    = str_replace('&amp;', '&', $param['html2pdf']);
 
         $this->parsingCss->save();
         $this->parsingCss->value['width']    = 0;

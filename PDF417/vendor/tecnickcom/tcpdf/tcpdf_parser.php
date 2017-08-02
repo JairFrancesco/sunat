@@ -103,7 +103,7 @@ class TCPDF_PARSER {
 		if (empty($data)) {
 			$this->Error('Empty PDF data.');
 		}
-		// find the pdf header starting position
+		// find the librerias header starting position
 		if (($trimpos = strpos($data, '%PDF-')) === FALSE) {
 			$this->Error('Invalid PDF data: missing %PDF header.');
 		}

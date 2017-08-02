@@ -990,7 +990,7 @@ function Output($name='', $dest='')
 	{
 		if($name=='')
 		{
-			$name = 'doc.pdf';
+			$name = 'doc.librerias';
 			$dest = 'I';
 		}
 		else
@@ -1004,7 +1004,7 @@ function Output($name='', $dest='')
 			if(PHP_SAPI!='cli')
 			{
 				// We send to a browser
-				header('Content-Type: application/pdf');
+				header('Content-Type: application/librerias');
 				header('Content-Disposition: inline; filename="'.$name.'"');
 				header('Cache-Control: private, max-age=0, must-revalidate');
 				header('Pragma: public');
@@ -1838,7 +1838,7 @@ function _enddoc()
 // Handle special IE contype request
 if(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT']=='contype')
 {
-	header('Content-Type: application/pdf');
+	header('Content-Type: application/librerias');
 	exit;
 }
 
