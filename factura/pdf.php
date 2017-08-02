@@ -144,8 +144,8 @@
             $items[$i][2] = $repuesto['DDR_CAN_PRO']; // cantidad
             $items[$i][3] = $repuesto['DDR_VVP_SOL']; // precio unitario
             $items[$i][4] = number_format(($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']), 2, '.',','); // importe
-            $items[$i][5] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100), 2, '.', ','); // descuento
-            $items[$i][6] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']) - (($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100)),2,'.',',');
+            $items[$i][5] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100), 2, '.', ','); // descuento esta en % hay que sacarle del importe
+            $items[$i][6] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']) - (($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100)),2,'.',','); // valor venta (importe - descuento)
             $i++;
         }
     }
@@ -162,7 +162,7 @@
             $items[$i][3] = $servicio['DDS_VVP_SOL']; // precio unitario
             $items[$i][4] = number_format(($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']), 2, '.', ','); // importe
             $items[$i][5] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100), 2, '.', ','); // descuento
-            $items[$i][6] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']) - (($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100)),2,'.',','); // valor venta
+            $items[$i][6] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']) - (($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100)),2,'.',','); // valor venta (importe - descuento)
             $i++;
         }
     }
@@ -184,20 +184,39 @@
         }
     }
 
-    if($cab_doc_gen['CDG_TIP_IMP'] == 'R') {
+    if($cab_doc_gen['CDG_TIP_IMP'] == 'R') { // solo si es resumen se imprime cdg_ten_res, nunca va ver un R que sea AN
         if ($cab_doc_gen['CDG_TEN_RES'] != '') {
             $items[$i][0] = '-- -- --';
             $items[$i][1] = $cab_doc_gen['CDG_TEN_RES'];
             $items[$i][2] = '1';
-            $items[$i][3] = '';
-            $items[$i][4] = '';
-            $items[$i][5] = '';
-            $items[$i][6] = '';
+            $items[$i][3] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
+            $items[$i][4] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
+            $items[$i][5] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); //descuentos
+            $items[$i][6] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot;
         }
     }
 
+    if($cab_doc_gen['CDG_CO_CR'] == 'AN') { // solo si es anticipo se imprime la nota en arriba anticipo es contado
+        $items[$i][0] = '-- -- --';
+        $items[$i][1] = $cab_doc_gen['CDG_NOT_001'];
+        $items[$i][2] = '1';
+        $items[$i][3] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); // precio unitario
+        $items[$i][4] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); //importe
+        $items[$i][5] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); //descuentos
+        $items[$i][6] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
+    }
     //print_r($repuestos);
     //print_r($items);
+
+
+
+    /* TOTALES
+    ***********************************************/
+    $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
+    $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
+    $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
+    $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',','); // igv total
+    $total = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','); // total cdg_imp_neto
 
     ob_start();
 
@@ -363,37 +382,37 @@
                 <img src="images/20532710066-07-FN03-2917.png" style="height: 55px; width: 300px; text-align: center;">
             </td>
             <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Sub Total S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">200.00</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;"><?php echo $subtotal; ?></td>
         </tr>
         <tr>
             <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Total Descuentos S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">200.00</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;"><?php echo $descuentos; ?></td>
         </tr>
         <tr>
             <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Operaciones Gravadas S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">200.00</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;"><?php echo $gravadas; ?></td>
         </tr>
         <tr>
             <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Operaciones Inafectas S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">200.00</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">0.00</td>
         </tr>
         <tr>
             <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Operaciones Exoneradas S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">200.00</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">0.00</td>
         </tr>
         <tr>
             <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Operaciones Gratuitas S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">200.00</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">0.00</td>
         </tr>
         <tr>
             <td colspan="3" style="border-top: solid 1px #000; text-align: right;">I.G.V. 18% S/ :</td>
-            <td style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000;">200.00</td>
+            <td style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000;"><?php echo $igv; ?></td>
         </tr>
         <tr>
             <td colspan="3" style="border-top: solid 1px #000; border-bottom: solid 1px #000; text-align: right;">
                 <strong>IMPORTE TOTAL S/ :</strong></td>
             <td style="border-top: solid 1px #000; border-bottom: solid 1px #000; border-right: solid 1px #000; text-align: right;">
-                <strong>200.00</strong></td>
+                <strong><?php echo $total; ?></strong></td>
         </tr>
     </table>
     <hr style="border: none; height: 1px; background-color: #414141; margin-top: 30px;">
