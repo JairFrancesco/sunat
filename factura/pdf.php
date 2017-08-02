@@ -198,7 +198,7 @@
 
     if($cab_doc_gen['CDG_CO_CR'] == 'AN') { // solo si es anticipo se imprime la nota en arriba anticipo es contado
         $items[$i][0] = '-- -- --';
-        $items[$i][1] = $cab_doc_gen['CDG_NOT_001'];
+        $items[$i][1] = $cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'];
         $items[$i][2] = '1';
         $items[$i][3] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); // precio unitario
         $items[$i][4] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); //importe
@@ -217,6 +217,12 @@
     $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
     $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',','); // igv total
     $total = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','); // total cdg_imp_neto
+
+
+    /*LETRAS DEL TOTAL
+    *******************************/
+    include ("convertir_a_letras.php");
+    $letras = convertir_a_letras(number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','));
 
     ob_start();
 
@@ -375,11 +381,18 @@
         <tr>
             <td colspan="4" rowspan="8"
                 style="width: 60%; border-top: solid 1px #000; border-right: solid 1px #000; line-height: 14px;">
-                Nota: Esta nota sale en todos y esto es de dos lineas seguidas. Esta nota sale en todos y esto es de dos
-                lineas seguidas.<br>
-                <span style="font-style: italic;">Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco.</span><br>
-                <span style="font-style: italic;">Son : Ochenta y ocho con 97/100 soles.</span><br>
-                <img src="images/20532710066-07-FN03-2917.png" style="height: 55px; width: 300px; text-align: center;">
+                <?php
+                    // notas
+                    if($cab_doc_gen['CDG_CO_CR'] != 'AN'){
+                        echo $cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'].'<br>';
+                    }
+                    // facturas por servicios mayores a 700
+                    if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $total > 700 ){
+                        echo "<span style='font-style: italic;'>Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco.</span><br>";
+                    }
+                    echo "<span style='font-style: italic;'>".$letras."</span><br>";
+                ?>
+                <img src='images/20532710066-07-FN03-2917.png' style='height: 55px; width: 300px; text-align: center;'>
             </td>
             <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Sub Total S/ :</td>
             <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;"><?php echo $subtotal; ?></td>
