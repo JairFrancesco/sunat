@@ -119,7 +119,7 @@ class PDF extends FPDF{
 
 // nombre del librerias
 $nombre_pdf = '20532710066-07-'.$DOM->getElementsByTagName('ID')->item(4)->nodeValue;
-$NomArchPDF = $nombre_pdf.'.librerias';
+$NomArchPDF = $nombre_pdf.'.pdf';
 
 $pdf=new PDF('P','cm','Letter');
 $pdf->AliasNbPages();
