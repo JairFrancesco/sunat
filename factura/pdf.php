@@ -109,7 +109,7 @@
             $sql_extendido = "select * from cab_ord_ser 
                     inner join det_ing_ser on dis_pla_veh=cab_ord_ser.cos_pla_veh and dis_cod_gen=cab_ord_ser.cos_cod_gen
                     inner join cab_fam_veh on cfv_cod_gen=cab_ord_ser.cos_cod_gen and cfv_cod_mar=det_ing_ser.dis_mar_veh and cfv_cod_fam=det_ing_ser.dis_cod_fam
-                    where cos_cod_gen='02' and cos_cod_emp='01' and cos_num_ot='23341'";
+                    where cos_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."' and cos_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cos_num_ot='".$cab_doc_gen['CDG_ORD_TRA']."'";
             $sql_parse_extendido = oci_parse($conn,$sql_extendido);
             oci_execute($sql_parse_extendido);
             oci_fetch_all($sql_parse_extendido, $res_extendido, null, null, OCI_FETCHSTATEMENT_BY_ROW); $res_extendido = $res_extendido[0];
@@ -127,6 +127,69 @@
     }else{
         $cabezera_tipo = 0;
     }
+
+
+
+    /* ITEMS
+     ***********************************/
+    $i=0;
+    if($cab_doc_gen['CDG_TIP_IMP'] != 'R'){
+        $sql_repuestos = "select * from det_doc_rep inner join LIS_PRE_REP on lpr_cod_gen=ddr_cod_gen and lpr_cod_pro=ddr_cod_pro where DDR_COD_GEN='".$cab_doc_gen['CDG_COD_GEN']."' and DDR_COD_EMP='".$cab_doc_gen['CDG_COD_EMP']."' and DDR_NUM_DOC='".$cab_doc_gen['CDG_NUM_DOC']."' and DDR_CLA_DOC='".$cab_doc_gen['CDG_CLA_DOC']."' ORDER BY rownum Desc";
+        $sql_repuestos_parse = oci_parse($conn,$sql_repuestos);
+        oci_execute($sql_repuestos_parse);
+        oci_fetch_all($sql_repuestos_parse, $repuestos, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        foreach ($repuestos as $repuesto){
+            $items[$i][0] = $repuesto['DDR_COD_PRO']; // codigo
+            $items[$i][1] = $repuesto['LPR_DES_PRO']; // descripcion
+            $items[$i][2] = $repuesto['DDR_CAN_PRO']; // cantidad
+            $items[$i][3] = $repuesto['DDR_VVP_SOL']; // precio unitario
+            $items[$i][4] = ($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']); // importe
+            $i++;
+        }
+    }
+
+    if($cab_doc_gen['CDG_TIP_IMP'] != 'R') {
+        $sql_servicios = "select * from det_doc_ser where DDS_COD_GEN='" . $cab_doc_gen['CDG_COD_GEN'] . "' and DDS_COD_EMP='" . $cab_doc_gen['CDG_COD_EMP'] . "' and DDS_NUM_DOC='" . $cab_doc_gen['CDG_NUM_DOC'] . "' and DDS_CLA_DOC='" . $cab_doc_gen['CDG_CLA_DOC'] . "' ORDER BY rowid Desc";
+        $sql_servicios_parse = oci_parse($conn, $sql_servicios);
+        oci_execute($sql_servicios_parse);
+        oci_fetch_all($sql_servicios_parse, $servicios, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        foreach ($servicios as $servicio) {
+            $items[$i][0] = $servicio['DDS_COD_PRO'];
+            $items[$i][1] = $servicio['DDS_DES_001'];
+            $items[$i][2] = $servicio['DDS_CAN_PRO'];
+            $items[$i][3] = $servicio['DDS_VVP_SOL'];
+            $items[$i][4] = ($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']);
+            $i++;
+        }
+    }
+
+    if($cab_doc_gen['CDG_TIP_IMP'] != 'R') {
+        $sql_otros = "select * from det_doc_otr where DDO_COD_GEN='" . $cab_doc_gen['CDG_COD_GEN'] . "' and DDO_COD_EMP='" . $cab_doc_gen['CDG_COD_EMP'] . "' and DDO_NUM_DOC='" . $cab_doc_gen['CDG_NUM_DOC'] . "' and DDO_CLA_DOC='" . $cab_doc_gen['CDG_CLA_DOC'] . "' ORDER BY rowid Desc";
+        $sql_otros_parse = oci_parse($conn, $sql_otros);
+        oci_execute($sql_otros_parse);
+        oci_fetch_all($sql_otros_parse, $otros, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        foreach ($otros as $otro) {  // DDO_DES_OTR
+            $items[$i][0] = '';
+            $items[$i][1] = $otro['DDO_DES_OTR'];
+            $items[$i][2] = '';
+            $items[$i][3] = '';
+            $items[$i][4] = '';
+            $i++;
+        }
+    }
+
+    if($cab_doc_gen['CDG_TIP_IMP'] == 'R') {
+        if ($cab_doc_gen['CDG_TEN_RES'] != '') {
+            $items[$i][0] = '';
+            $items[$i][1] = $cab_doc_gen['CDG_TEN_RES'];
+            $items[$i][2] = '';
+            $items[$i][3] = '';
+            $items[$i][4] = '';
+        }
+    }
+
+
+    print_r($items);
 
     ob_start();
 
@@ -332,6 +395,6 @@
     use Spipu\Html2Pdf\Html2Pdf;
     $html2pdf = new Html2Pdf('P', 'A4', 'es', true, 'UTF-8', array(8, 8, 8, 8));
     $html2pdf->writeHTML($content);
-    $html2pdf->output('factura.pdf');
+    //$html2pdf->output('factura.pdf');
 
 ?>
