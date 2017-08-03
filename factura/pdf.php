@@ -203,7 +203,8 @@
         }
     }
 
-    if($cab_doc_gen['CDG_CO_CR'] == 'AN') { // solo si es anticipo se imprime la nota en arriba anticipo es contado
+    // anticipo pero factura
+    if($cab_doc_gen['CDG_CO_CR'] == 'AN' && $cab_doc_gen['CDG_TIP_DOC'] != 'A') { // solo si es anticipo se imprime la nota en arriba anticipo es contado
         $items[$i][0] = '-- -- --';
         $items[$i][1] = $cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'];
         $items[$i][2] = '1';
@@ -212,9 +213,26 @@
         $items[$i][5] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); //descuentos
         $items[$i][6] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
     }
-    //print_r($repuestos);
-    //print_r($items);
 
+    // anticipo pero nota de credito
+    if($cab_doc_gen['CDG_CO_CR'] == 'AN' && $cab_doc_gen['CDG_TIP_DOC'] == 'A') {
+        $sql_nota = "select cdg_not_001,cdg_not_002,cdg_not_003 from cab_doc_gen where cdg_cod_gen ='".$cab_doc_gen['CDG_COD_GEN']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cla_doc='".$cab_doc_gen['CDG_TIP_REF']."' and cdg_num_doc='".$cab_doc_gen['CDG_DOC_REF']."'";
+        $sql_nota_parse = oci_parse($conn, $sql_nota);
+        oci_execute($sql_nota_parse);
+        oci_fetch_all($sql_nota_parse, $nota, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+        $items[$i][0] = '-- -- --';
+        $items[$i][1] = $nota[0]['CDG_NOT_001'].' '.$nota[0]['CDG_NOT_002'].' '.$nota[0]['CDG_NOT_003'];
+        $items[$i][2] = '1';
+        $items[$i][3] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');;
+        $items[$i][4] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');;
+        $items[$i][5] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');;
+        $items[$i][6] = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','); // total cdg_imp_neto
+        //print_r($nota);
+    }
+    //print_r($repuestos);
+    //print_r($servicios);
+    //print_r($otros);
+    //print_r($items);
 
 
     /* TOTALES
@@ -236,6 +254,17 @@
     *******************************/
     include ("convertir_a_letras.php");
     $letras = convertir_a_letras(number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','));
+
+
+    /*REFERENCIA 0:sin  1:nota  2:franquisia 3:anticipo
+    *****************************************************/
+    if($cab_doc_gen['CDG_TIP_DOC']=='A'){
+        $reference = 1;
+    }elseif($cab_doc_gen['CDG_EXI_FRA']=='S' && $cab_doc_gen['CDG_TIP_DOC'] !='A'){
+        $reference = 2;
+    }elseif($cab_doc_gen['CDG_EXI_ANT']=='AN' && $cab_doc_gen['CDG_TIP_DOC'] !='A'){
+        $reference = 3;
+    }
 
     ob_start();
 
@@ -380,8 +409,12 @@
             <td colspan="4" rowspan="8" style="width: 60%;border-right: solid 1px #000; line-height: 14px; ">
                 <?php
                     // notas
-                    if($cab_doc_gen['CDG_CO_CR'] != 'AN'){
-                        echo $cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'].'<br>';
+                    if($cab_doc_gen['CDG_TIP_DOC']=='F' || $cab_doc_gen['CDG_TIP_DOC']=='B'){
+                        if($cab_doc_gen['CDG_CO_CR'] != 'AN'){
+                            echo $cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'].'<br>';
+                        }
+                    }elseif($cab_doc_gen['CDG_TIP_DOC']=='A'){
+                        echo 'MOTIVO : '.$cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'].'<br>';
                     }
                     // facturas por servicios mayores a 700
                     if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $total > 700 ){

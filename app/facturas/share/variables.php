@@ -428,6 +428,7 @@
         $f13 = ' $';
     }
 
+    // referencia
     // Anticipo Franquicia o Anticipo
     if ($cab['CDG_TIP_DOC'] != 'A'){
         if ($cab['CDG_EXI_FRA'] == 'N'){
