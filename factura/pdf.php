@@ -142,7 +142,7 @@
             $items[$i][0] = $repuesto['DDR_COD_PRO']; // codigo
             $items[$i][1] = $repuesto['LPR_DES_PRO']; // descripcion
             $items[$i][2] = $repuesto['DDR_CAN_PRO']; // cantidad
-            $items[$i][3] = $repuesto['DDR_VVP_SOL']; // precio unitario
+            $items[$i][3] = number_format($repuesto['DDR_VVP_SOL'],2,'.',','); // precio unitario
             $items[$i][4] = number_format(($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']), 2, '.',','); // importe
             $items[$i][5] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100), 2, '.', ','); // descuento esta en % hay que sacarle del importe
             $items[$i][6] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']) - (($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100)),2,'.',','); // valor venta (importe - descuento)
@@ -159,7 +159,7 @@
             $items[$i][0] = $servicio['DDS_COD_PRO']; // codigo
             $items[$i][1] = $servicio['DDS_DES_001']; // descripcion
             $items[$i][2] = $servicio['DDS_CAN_PRO']; // cantidad
-            $items[$i][3] = $servicio['DDS_VVP_SOL']; // precio unitario
+            $items[$i][3] = number_format($servicio['DDS_VVP_SOL'],2,'.',','); // precio unitario
             $items[$i][4] = number_format(($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']), 2, '.', ','); // importe
             $items[$i][5] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100), 2, '.', ','); // descuento
             $items[$i][6] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']) - (($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100)),2,'.',','); // valor venta (importe - descuento)
@@ -257,12 +257,12 @@
 
     <table style="width: 100%; font-size: 12px; border: solid 1px #000; margin-bottom: 20px; padding: 5px;" cellspacing="0" cellpadding="0">
         <tr>
-            <td style="width: 16%;"><strong>Fecha</strong></td>
-            <td style="width: 44%;">: <?php echo $fecha; ?></td>
+            <td style="width: 16%;"><strong>Fecha:</strong></td>
+            <td style="width: 44%;"><?php echo $fecha; ?></td>
             <?php
                 if ($cabezera_tipo==1){
-                    echo '<td style="width: 15%;"><strong>Ord. Trab</strong></td>';
-                    echo '<td style="width: 25%;">: '.$ord_trab.'</td>';
+                    echo '<td style="width: 15%;"><strong>Ord. Trab:</strong></td>';
+                    echo '<td style="width: 25%;">'.$ord_trab.'</td>';
                 }else {
                     echo '<td style="width: 15%;"></td>';
                     echo '<td style="width: 25%;"></td>';
@@ -270,12 +270,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong>Cliente</strong></td>
-            <td>: <?php echo substr($cab_doc_gen['CDG_NOM_CLI'],0,40); ?></td>
+            <td style="width: 16%;"><strong>Cliente:</strong></td>
+            <td style="width: 44%;"><?php echo $cab_doc_gen['CDG_NOM_CLI']; ?></td>
             <?php
                 if ($cabezera_tipo==1){
-                    echo '<td><strong>Placa/Serie</strong></td>';
-                    echo '<td>: '.$placa.'</td>';
+                    echo '<td><strong>Placa/Serie:</strong></td>';
+                    echo '<td>'.$placa.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
@@ -283,12 +283,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong><?php echo $tipo_doc; ?></strong></td>
-            <td>: <?php echo $cab_doc_gen['CDG_DOC_CLI']; ?></td>
+            <td><strong><?php echo $tipo_doc; ?>:</strong></td>
+            <td><?php echo $cab_doc_gen['CDG_DOC_CLI']; ?></td>
             <?php
                 if($cabezera_tipo==1){
-                    echo '<td><strong>Modelo/Año</strong></td>';
-                    echo '<td>: '.$modelo_anho.'</td>';
+                    echo '<td><strong>Modelo/Año:</strong></td>';
+                    echo '<td>'.$modelo_anho.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
@@ -296,12 +296,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong>Dirección</strong></td>
-            <td>: <?php echo substr($cab_doc_gen['CDG_DIR_CLI'],0,40); ?></td>
+            <td><strong>Dirección:</strong></td>
+            <td><?php echo substr($cab_doc_gen['CDG_DIR_CLI'],0,40); ?></td>
             <?php
                 if($cabezera_tipo==1){
-                    echo '<td><strong>Motor/Chasis</strong></td>';
-                    echo '<td>: '.$motor_chasis.'</td>';
+                    echo '<td><strong>Motor/Chasis:</strong></td>';
+                    echo '<td>'.$motor_chasis.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
@@ -309,12 +309,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong>Forma de Pago</strong></td>
-            <td>: <?php echo $forma_pago; ?></td>
+            <td><strong>Forma de Pago:</strong></td>
+            <td><?php echo $forma_pago; ?></td>
             <?php
                 if($cabezera_tipo==1){
-                    echo '<td><strong>Color</strong></td>';
-                    echo '<td>: '.$color.'</td>';
+                    echo '<td><strong>Color:</strong></td>';
+                    echo '<td>'.$color.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
@@ -322,12 +322,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong>Ubigeo</strong></td>
-            <td>: <?php echo $ubigeo; ?></td>
+            <td><strong>Ubigeo:</strong></td>
+            <td><?php echo $ubigeo; ?></td>
             <?php
                 if($cabezera_tipo==1){
-                    echo '<td><strong>Km</strong></td>';
-                    echo '<td>: '.$kilometraje.'</td>';
+                    echo '<td><strong>Km:</strong></td>';
+                    echo '<td>'.$kilometraje.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
@@ -337,50 +337,34 @@
     </table>
 
     <table style="width: 100%; font-size: 12px;" cellspacing="0" cellpadding="0">
-        <tr>
-            <td style="border-bottom: solid 1px #000; border-left: solid 1px #000; border-top: solid 1px #000; background-color: #e7e7e7;">
-                Nro
-            </td>
-            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; background-color: #e7e7e7;">Codigo
-            </td>
-            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; background-color: #e7e7e7;">
-                Descripcion
-            </td>
-            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; background-color: #e7e7e7; text-align: right;">
-                Cant
-            </td>
-            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; background-color: #e7e7e7; text-align: right;">
-                P. Unit
-            </td>
-            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; background-color: #e7e7e7; text-align: right;">
-                Importe
-            </td>
-            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; background-color: #e7e7e7; text-align: right;">
-                Desct
-            </td>
-            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; background-color: #e7e7e7; border-right: solid 1px #000; text-align: right;">
-                Valor Venta
-            </td>
+        <tr style="font-weight: bold;">
+            <td style="border-bottom: solid 1px #000; border-left: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; text-align: center;">Nro</td>
+            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">Codigo</td>
+            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">Descripcion</td>
+            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: center;">Cant</td>
+            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">P. Unit</td>
+            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">Importe</td>
+            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">Desct</td>
+            <td style="border-bottom: solid 1px #000; border-top: solid 1px #000;  border-right: solid 1px #000; text-align: right; padding-right: 3px;">Valor Venta</td>
         </tr>
         <?php
             $i=1;
             foreach($items as $item){
                 echo '<tr>';
-                echo '<td style="width: 5%; border-left: solid 1px #000;">' . $i . '</td>';
-                echo '<td style="width: 13%;">'.$item[0].'</td>';
-                echo '<td style="width: 37%;">'.$item[1].'</td>';
-                echo '<td style="width: 5%; text-align: right;">'.$item[2].'</td>';
-                echo '<td style="width: 10%; text-align: right;">'.$item[3].'</td>';
-                echo '<td style="width: 10%; text-align: right;">'.$item[4].'</td>';
-                echo '<td style="width: 10%; text-align: right;">'.$item[5].'</td>';
-                echo '<td style="width: 10%; border-right: solid 1px #000; text-align: right;">'.$item[6].'</td>';
+                echo '<td style="width: 4%; border-left: solid 1px #000; border-right: solid 1px #000; border-bottom: solid 1px #000; text-align: center;">' . $i . '</td>';
+                echo '<td style="width: 11%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">'.$item[0].'</td>'; // codigo
+                echo '<td style="width: 42%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">'.$item[1].'</td>'; // descripcion
+                echo '<td style="width: 5%; text-align: center; border-right: solid 1px #000; border-bottom: solid 1px #000;">'.$item[2].'</td>'; // cantidad
+                echo '<td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">'.$item[3].'</td>'; // unitario
+                echo '<td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">'.$item[4].'</td>'; // importe
+                echo '<td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">'.$item[5].'</td>'; // descuento
+                echo '<td style="width: 11%; border-right: solid 1px #000; text-align: right; border-bottom: solid 1px #000; padding-right: 3px;">'.$item[6].'</td>'; // valor venta
                 echo '</tr>';
                 $i++;
             }
         ?>
         <tr>
-            <td colspan="4" rowspan="8"
-                style="width: 60%; border-top: solid 1px #000; border-right: solid 1px #000; line-height: 14px;">
+            <td colspan="4" rowspan="8" style="width: 60%;border-right: solid 1px #000; line-height: 14px; ">
                 <?php
                     // notas
                     if($cab_doc_gen['CDG_CO_CR'] != 'AN'){
@@ -394,42 +378,41 @@
                 ?>
                 <img src='images/20532710066-07-FN03-2917.png' style='height: 55px; width: 300px; text-align: center;'>
             </td>
-            <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Sub Total S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;"><?php echo $subtotal; ?></td>
+            <td colspan="3" style="text-align: right; border-right: solid 1px #000; padding-right: 3px;">Sub Total S/ :</td>
+            <td style="border-right: solid 1px #000; text-align: right; padding-right: 3px;"><?php echo $subtotal; ?></td>
         </tr>
         <tr>
-            <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Total Descuentos S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;"><?php echo $descuentos; ?></td>
+            <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;" >Total Descuentos S/ :</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;"><?php echo $descuentos; ?></td>
         </tr>
         <tr>
-            <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Operaciones Gravadas S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;"><?php echo $gravadas; ?></td>
+            <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">Operaciones Gravadas S/ :</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;"><?php echo $gravadas; ?></td>
         </tr>
         <tr>
-            <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Operaciones Inafectas S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">0.00</td>
+            <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">Operaciones Inafectas S/ :</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">0.00</td>
         </tr>
         <tr>
-            <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Operaciones Exoneradas S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">0.00</td>
+            <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">Operaciones Exoneradas S/ :</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">0.00</td>
         </tr>
         <tr>
-            <td colspan="3" style="border-top: solid 1px #000; text-align: right;">Operaciones Gratuitas S/ :</td>
-            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right;">0.00</td>
+            <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">Operaciones Gratuitas S/ :</td>
+            <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">0.00</td>
         </tr>
         <tr>
-            <td colspan="3" style="border-top: solid 1px #000; text-align: right;">I.G.V. 18% S/ :</td>
-            <td style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000;"><?php echo $igv; ?></td>
+            <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">I.G.V. 18% S/ :</td>
+            <td style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;"><?php echo $igv; ?></td>
         </tr>
         <tr>
-            <td colspan="3" style="border-top: solid 1px #000; border-bottom: solid 1px #000; text-align: right;">
+            <td colspan="3" style="border-top: solid 1px #000; border-bottom: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
                 <strong>IMPORTE TOTAL S/ :</strong></td>
-            <td style="border-top: solid 1px #000; border-bottom: solid 1px #000; border-right: solid 1px #000; text-align: right;">
-                <strong><?php echo $total; ?></strong></td>
+            <td style="border-top: solid 1px #000; border-bottom: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;"><strong><?php echo $total; ?></strong></td>
         </tr>
     </table>
     <hr style="border: none; height: 1px; background-color: #414141; margin-top: 30px;">
-    <span style="text-align: center; font-size: 11px;">Representación Impresa de la Factura Electrónica. SURMOTRIZ S.R.L. Autorizado para ser Emisor electrónico mediante la Resolución de Intendencia N° 112-005-0000143/SUNAT Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php</span>
+    <span style="text-align: center; font-size: 11px;">Representación Impresa de la Factura Electrónica. SURMOTRIZ S.R.L. Autorizado para ser Emisor electrónico mediante Resolución de Intendencia N° 112-005-0000143/SUNAT Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php</span>
 
 <?php
 
