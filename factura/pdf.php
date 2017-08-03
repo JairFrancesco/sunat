@@ -257,12 +257,12 @@
 
     <table style="width: 100%; font-size: 12px; border: solid 1px #000; margin-bottom: 20px; padding: 5px;" cellspacing="0" cellpadding="0">
         <tr>
-            <td style="width: 16%;"><strong>Fecha</strong></td>
-            <td style="width: 44%;">: <?php echo $fecha; ?></td>
+            <td style="width: 16%;"><strong>Fecha:</strong></td>
+            <td style="width: 44%;"><?php echo $fecha; ?></td>
             <?php
                 if ($cabezera_tipo==1){
-                    echo '<td style="width: 15%;"><strong>Ord. Trab</strong></td>';
-                    echo '<td style="width: 25%;">: '.$ord_trab.'</td>';
+                    echo '<td style="width: 15%;"><strong>Ord. Trab:</strong></td>';
+                    echo '<td style="width: 25%;">'.$ord_trab.'</td>';
                 }else {
                     echo '<td style="width: 15%;"></td>';
                     echo '<td style="width: 25%;"></td>';
@@ -270,12 +270,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong>Cliente</strong></td>
-            <td>: <?php echo substr($cab_doc_gen['CDG_NOM_CLI'],0,40); ?></td>
+            <td style="width: 16%;"><strong>Cliente:</strong></td>
+            <td style="width: 44%;"><?php echo $cab_doc_gen['CDG_NOM_CLI']; ?></td>
             <?php
                 if ($cabezera_tipo==1){
-                    echo '<td><strong>Placa/Serie</strong></td>';
-                    echo '<td>: '.$placa.'</td>';
+                    echo '<td><strong>Placa/Serie:</strong></td>';
+                    echo '<td>'.$placa.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
@@ -283,12 +283,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong><?php echo $tipo_doc; ?></strong></td>
-            <td>: <?php echo $cab_doc_gen['CDG_DOC_CLI']; ?></td>
+            <td><strong><?php echo $tipo_doc; ?>:</strong></td>
+            <td><?php echo $cab_doc_gen['CDG_DOC_CLI']; ?></td>
             <?php
                 if($cabezera_tipo==1){
-                    echo '<td><strong>Modelo/Año</strong></td>';
-                    echo '<td>: '.$modelo_anho.'</td>';
+                    echo '<td><strong>Modelo/Año:</strong></td>';
+                    echo '<td>'.$modelo_anho.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
@@ -296,12 +296,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong>Dirección</strong></td>
-            <td>: <?php echo substr($cab_doc_gen['CDG_DIR_CLI'],0,40); ?></td>
+            <td><strong>Dirección:</strong></td>
+            <td><?php echo substr($cab_doc_gen['CDG_DIR_CLI'],0,40); ?></td>
             <?php
                 if($cabezera_tipo==1){
-                    echo '<td><strong>Motor/Chasis</strong></td>';
-                    echo '<td>: '.$motor_chasis.'</td>';
+                    echo '<td><strong>Motor/Chasis:</strong></td>';
+                    echo '<td>'.$motor_chasis.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
@@ -309,12 +309,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong>Forma de Pago</strong></td>
-            <td>: <?php echo $forma_pago; ?></td>
+            <td><strong>Forma de Pago:</strong></td>
+            <td><?php echo $forma_pago; ?></td>
             <?php
                 if($cabezera_tipo==1){
-                    echo '<td><strong>Color</strong></td>';
-                    echo '<td>: '.$color.'</td>';
+                    echo '<td><strong>Color:</strong></td>';
+                    echo '<td>'.$color.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
@@ -322,12 +322,12 @@
             ?>
         </tr>
         <tr>
-            <td><strong>Ubigeo</strong></td>
-            <td>: <?php echo $ubigeo; ?></td>
+            <td><strong>Ubigeo:</strong></td>
+            <td><?php echo $ubigeo; ?></td>
             <?php
                 if($cabezera_tipo==1){
-                    echo '<td><strong>Km</strong></td>';
-                    echo '<td>: '.$kilometraje.'</td>';
+                    echo '<td><strong>Km:</strong></td>';
+                    echo '<td>'.$kilometraje.'</td>';
                 }else{
                     echo '<td></td>';
                     echo '<td></td>';
