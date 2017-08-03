@@ -189,10 +189,17 @@
             $items[$i][0] = '-- -- --';
             $items[$i][1] = $cab_doc_gen['CDG_TEN_RES'];
             $items[$i][2] = '1';
-            $items[$i][3] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
-            $items[$i][4] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
-            $items[$i][5] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); //descuentos
-            $items[$i][6] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot;
+            if($cab_doc_gen['CDG_EXI_FRA'] == 'S'){
+                $items[$i][3] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.',',');
+                $items[$i][4] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.',',');
+                $items[$i][5] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
+                $items[$i][6] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');
+            }else{
+                $items[$i][3] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
+                $items[$i][4] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
+                $items[$i][5] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); //descuentos
+                $items[$i][6] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot;
+            }
         }
     }
 
@@ -212,10 +219,16 @@
 
     /* TOTALES
     ***********************************************/
-    $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
+    if($cab_doc_gen['CDG_EXI_FRA'] == 'S'){
+        $subtotal = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.',',');
+        $gravadas = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');
+        $igv = number_format(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2,'.',',');
+    }else{
+        $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
+        $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
+        $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',','); // igv total
+    }
     $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
-    $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
-    $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',','); // igv total
     $total = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','); // total cdg_imp_neto
 
 
@@ -296,8 +309,8 @@
             ?>
         </tr>
         <tr>
-            <td><strong>Dirección:</strong></td>
-            <td><?php echo substr($cab_doc_gen['CDG_DIR_CLI'],0,40); ?></td>
+            <td style="width: 16%;"><strong>Dirección:</strong></td>
+            <td style="width: 44%;"><?php echo substr($cab_doc_gen['CDG_DIR_CLI'],0,40); ?></td>
             <?php
                 if($cabezera_tipo==1){
                     echo '<td><strong>Motor/Chasis:</strong></td>';
@@ -352,8 +365,8 @@
             foreach($items as $item){
                 echo '<tr>';
                 echo '<td style="width: 4%; border-left: solid 1px #000; border-right: solid 1px #000; border-bottom: solid 1px #000; text-align: center;">' . $i . '</td>';
-                echo '<td style="width: 11%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">'.$item[0].'</td>'; // codigo
-                echo '<td style="width: 42%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">'.$item[1].'</td>'; // descripcion
+                echo '<td style="width: 12%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">'.$item[0].'</td>'; // codigo
+                echo '<td style="width: 41%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">'.$item[1].'</td>'; // descripcion
                 echo '<td style="width: 5%; text-align: center; border-right: solid 1px #000; border-bottom: solid 1px #000;">'.$item[2].'</td>'; // cantidad
                 echo '<td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">'.$item[3].'</td>'; // unitario
                 echo '<td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">'.$item[4].'</td>'; // importe
@@ -374,7 +387,7 @@
                     if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $total > 700 ){
                         echo "<span style='font-style: italic;'>Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco.</span><br>";
                     }
-                    echo "<span style='font-style: italic;'>".$letras."</span><br>";
+                    echo "<span style='font-style: italic;'>Son: ".$letras."</span><br>";
                 ?>
                 <img src='images/20532710066-07-FN03-2917.png' style='height: 55px; width: 300px; text-align: center;'>
             </td>
