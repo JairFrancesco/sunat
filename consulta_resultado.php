@@ -108,8 +108,6 @@
     <br>
     <br>
     <a href="consulta.php" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>
-
-
 </div>
 </body>
 </html>
