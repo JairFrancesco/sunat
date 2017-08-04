@@ -253,7 +253,7 @@
     /*LETRAS DEL TOTAL
     *******************************/
     include ("convertir_a_letras.php");
-    $letras = convertir_a_letras(number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','));
+    $letras = convertir_a_letras(number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',''));
 
 
     /*REFERENCIA 0:sin  1:nota  2:franquisia 3:anticipo
@@ -434,7 +434,7 @@
                         echo '<strong>Ref Doc: '.$ref_doc.' Ref Fecha: '.$ref_fecha.'</strong><br>';
                     }
                     // facturas por servicios mayores a 700
-                    if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $total > 700 ){
+                    if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $cab_doc_gen['CDG_IMP_NETO'] > 700 ){
                         echo "<span style='font-style: italic;'>Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco.</span><br>";
                     }
                     echo "<span style='font-style: italic;'>Son: ".$letras."</span><br>";
