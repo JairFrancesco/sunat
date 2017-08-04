@@ -99,7 +99,7 @@
                     <td><?php echo $numero; ?></td>
                     <td><?php echo $fecha ?></td>
                     <td><?php echo $nombre; ?></td>
-                    <td><a href="consulta_descarga.php?file=<?php echo $ruta ?>.pdf&nombre=<?php echo $nombre.'.librerias'; ?>" class="btn btn-default"><span class="glyphicon glyphicon-file"></span> pdf</a></td>
+                    <td><a href="consulta_descarga.php?file=<?php echo $ruta ?>.pdf&nombre=<?php echo $nombre.'.pdf'; ?>" class="btn btn-default"><span class="glyphicon glyphicon-file"></span> pdf</a></td>
                     <td><a href="consulta_descarga.php?file=<?php echo $ruta ?>.xml&nombre=<?php echo $nombre.'.xml'; ?>" class="btn btn-default"><span class="glyphicon glyphicon-barcode"></span> xml</a></td>
                 </tr>
             </table>
