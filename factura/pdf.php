@@ -260,10 +260,24 @@
     *****************************************************/
     if($cab_doc_gen['CDG_TIP_DOC']=='A'){
         $reference = 1;
+        if($cab_doc_gen['CDG_COD_EMP']=='01'){ // tacna
+            $sql_ref = "select * from cab_doc_gen where cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cla_doc='".$cab_doc_gen['CDG_TIP_REF']."' and cdg_num_doc='".$cab_doc_gen['CDG_DOC_REF']."'";
+            $sql_ref_parse = oci_parse($conn, $sql_ref);
+            oci_execute($sql_ref_parse);
+            oci_fetch_all($sql_ref_parse, $ref, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+            $ref_doc = $ref[0]['CDG_TIP_DOC'][0].'00'.$ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
+            $ref_fecha = date("d-m-Y", strtotime($ref[0]['CDG_FEC_GEN']));
+            //print_r($ref);
+            //echo $ref_serie;
+        }elseif($cab_doc_gen['CDG_COD_EMP']=='02'){ // moquegua
+
+        }
     }elseif($cab_doc_gen['CDG_EXI_FRA']=='S' && $cab_doc_gen['CDG_TIP_DOC'] !='A'){
         $reference = 2;
     }elseif($cab_doc_gen['CDG_EXI_ANT']=='AN' && $cab_doc_gen['CDG_TIP_DOC'] !='A'){
         $reference = 3;
+    }else{
+        $reference = 0;
     }
 
     ob_start();
@@ -415,6 +429,10 @@
                         }
                     }elseif($cab_doc_gen['CDG_TIP_DOC']=='A'){
                         echo 'MOTIVO : '.$cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'].'<br>';
+                    }
+                    // referencia
+                    if($reference == 1){
+                        echo '<strong>Ref Doc: '.$ref_doc.' Ref Fecha: '.$ref_fecha.'</strong><br>';
                     }
                     // facturas por servicios mayores a 700
                     if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $total > 700 ){
