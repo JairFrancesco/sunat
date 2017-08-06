@@ -189,40 +189,65 @@
                                 echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
                             }
 
+                            // arranca el 1 la facturacion electronica
+                            $fisico_electro = 1;
                             echo '<td>';
-
-                            if($row['CDG_TIP_DOC'] == 'F'){
-                                echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
-                                echo '<a href="factura/xml.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">XML</a> ';
-                                echo '<a href="factura/comp_fb.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">COM</a> ';
-                            }elseif($row['CDG_TIP_DOC'] == 'B'){
-                                echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
-                                echo '<a href="" class="btn btn-default btn-xs" disabled="">XML</a> ';
-                                echo '<a href="" class="btn btn-default btn-xs" disabled="">COM</a> ';
-                            }elseif($row['CDG_TIP_DOC'] == 'A'){
-                                if ($row['CDG_TIP_REF'] !='BR' &&  $row['CDG_TIP_REF'] !='BS' ) {
+                                if($row['CDG_TIP_DOC'] == 'F'){
                                     echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
-                                    echo '<a href="factura/xml_n.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">XML</a> ';
-                                    echo '<a href="factura/comp_n.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">COM</a> ';
-                                }else{
-                                    echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs" target="_blank">PDF</a> ';
+                                    echo '<a href="factura/xml.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">XML</a> ';
+                                    echo '<a href="factura/comp_fb.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">COM</a> ';
+                                }elseif($row['CDG_TIP_DOC'] == 'B'){
+                                    echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
                                     echo '<a href="" class="btn btn-default btn-xs" disabled="">XML</a> ';
                                     echo '<a href="" class="btn btn-default btn-xs" disabled="">COM</a> ';
-                                }
-                            }
+                                }elseif($row['CDG_TIP_DOC'] == 'A'){
+                                    $sql_ref = "select * from cab_doc_gen where cdg_cod_gen='".$row['CDG_COD_GEN']."' and cdg_cod_emp='".$row['CDG_COD_EMP']."' and cdg_cla_doc='".$row['CDG_TIP_REF']."' and cdg_num_doc='".$row['CDG_DOC_REF']."'";
+                                    $sql_ref_parse = oci_parse($conn, $sql_ref);
+                                    oci_execute($sql_ref_parse);
+                                    oci_fetch_all($sql_ref_parse, $ref, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+                                    $fecha_actual = strtotime(date("d-m-Y", strtotime($ref[0]['CDG_FEC_GEN'])));
+                                    $fecha_fija = strtotime('13-07-2017');
+                                    if($fecha_actual >= $fecha_fija){
+                                        // factura elctronica
+                                        $fisico_electro = 1;
+                                    }else{
+                                        // factura fisica
+                                        $fisico_electro = 0;
+                                    }
 
-                            if ($row['CDG_SUN_ENV']=='S'){
-                                if ($row['ANU_SN11']=='S' && $row['DOC_ANU12']=='S') {
-                                    echo '<a class="btn btn-'.$sunat.' btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="'.$icon.'"></span> Dar Baja</a>';
-                                } else {
-                                    echo '<a class="btn btn-'.$sunat.' btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="'.$icon.'"></span> Imprimir</a>';
+                                    if($fisico_electro == 1){
+                                        if ($row['CDG_TIP_REF'] !='BR' &&  $row['CDG_TIP_REF'] !='BS' ) {
+                                            echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
+                                            echo '<a href="factura/xml_n.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">XML</a> ';
+                                            echo '<a href="factura/comp_n.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">COM</a> ';
+                                        }else{
+                                            echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs" target="_blank">PDF</a> ';
+                                            echo '<a href="" class="btn btn-default btn-xs" disabled="">XML</a> ';
+                                            echo '<a href="" class="btn btn-default btn-xs" disabled="">COM</a> ';
+                                        }
+                                    }else{
+                                        echo '<a href="factura/pdf_fisico.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">FSC</a> ';
+                                        echo '<a target="_blank" class="btn btn-default btn-xs" disabled="">XML</a> ';
+                                        echo '<a target="_blank" class="btn btn-default btn-xs" disabled="">COM</a> ';
+                                    }
                                 }
-                            } elseif ($row['CDG_SUN_ENV']=='C'){
-                                echo '<a class="btn btn-'.$sunat.' btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="'.$icon.'"></span> Imprimir</a>';
-                            }
-                            else{
-                                echo '<a class="btn btn-primary btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="'.$icon.'"></span> Facturar</a>';
-                            }
+
+                                if($fisico_electro == 1){
+                                    if ($row['CDG_SUN_ENV']=='S'){
+                                        if ($row['ANU_SN11']=='S' && $row['DOC_ANU12']=='S') {
+                                            echo '<a class="btn btn-'.$sunat.' btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="'.$icon.'"></span> Dar Baja</a>';
+                                        } else {
+                                            echo '<a class="btn btn-'.$sunat.' btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="'.$icon.'"></span> Imprimir</a>';
+                                        }
+                                    } elseif ($row['CDG_SUN_ENV']=='C'){
+                                        echo '<a class="btn btn-'.$sunat.' btn-xs" href="./app/repo/' . $row['NOMBRE_DOC'] . '.pdf" target="_blank"><span class="'.$icon.'"></span> Imprimir</a>';
+                                    }
+                                    else{
+                                        echo '<a class="btn btn-primary btn-xs" href="test2.php?gen=02&emp='.$row['CDG_COD_EMP'].'&num_doc='.$row['NUM_DOC0'].'&cla_doc='.$row['CLA_DOC3'].'&moneda='.$row['SOLES8'].'&co_cr_an='.$row['CO_CR_AN4'].'&exi_fra='.$row['FQ5'].'&tip_imp='.$row['TIP_IMP6'].'&anu_sn='.$row['ANU_SN11'].'&doc_anu='.$row['DOC_ANU12'].'&sun_env='.$row['CDG_SUN_ENV'].'" target="_blank"><span class="'.$icon.'"></span> Facturar</a>';
+                                    }
+                                }else{
+                                    echo '<a target="_blank" class="btn btn-default btn-xs" disabled=""><span class="'.$icon.'"></span>Imprimir</a>';
+                                }
 					        echo '</td></tr>';
 
                         //}
