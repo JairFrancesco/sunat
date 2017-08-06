@@ -84,7 +84,7 @@
                     $date1 = new DateTime($_GET['fecha_inicio']);
                     $date2 = new DateTime(date('d-m-Y'));
                     $diff = $date1->diff($date2);
-                    if (($diff->days) < 10) {
+                    if (($diff->days) < 14) {
                         $fecha = date("Y-m-d", strtotime($_GET['fecha_inicio']));
                     } else {
                         $fecha = 'N';
