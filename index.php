@@ -194,7 +194,7 @@
                             echo '<td>';
                                 if($row['CDG_TIP_DOC'] == 'F'){
                                     echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
-                                    echo '<a href="factura/xml.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">XML</a> ';
+                                    echo '<a href="factura/xml_factura.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs" target="_blank">XML</a> ';
                                     echo '<a href="factura/comp_fb.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">COM</a> ';
                                 }elseif($row['CDG_TIP_DOC'] == 'B'){
                                     echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
@@ -218,7 +218,7 @@
                                     if($fisico_electro == 1){
                                         if ($row['CDG_TIP_REF'] !='BR' &&  $row['CDG_TIP_REF'] !='BS' ) {
                                             echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
-                                            echo '<a href="factura/xml_n.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">XML</a> ';
+                                            echo '<a href="factura/xml_nota.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">XML</a> ';
                                             echo '<a href="factura/comp_n.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs">COM</a> ';
                                         }else{
                                             echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" class="btn btn-default btn-xs" target="_blank">PDF</a> ';

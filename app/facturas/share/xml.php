@@ -72,7 +72,7 @@ $Invoice->setAttribute('xmlns:udt', "urn:un:unece:uncefact:data:specification:Un
                         $cbc = $xml->createElement('cbc:ID', '1003'); $cbc = $monetary->appendChild($cbc);
                         $cbc = $xml->createElement('cbc:PayableAmount', $c25); $cbc = $monetary->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
 
-                    // el 1004 es operaciones gratuitas
+                    // el 1004 gratuitas
                     $monetary = $xml->createElement('sac:AdditionalMonetaryTotal'); $monetary = $sac->appendChild($monetary);
                         $cbc = $xml->createElement('cbc:ID', '1004'); $cbc = $monetary->appendChild($cbc);
                         $cbc = $xml->createElement('cbc:PayableAmount', $c22); $cbc = $monetary->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");

@@ -266,11 +266,8 @@
         oci_fetch_all($sql_ref_parse, $ref, null, null, OCI_FETCHSTATEMENT_BY_ROW);
         $ref_doc = $ref[0]['CDG_TIP_DOC'][0].'00'.$ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
         $ref_fecha = date("d-m-Y", strtotime($ref[0]['CDG_FEC_GEN']));
-            //print_r($ref);
-            //echo $ref_serie;
-
-
-
+        //print_r($ref);
+        //echo $ref_serie;
     }elseif($cab_doc_gen['CDG_EXI_FRA']=='S' && $cab_doc_gen['CDG_TIP_DOC'] !='A'){
         $reference = 2;
     }elseif($cab_doc_gen['CDG_EXI_ANT']=='AN' && $cab_doc_gen['CDG_TIP_DOC'] !='A'){
