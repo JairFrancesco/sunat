@@ -327,6 +327,41 @@ try {
     $legal = $xml->createElement('cac:LegalMonetaryTotal'); $legal = $CreditNote->appendChild($legal);
     $cbc = $xml->createElement('cbc:PayableAmount', $total); $cbc = $legal->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
 
+    $i=1;
+    foreach($items as $item){
+        $CreditNoteLine = $xml->createElement('cac:CreditNoteLine'); $CreditNoteLine = $CreditNote->appendChild($CreditNoteLine);
+            $cbc = $xml->createElement('cbc:ID', $i); $cbc = $CreditNoteLine->appendChild($cbc);
+            $cbc = $xml->createElement('cbc:CreditedQuantity', $item['cantidad']); $cbc = $CreditNoteLine->appendChild($cbc); $cbc->setAttribute('unitCode', "NIU"); // cantidad x item:  1
+            $cbc = $xml->createElement('cbc:LineExtensionAmount', $item['venta']); $cbc = $CreditNoteLine->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
+            // precio unitario del producto con igv
+            $pricing = $xml->createElement('cac:PricingReference'); $pricing = $CreditNoteLine->appendChild($pricing);
+                $cac = $xml->createElement('cac:AlternativeConditionPrice'); $cac = $pricing->appendChild($cac);
+                    // precio unitario con igv
+                    $cbc = $xml->createElement('cbc:PriceAmount', $item['unitario']*0.18+$item['unitario']); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
+                    // 01 con igv, 02 operaciones no onerosas
+                    $cbc = $xml->createElement('cbc:PriceTypeCode', '01'); $cbc = $cac->appendChild($cbc);
+            // igv del total del producto aplicado ya el descuento *0.18
+            $taxtotal = $xml->createElement('cac:TaxTotal'); $taxtotal = $CreditNoteLine->appendChild($taxtotal);
+                $cbc = $xml->createElement('cbc:TaxAmount', round($item['venta']*0.18,2)); $cbc = $taxtotal->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
+                $taxtsubtotal = $xml->createElement('cac:TaxSubtotal'); $taxtsubtotal = $taxtotal->appendChild($taxtsubtotal);
+                    $cbc = $xml->createElement('cbc:TaxAmount', round($item['venta']*0.18,2)); $cbc = $taxtsubtotal->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
+                    $taxtcategory = $xml->createElement('cac:TaxCategory'); $taxtcategory = $taxtsubtotal->appendChild($taxtcategory);
+                        $cbc = $xml->createElement('cbc:TaxExemptionReasonCode', '10'); $cbc = $taxtcategory->appendChild($cbc);
+                        $taxscheme = $xml->createElement('cac:TaxScheme'); $taxscheme = $taxtcategory->appendChild($taxscheme);
+                            $cbc = $xml->createElement('cbc:ID', '1000'); $cbc = $taxscheme->appendChild($cbc);
+                            $cbc = $xml->createElement('cbc:Name', 'IGV'); $cbc = $taxscheme->appendChild($cbc);
+                            $cbc = $xml->createElement('cbc:TaxTypeCode', 'VAT'); $cbc = $taxscheme->appendChild($cbc);
+
+        $item1 = $xml->createElement('cac:Item'); $item1 = $CreditNoteLine->appendChild($item1);
+            $cbc = $xml->createElement('cbc:Description', $item['descripcion']); $cbc = $item1->appendChild($cbc);
+            $sellers = $xml->createElement('cac:SellersItemIdentification'); $sellers = $item1->appendChild($sellers);
+                $cbc = $xml->createElement('cbc:ID', $item['codigo']); $cbc = $sellers->appendChild($cbc);
+        // precio sin igv ejm 83.05
+        $price = $xml->createElement('cac:Price'); $price = $CreditNoteLine->appendChild($price);
+        $cbc = $xml->createElement('cbc:PriceAmount', $item['venta']); $cbc = $price->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
+        $i++;
+    }
+
 
     $xml->formatOutput = true;
     $strings_xml = $xml->saveXML();

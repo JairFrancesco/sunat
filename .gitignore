@@ -9,4 +9,6 @@ app/coneccion.php
 app/repo/
 homo/
 app/resumenes/
+factura/vendor
 dev/baja/20532710066-RA-20170716-1.zip
+app/bajas/

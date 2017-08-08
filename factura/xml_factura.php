@@ -1,4 +1,7 @@
 <?php
+    require './../robrichards/src/xmlseclibs.php';
+    use RobRichards\XMLSecLibs\XMLSecurityDSig;
+    use RobRichards\XMLSecLibs\XMLSecurityKey;
 
     function exception_error_handler($errno, $errstr, $errfile, $errline ) {
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
@@ -6,6 +9,9 @@
     set_error_handler("exception_error_handler");
 
 try {
+    //require 'vendor/robrichards/xmlseclibs/src/';
+
+
     require ('conexion.php');
     date_default_timezone_set('America/Lima');
 
@@ -204,7 +210,7 @@ try {
 
 
     /******************************************** XML *********************************/
-    header('Content-Type: text/xml; charset=UTF-8');
+    //header('Content-Type: text/xml; charset=UTF-8');
     $xml = new DomDocument('1.0', 'ISO-8859-1');
     $xml->standalone         = false;
     $xml->preserveWhiteSpace = false;
@@ -253,7 +259,7 @@ try {
     //Numeracion , conformada por serie y numero correlativo B001-00012926
     $cbc = $xml->createElement('cbc:ID', $serie.'-'.$cab_doc_gen['CDG_NUM_DOC']); $cbc = $Invoice->appendChild($cbc);
     //Fecha de emision 2017-04-13
-    $cbc = $xml->createElement('cbc:IssueDate', $fecha); $cbc = $Invoice->appendChild($cbc);
+    $cbc = $xml->createElement('cbc:IssueDate', date("Y-m-d", strtotime($fecha))); $cbc = $Invoice->appendChild($cbc);
     //Tipo de Documento 01 Factura 03 Boleta 07 Nota credito - catalogo numero 06
     $cbc = $xml->createElement('cbc:InvoiceTypeCode', $doc); $cbc = $Invoice->appendChild($cbc);
     //Tipo de moneda en la cual se emite la factura electronica
@@ -326,9 +332,9 @@ try {
                 $cbc = $xml->createElement('cbc:ChargeIndicator', 'false'); $cbc = $allowance->appendChild($cbc);// false para descuento
                 $cbc = $xml->createElement('cbc:Amount', $item['descuento']); $cbc = $allowance->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");// descuento
             $taxtotal = $xml->createElement('cac:TaxTotal'); $taxtotal = $InvoiceLine->appendChild($taxtotal);// igv del total del producto aplicado ya el descuento *0.18
-                $cbc = $xml->createElement('cbc:TaxAmount', $item['venta']*0.18); $cbc = $taxtotal->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
+                $cbc = $xml->createElement('cbc:TaxAmount', number_format($item['venta']*0.18,2,'.','')); $cbc = $taxtotal->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
                 $taxtsubtotal = $xml->createElement('cac:TaxSubtotal'); $taxtsubtotal = $taxtotal->appendChild($taxtsubtotal);
-                    $cbc = $xml->createElement('cbc:TaxAmount', $item['venta']*0.18); $cbc = $taxtsubtotal->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
+                    $cbc = $xml->createElement('cbc:TaxAmount', number_format($item['venta']*0.18,2,'.','')); $cbc = $taxtsubtotal->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
                     $taxtcategory = $xml->createElement('cac:TaxCategory'); $taxtcategory = $taxtsubtotal->appendChild($taxtcategory);
                         $cbc = $xml->createElement('cbc:TaxExemptionReasonCode', '10'); $cbc = $taxtcategory->appendChild($cbc);
                         $taxscheme = $xml->createElement('cac:TaxScheme'); $taxscheme = $taxtcategory->appendChild($taxscheme);
@@ -345,14 +351,109 @@ try {
     }
 
     $xml->formatOutput = true;
-    $strings_xml = $xml->saveXML();
-    echo $strings_xml;
-    //$xml->save('./factura.xml');
+    //$strings_xml = $xml->saveXML(); asigna el xml a un string
+    //echo $strings_xml;
+    //$xml->save('./20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.xml');
     //print_r($items);
 
 
+
+    // Cargar el XML a firmar
+    $nom = '20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'];
+    $doc = new DOMDocument();
+    $doc->loadXML($xml->saveXML());
+    $objDSig = new XMLSecurityDSig();
+    $objDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
+    $objDSig->addReference(
+        $doc,
+        XMLSecurityDSig::SHA1,
+        array('http://www.w3.org/2000/09/xmldsig#enveloped-signature'),
+        array('force_uri' => true)
+    );
+    //Crear una nueva clave de seguridad (privada)
+    $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
+
+    //Cargamos la clave privada
+    $objKey->loadKey('../archivos_pem/private_key.pem', true);
+    $objDSig->sign($objKey);
+
+    // Agregue la clave pública asociada a la firma
+    $objDSig->add509Cert(file_get_contents('../archivos_pem/public_key.pem'), true, false, array('subjectName' => true)); // array('issuerSerial' => true, 'subjectName' => true));
+
+    // Anexar la firma al XML
+    $objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(1));
+    $strings_xml = $doc->saveXML();
+
+
+    ## Creación del archivo .ZIP
+    $zip = new ZipArchive;
+    $res = $zip->open($nom.'.zip', ZipArchive::CREATE);
+    $zip->addFromString($nom.'.xml', $strings_xml);
+    $zip->close();
+
+# Procedimiento para enviar comprobante a la SUNAT
+    class feedSoap extends SoapClient{
+        public $XMLStr = "";
+        public function setXMLStr($value){
+            $this->XMLStr = $value;
+        }
+        public function getXMLStr(){
+            return $this->XMLStr;
+        }
+        public function __doRequest($request, $location, $action, $version, $one_way = 0){
+            $request = $this->XMLStr;
+            $dom = new DOMDocument('1.0');
+            try
+            {
+                $dom->loadXML($request);
+            } catch (DOMException $e) {
+                die($e->code);
+            }
+            $request = $dom->saveXML();
+            //Solicitud
+            return parent::__doRequest($request, $location, $action, $version, $one_way = 0);
+        }
+        public function SoapClientCall($SOAPXML){
+            return $this->setXMLStr($SOAPXML);
+        }
+    }
+
+
+    function soapCall($wsdlURL, $callFunction = "", $XMLString){
+        $client = new feedSoap($wsdlURL, array('trace' => true));
+        $reply  = $client->SoapClientCall($XMLString);
+        $client->__call("$callFunction", array(), array());
+        return $client->__getLastResponse();
+    }
+
+    $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+    $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
+        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+         <soapenv:Header>
+             <wsse:Security>
+                 <wsse:UsernameToken>
+                     <wsse:Username>20532710066MODDATOS</wsse:Username>
+                     <wsse:Password>MODDATOS</wsse:Password>
+                 </wsse:UsernameToken>
+             </wsse:Security>
+         </soapenv:Header>
+         <soapenv:Body>
+             <ser:sendBill>
+                <fileName>'.$nom.'.zip</fileName>
+                <contentFile>'.base64_encode(file_get_contents($nom.'.zip')).'</contentFile>
+             </ser:sendBill>
+         </soapenv:Body>
+        </soapenv:Envelope>';
+
+    $result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
+    preg_match_all('/<applicationResponse>(.*?)<\/applicationResponse>/is', $result, $matches);
+    $archivo = fopen('R-'.$nom.'.zip', 'w+');
+    fputs($archivo, base64_decode($matches[1][0]));
+    fclose($archivo);
+    chmod('R-'.$nom.'.zip', 0777);
+
 }catch (Exception $e) {
-    echo $e->getMessage();
+    echo 'MOISES '.$e->getMessage();
 }
 
 ?>
