@@ -284,14 +284,14 @@ if($cab_doc_gen['CDG_TIP_DOC']=='A'){
 ob_start();
 
 ?>
-    <div style="margin-top: 155px;"></div>
+    <div style="margin-top: 170px;"></div>
     <table style=" width: 100%; text-align: center;">
         <tr>
             <td style="width: 100%; text-align: center;"><?php echo $doc_nombre.' Nro '.$cab_doc_gen['CDG_SER_DOC'].' - '.$_GET['fisico']; ?> </td>
         </tr>
     </table>
 
-    <table style="width: 100%; font-size: 12px; border: solid 1px #000; margin-bottom: 20px; padding: 5px;" cellspacing="0" cellpadding="0">
+    <table style="width: 98%; font-size: 12px; border: solid 1px #000; margin-bottom: 20px; padding: 5px;" cellspacing="0" cellpadding="0">
         <tr>
             <td style="width: 16%;"><strong>Fecha:</strong></td>
             <td style="width: 44%;"><?php echo $fecha; ?></td>
@@ -372,7 +372,7 @@ ob_start();
         </tr>
     </table>
 
-    <table style="width: 100%; font-size: 12px;" cellspacing="0" cellpadding="0">
+    <table style="width: 98%; font-size: 12px;" cellspacing="0" cellpadding="0">
         <tr style="font-weight: bold;">
             <td style="border-bottom: solid 1px #000; border-left: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; text-align: center;">Nro</td>
             <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">Codigo</td>
