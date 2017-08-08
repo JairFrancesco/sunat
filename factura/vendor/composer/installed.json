@@ -347,5 +347,47 @@
             "html2pdf",
             "pdf"
         ]
+    },
+    {
+        "name": "robrichards/xmlseclibs",
+        "version": "3.0.0",
+        "version_normalized": "3.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/robrichards/xmlseclibs.git",
+            "reference": "a29eb3100eb6c5a427d6a3f9e61aff37492405ae"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/a29eb3100eb6c5a427d6a3f9e61aff37492405ae",
+            "reference": "a29eb3100eb6c5a427d6a3f9e61aff37492405ae",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">= 5.6"
+        },
+        "suggest": {
+            "ext-openssl": "OpenSSL extension"
+        },
+        "time": "2017-05-25T15:25:34+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "RobRichards\\XMLSecLibs\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "description": "A PHP library for XML Security",
+        "homepage": "https://github.com/robrichards/xmlseclibs",
+        "keywords": [
+            "security",
+            "signature",
+            "xml",
+            "xmldsig"
+        ]
     }
 ]

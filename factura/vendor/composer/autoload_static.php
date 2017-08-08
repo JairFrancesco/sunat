@@ -15,6 +15,10 @@ class ComposerStaticInitbb5a36ed920ffc23255c3e8e4a0cff45
         array (
             'Spipu\\Html2Pdf\\' => 15,
         ),
+        'R' => 
+        array (
+            'RobRichards\\XMLSecLibs\\' => 23,
+        ),
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
@@ -37,6 +41,10 @@ class ComposerStaticInitbb5a36ed920ffc23255c3e8e4a0cff45
         'Spipu\\Html2Pdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/spipu/html2pdf/src',
+        ),
+        'RobRichards\\XMLSecLibs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/robrichards/xmlseclibs/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (

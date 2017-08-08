@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c341aba043e63c26dbff3ceb9a72ddbd",
+    "content-hash": "1852f671802f5540dbbc24d3d6dceeae",
     "packages": [
         {
             "name": "bigfish/pdf417",
@@ -227,6 +227,46 @@
                 "response"
             ],
             "time": "2016-08-06T14:39:51+00:00"
+        },
+        {
+            "name": "robrichards/xmlseclibs",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/robrichards/xmlseclibs.git",
+                "reference": "a29eb3100eb6c5a427d6a3f9e61aff37492405ae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/a29eb3100eb6c5a427d6a3f9e61aff37492405ae",
+                "reference": "a29eb3100eb6c5a427d6a3f9e61aff37492405ae",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.6"
+            },
+            "suggest": {
+                "ext-openssl": "OpenSSL extension"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RobRichards\\XMLSecLibs\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "A PHP library for XML Security",
+            "homepage": "https://github.com/robrichards/xmlseclibs",
+            "keywords": [
+                "security",
+                "signature",
+                "xml",
+                "xmldsig"
+            ],
+            "time": "2017-05-25T15:25:34+00:00"
         },
         {
             "name": "spipu/html2pdf",
