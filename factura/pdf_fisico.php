@@ -284,7 +284,7 @@ if($cab_doc_gen['CDG_TIP_DOC']=='A'){
 ob_start();
 
 ?>
-    <div style="margin-top: 130px;"></div>
+    <div style="margin-top: 155px;"></div>
     <table style=" width: 100%; text-align: center;">
         <tr>
             <td style="width: 100%; text-align: center;"><?php echo $doc_nombre.' Nro '.$cab_doc_gen['CDG_SER_DOC'].' - '.$_GET['fisico']; ?> </td>
