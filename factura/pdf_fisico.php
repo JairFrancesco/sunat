@@ -266,7 +266,7 @@ if($cab_doc_gen['CDG_TIP_DOC']=='A'){
     $sql_ref_parse = oci_parse($conn, $sql_ref);
     oci_execute($sql_ref_parse);
     oci_fetch_all($sql_ref_parse, $ref, null, null, OCI_FETCHSTATEMENT_BY_ROW);
-    $ref_doc = $ref[0]['CDG_TIP_DOC'][0].'00'.$ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
+    $ref_doc = $ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
     $ref_fecha = date("d-m-Y", strtotime($ref[0]['CDG_FEC_GEN']));
     //print_r($ref);
     //echo $ref_serie;
@@ -284,14 +284,14 @@ if($cab_doc_gen['CDG_TIP_DOC']=='A'){
 ob_start();
 
 ?>
-    <div style="margin-top: 170px;"></div>
+    <div style="margin-top: 185px;"></div>
     <table style=" width: 100%; text-align: center;">
         <tr>
             <td style="width: 100%; text-align: center;"><?php echo $doc_nombre.' Nro '.$cab_doc_gen['CDG_SER_DOC'].' - '.$_GET['fisico']; ?> </td>
         </tr>
     </table>
 
-    <table style="width: 98%; font-size: 12px; border: solid 1px #000; margin-bottom: 20px; padding: 5px;" cellspacing="0" cellpadding="0">
+    <table style="width: 96%; margin-left: 15px; margin-right: 15px; font-size: 12px; border: solid 1px #000; margin-bottom: 20px; padding: 5px 5px 5px 5px;" cellspacing="0" cellpadding="0">
         <tr>
             <td style="width: 16%;"><strong>Fecha:</strong></td>
             <td style="width: 44%;"><?php echo $fecha; ?></td>
@@ -372,7 +372,7 @@ ob_start();
         </tr>
     </table>
 
-    <table style="width: 98%; font-size: 12px;" cellspacing="0" cellpadding="0">
+    <table style="width: 98%; padding-left: 15px; font-size: 12px;" cellspacing="0" cellpadding="0">
         <tr style="font-weight: bold;">
             <td style="border-bottom: solid 1px #000; border-left: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; text-align: center;">Nro</td>
             <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">Codigo</td>
