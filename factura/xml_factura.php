@@ -9,8 +9,6 @@
     set_error_handler("exception_error_handler");
 
 try {
-    //require 'vendor/robrichards/xmlseclibs/src/';
-
 
     require ('conexion.php');
     date_default_timezone_set('America/Lima');
@@ -384,10 +382,18 @@ try {
     $objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(1));
     $strings_xml = $doc->saveXML();
 
+    /* RUTA   ../app/repo/2017/08/08/
+    ************************************************************/
+    $ruta = explode('-',$fecha);
+    $ruta = '../app/repo/'.$ruta[2].'/'.$ruta[1].'/'.$ruta[0].'/';
+    if (!file_exists($ruta)) {
+        mkdir($ruta, 0777, true);
+    }
+    //echo $ruta;
 
     ## Creación del archivo .ZIP
     $zip = new ZipArchive;
-    $res = $zip->open($nom.'.zip', ZipArchive::CREATE);
+    $res = $zip->open($ruta.$nom.'.zip', ZipArchive::CREATE);
     $zip->addFromString($nom.'.xml', $strings_xml);
     $zip->close();
 
@@ -440,21 +446,29 @@ try {
          <soapenv:Body>
              <ser:sendBill>
                 <fileName>'.$nom.'.zip</fileName>
-                <contentFile>'.base64_encode(file_get_contents($nom.'.zip')).'</contentFile>
+                <contentFile>'.base64_encode(file_get_contents($ruta.$nom.'.zip')).'</contentFile>
              </ser:sendBill>
          </soapenv:Body>
         </soapenv:Envelope>';
 
+
     $result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
     preg_match_all('/<applicationResponse>(.*?)<\/applicationResponse>/is', $result, $matches);
-    $archivo = fopen('R-'.$nom.'.zip', 'w+');
+    $archivo = fopen($ruta.'R-'.$nom.'.zip', 'w+');
     fputs($archivo, base64_decode($matches[1][0]));
     fclose($archivo);
-    chmod('R-'.$nom.'.zip', 0777);
+    chmod($ruta.'R-'.$nom.'.zip', 0777);
     //echo $strings_xml;
+    echo '<img src="images/ok.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
+    echo '<div style="text-align: center;">Se genero el xml y se envio supuestamente <strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong>, por favor comprobar<br><br>';
+    echo '<a href="comprobar.php?gen='.$cab_doc_gen['CDG_COD_GEN'].'&emp='.$cab_doc_gen['CDG_COD_EMP'].'&tip='.$cab_doc_gen['CDG_TIP_DOC'].'&num='.$cab_doc_gen['CDG_NUM_DOC'].'"><button class="action bluebtn"><span class="label"><strong>Comprobar '.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong></span></button></a></div>';
+
 
 }catch (Exception $e) {
-    echo $e->getMessage();
+    echo '<img src="images/error.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
+    echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong>, ERROR AL GENERAR XML, COMUNICAR A : sistemas@surmotriz.com<br>';
+    echo 'Nombre del Error : '.$e->getMessage().'</div>';
 }
 
 ?>
+

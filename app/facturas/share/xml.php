@@ -477,7 +477,6 @@ if ($pase == 'S')
     }else{
         chmod($ruta.$f8.'.xml', 0777);
     }
-
     /*Eliminamos el Archivo Response*/
     unlink($ruta.'C'.$f8.'.xml');
 }

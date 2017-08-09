@@ -1,16 +1,30 @@
 <?php
-    class feedSoap extends SoapClient{
+
+function exception_error_handler($errno, $errstr, $errfile, $errline ) {
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+}
+set_error_handler("exception_error_handler");
+
+try {
+    class feedSoap extends SoapClient
+    {
         public $XMLStr = "";
-        public function setXMLStr($value){
+
+        public function setXMLStr($value)
+        {
             $this->XMLStr = $value;
         }
-        public function getXMLStr(){
+
+        public function getXMLStr()
+        {
             return $this->XMLStr;
         }
-        public function __doRequest($request, $location, $action, $version, $one_way = 0){
+
+        public function __doRequest($request, $location, $action, $version, $one_way = 0)
+        {
             $request = $this->XMLStr;
             $dom = new DOMDocument('1.0');
-            try{
+            try {
                 $dom->loadXML($request);
             } catch (DOMException $e) {
                 die($e->code);
@@ -19,13 +33,17 @@
             //Solicitud
             return parent::__doRequest($request, $location, $action, $version, $one_way = 0);
         }
-        public function SoapClientCall($SOAPXML){
+
+        public function SoapClientCall($SOAPXML)
+        {
             return $this->setXMLStr($SOAPXML);
         }
     }
-    function soapCall($wsdlURL, $callFunction = "", $XMLString){
+
+    function soapCall($wsdlURL, $callFunction = "", $XMLString)
+    {
         $client = new feedSoap($wsdlURL, array('trace' => true));
-        $reply  = $client->SoapClientCall($XMLString);
+        $reply = $client->SoapClientCall($XMLString);
         //echo "REQUEST:\n" . $client->__getFunctions() . "\n";
         $client->__call("$callFunction", array(), array());
         //$request = prettyXml($client->__getLastRequest());
@@ -34,7 +52,7 @@
         //print_r($client);
     }
 
-    require ('conexion.php');
+    require('conexion.php');
     /* PARAMETROS GET
     ***********************************/
     $gen = $_GET['gen'];
@@ -45,25 +63,26 @@
 
     /* CONSULTA CAB_DOC_GEN
     *****************************************************************************/
-    $sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_tip_doc='".$tip."' and cdg_num_doc='".$num."'";
-    $sql_parse = oci_parse($conn,$sql_cab_doc_gen);
+    $sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='" . $gen . "' and cdg_cod_emp='" . $emp . "' and cdg_tip_doc='" . $tip . "' and cdg_num_doc='" . $num . "'";
+    $sql_parse = oci_parse($conn, $sql_cab_doc_gen);
     oci_execute($sql_parse);
-    oci_fetch_all($sql_parse, $cab_doc_gen, null, null, OCI_FETCHSTATEMENT_BY_ROW); $cab_doc_gen = $cab_doc_gen[0];
+    oci_fetch_all($sql_parse, $cab_doc_gen, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+    $cab_doc_gen = $cab_doc_gen[0];
 
     /* DOC Y SERIE 01-F001
     *******************/
-    if($cab_doc_gen['CDG_TIP_DOC'] == 'F'){
+    if ($cab_doc_gen['CDG_TIP_DOC'] == 'F') {
         $doc = '01';
-        $serie = 'F00'.$cab_doc_gen['CDG_SER_DOC'];
-    }elseif($cab_doc_gen['CDG_TIP_DOC'] == 'B'){
+        $serie = 'F00' . $cab_doc_gen['CDG_SER_DOC'];
+    } elseif ($cab_doc_gen['CDG_TIP_DOC'] == 'B') {
         $doc = '03';
-        $serie = 'B00'.$cab_doc_gen['CDG_SER_DOC'];
-    }elseif($cab_doc_gen['CDG_TIP_DOC'] == 'A'){
+        $serie = 'B00' . $cab_doc_gen['CDG_SER_DOC'];
+    } elseif ($cab_doc_gen['CDG_TIP_DOC'] == 'A') {
         $doc = '07';
-        if($cab_doc_gen['CDG_TIP_REF'] == 'BR' || $cab_doc_gen['CDG_TIP_REF'] == 'BS'){
-            $serie = 'BN0'.$cab_doc_gen['CDG_SER_DOC'];
-        }elseif($cab_doc_gen['CDG_TIP_REF'] == 'FR' || $cab_doc_gen['CDG_TIP_REF'] == 'FS' || $cab_doc_gen['CDG_TIP_REF'] == 'FC'){
-            $serie = 'FN0'.$cab_doc_gen['CDG_SER_DOC'];
+        if ($cab_doc_gen['CDG_TIP_REF'] == 'BR' || $cab_doc_gen['CDG_TIP_REF'] == 'BS') {
+            $serie = 'BN0' . $cab_doc_gen['CDG_SER_DOC'];
+        } elseif ($cab_doc_gen['CDG_TIP_REF'] == 'FR' || $cab_doc_gen['CDG_TIP_REF'] == 'FS' || $cab_doc_gen['CDG_TIP_REF'] == 'FC') {
+            $serie = 'FN0' . $cab_doc_gen['CDG_SER_DOC'];
         }
     }
 
@@ -82,24 +101,25 @@
 <SOAP-ENV:Body>
 <m:getStatusCdr xmlns:m="http://service.sunat.gob.pe">
 <rucComprobante>20532710066</rucComprobante>
-<tipoComprobante>'.$doc.'</tipoComprobante>
-<serieComprobante>'.$serie.'</serieComprobante>
-<numeroComprobante>'.$cab_doc_gen['CDG_NUM_DOC'].'</numeroComprobante>
+<tipoComprobante>' . $doc . '</tipoComprobante>
+<serieComprobante>' . $serie . '</serieComprobante>
+<numeroComprobante>' . $cab_doc_gen['CDG_NUM_DOC'] . '</numeroComprobante>
 </m:getStatusCdr>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>';
     $result = soapCall($wsdlURL, $callFunction = "getStatusCdr", $XMLString);
     //echo $result;
-
-    preg_match_all('/<statusCode>(.*?)<\/statusCode>/is',$result,$matches_codigo);
-    preg_match_all('/<statusMessage>(.*?)<\/statusMessage>/is',$result,$matches_mensaje);
-    echo '<strong>Codigo :</strong> '.$matches_codigo[1][0].'<br> <strong>Mensaje :</strong> '.$matches_mensaje[1][0];
-    /*
-    $cdr=base64_decode($matches[1][0]);
-    $archivo = fopen('./17076.zip','w+');
-    fputs($archivo,$cdr);
-    fclose($archivo);
-    chmod('./17076.zip', 0777);
-    */
-
+    preg_match_all('/<statusCode>(.*?)<\/statusCode>/is', $result, $matches_codigo);
+    preg_match_all('/<statusMessage>(.*?)<\/statusMessage>/is', $result, $matches_mensaje);
+    if($matches_codigo[1][0]=='0004' || $matches_codigo[1][0] == '0001'){
+        echo '<img src="images/successful.jpg" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
+        echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong> Si el codigo sale 0004 o 0001 esta bien, pero si sale otro esta mal. <br><strong>Codigo :</strong> ' . $matches_codigo[1][0] . '<br> <strong>Mensaje :</strong> ' . $matches_mensaje[1][0].'</div>';
+    }else{
+        echo '<img src="images/error.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
+        echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong> Si el codigo sale 0004 o 0001 esta bien, pero si sale otro esta mal. <br><strong>Codigo :</strong> ' . $matches_codigo[1][0] . '<br> <strong>Mensaje :</strong> ' . $matches_mensaje[1][0].'</div>';
+    }
+}catch (Exception $e) {
+    echo '<img src="images/error.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
+    echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong> No existe conexion con sunat intentar mas tarde o avisar a sistemas@surmotriz.com</div>';
+}
 ?>
