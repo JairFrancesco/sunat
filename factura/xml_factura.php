@@ -451,9 +451,10 @@ try {
     fputs($archivo, base64_decode($matches[1][0]));
     fclose($archivo);
     chmod('R-'.$nom.'.zip', 0777);
+    //echo $strings_xml;
 
 }catch (Exception $e) {
-    echo 'MOISES '.$e->getMessage();
+    echo $e->getMessage();
 }
 
 ?>
