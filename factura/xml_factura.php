@@ -80,10 +80,10 @@ try {
             $items[$i]['codigo'] = $repuesto['DDR_COD_PRO']; // codigo
             $items[$i]['descripcion'] = $repuesto['LPR_DES_PRO']; // descripcion
             $items[$i]['cantidad'] = $repuesto['DDR_CAN_PRO']; // cantidad
-            $items[$i]['unitario'] = number_format($repuesto['DDR_VVP_SOL'],2,'.',','); // precio unitario
-            $items[$i]['importe'] = number_format(($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']), 2, '.',','); // importe
-            $items[$i]['descuento'] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100), 2, '.', ','); // descuento esta en % hay que sacarle del importe
-            $items[$i]['venta'] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']) - (($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100)),2,'.',','); // valor venta (importe - descuento)
+            $items[$i]['unitario'] = number_format($repuesto['DDR_VVP_SOL'],2,'.',''); // precio unitario
+            $items[$i]['importe'] = number_format(($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']), 2, '.',''); // importe
+            $items[$i]['descuento'] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100), 2, '.', ''); // descuento esta en % hay que sacarle del importe
+            $items[$i]['venta'] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']) - (($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100)),2,'.',''); // valor venta (importe - descuento)
             $i++;
         }
     }
@@ -97,10 +97,10 @@ try {
             $items[$i]['codigo'] = $servicio['DDS_COD_PRO']; // codigo
             $items[$i]['descripcion'] = $servicio['DDS_DES_001']; // descripcion
             $items[$i]['cantidad'] = $servicio['DDS_CAN_PRO']; // cantidad
-            $items[$i]['unitario'] = number_format($servicio['DDS_VVP_SOL'],2,'.',','); // precio unitario
-            $items[$i]['importe'] = number_format(($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']), 2, '.', ','); // importe
-            $items[$i]['descuento'] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100), 2, '.', ','); // descuento
-            $items[$i]['venta'] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']) - (($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100)),2,'.',','); // valor venta (importe - descuento)
+            $items[$i]['unitario'] = number_format($servicio['DDS_VVP_SOL'],2,'.',''); // precio unitario
+            $items[$i]['importe'] = number_format(($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']), 2, '.', ''); // importe
+            $items[$i]['descuento'] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100), 2, '.', ''); // descuento
+            $items[$i]['venta'] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']) - (($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100)),2,'.',''); // valor venta (importe - descuento)
             $i++;
         }
     }
@@ -128,15 +128,15 @@ try {
             $items[$i]['descripcion'] = $cab_doc_gen['CDG_TEN_RES'];
             $items[$i]['cantidad'] = '1';
             if($cab_doc_gen['CDG_EXI_FRA'] == 'S'){
-                $items[$i]['unitario'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.',',');
-                $items[$i]['importe'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.',',');
+                $items[$i]['unitario'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.','');
+                $items[$i]['importe'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.','');
                 $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
-                $items[$i]['venta'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');
+                $items[$i]['venta'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.','');
             }else{
-                $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
-                $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
-                $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); //descuentos
-                $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot;
+                $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
+                $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
+                $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',''); //descuentos
+                $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot;
             }
         }
     }
@@ -146,10 +146,10 @@ try {
         $items[$i]['codigo'] = '-- -- --';
         $items[$i]['descripcion'] = $cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'];
         $items[$i]['cantidad'] = '1';
-        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); // precio unitario
-        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); //importe
-        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); //descuentos
-        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
+        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',''); // precio unitario
+        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',''); //importe
+        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',''); //descuentos
+        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
     }
 
     // anticipo pero nota de credito
@@ -161,10 +161,10 @@ try {
         $items[$i]['codigo'] = '-- -- --';
         $items[$i]['descripcion'] = $nota[0]['CDG_NOT_001'].' '.$nota[0]['CDG_NOT_002'].' '.$nota[0]['CDG_NOT_003'];
         $items[$i]['cantidad'] = '1';
-        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');;
-        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');;
-        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');;
-        $items[$i]['venta'] = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','); // total cdg_imp_neto
+        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');;
+        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');;
+        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');;
+        $items[$i]['venta'] = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',''); // total cdg_imp_neto
         //print_r($nota);
     }
 
@@ -173,16 +173,16 @@ try {
     /* TOTALES
     ***********************************************/
     if($cab_doc_gen['CDG_EXI_FRA'] == 'S'){
-        $subtotal = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.',',');
-        $gravadas = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');
-        $igv = number_format(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2,'.',',');
+        $subtotal = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.','');
+        $gravadas = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.','');
+        $igv = number_format(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2,'.','');
     }else{
-        $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
-        $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
-        $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',','); // igv total
+        $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
+        $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
+        $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',''); // igv total
     }
-    $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
-    $total = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','); // total cdg_imp_neto
+    $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
+    $total = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',''); // total cdg_imp_neto
 
 
 
@@ -299,7 +299,7 @@ try {
         $cac_party = $xml->createElement('cac:Party'); $cac_party = $cac_accounting->appendChild($cac_party);
             // nombre o razon zocial
             $legal = $xml->createElement('cac:PartyLegalEntity'); $legal = $cac_party->appendChild($legal);
-                $cbc = $xml->createCDATASection('cbc:RegistrationName', $cab_doc_gen['CDG_NOM_CLI']); $cbc = $legal->appendChild($cbc);
+                $cbc = $xml->createElement('cbc:RegistrationName', htmlspecialchars($cab_doc_gen['CDG_NOM_CLI'])); $cbc = $legal->appendChild($cbc);
 
     // Sumatoria IGV
     $taxtotal = $xml->createElement('cac:TaxTotal'); $taxtotal = $Invoice->appendChild($taxtotal);
@@ -451,14 +451,14 @@ try {
              </soapenv:Body>
             </soapenv:Envelope>';
 
-        /*
+
         $result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
         preg_match_all('/<applicationResponse>(.*?)<\/applicationResponse>/is', $result, $matches);
         $archivo = fopen($ruta.'R-'.$nom.'.zip', 'w+');
         fputs($archivo, base64_decode($matches[1][0]));
         fclose($archivo);
         chmod($ruta.'R-'.$nom.'.zip', 0777);
-        */
+
     //echo $strings_xml;
     echo '<img src="images/ok.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
     echo '<div style="text-align: center;">Se genero el xml y se envio supuestamente <strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong>, por favor comprobar<br><br>';
