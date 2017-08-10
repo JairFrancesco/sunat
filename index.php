@@ -211,8 +211,14 @@
                                         // factura elctronica
                                         $fisico_electro = 1;
                                     }else{
-                                        // factura fisica
-                                        $fisico_electro = 0;
+                                        if($ref[0]['CDG_TIP_DOC'] =='B'){
+                                            // factura electronica
+                                            $fisico_electro = 1;
+                                        }else{
+                                            // factura fisica
+                                            $fisico_electro = 0;
+                                        }
+
                                     }
 
                                     if($fisico_electro == 1){

@@ -46,13 +46,14 @@
     }
 
 
-    /* RUTA   ../../app/repo/26/07/2017/
+    /* RUTA   ../app/repo/2017/08/08/
     ************************************************************/
     $ruta = explode('-',$fecha);
     $ruta = '../app/repo/'.$ruta[2].'/'.$ruta[1].'/'.$ruta[0].'/';
     if (!file_exists($ruta)) {
         mkdir($ruta, 0777, true);
     }
+    //echo $ruta;
 
 
     /* CODIGO DE BARRAS
@@ -432,7 +433,7 @@
                     }
                     // facturas por servicios mayores a 700
                     if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $cab_doc_gen['CDG_IMP_NETO'] > 700 ){
-                        echo "<span style='font-style: italic;'>Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco.</span><br>";
+                        echo "<span style='font-style: italic;'>Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco. Nación no. 00-151-084257</span><br>";
                     }
                     echo "<span style='font-style: italic;'>Son: ".$letras."</span><br>";
                 ?>
@@ -480,6 +481,8 @@
     use Spipu\Html2Pdf\Html2Pdf;
     $html2pdf = new Html2Pdf('P', 'A4', 'es', true, 'UTF-8', array(8, 8, 8, 8));
     $html2pdf->writeHTML($content);
-    $html2pdf->output('factura.pdf');
+    $html2pdf->output($ruta.'20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.pdf','F');
+    $html2pdf->output('20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.pdf');
+    unlink($ruta.'20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.png');
 
 ?>
