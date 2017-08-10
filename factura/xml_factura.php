@@ -299,7 +299,7 @@ try {
         $cac_party = $xml->createElement('cac:Party'); $cac_party = $cac_accounting->appendChild($cac_party);
             // nombre o razon zocial
             $legal = $xml->createElement('cac:PartyLegalEntity'); $legal = $cac_party->appendChild($legal);
-                $cbc = $xml->createElement('cbc:RegistrationName', $cab_doc_gen['CDG_NOM_CLI']); $cbc = $legal->appendChild($cbc);
+                $cbc = $xml->createCDATASection('cbc:RegistrationName', $cab_doc_gen['CDG_NOM_CLI']); $cbc = $legal->appendChild($cbc);
 
     // Sumatoria IGV
     $taxtotal = $xml->createElement('cac:TaxTotal'); $taxtotal = $Invoice->appendChild($taxtotal);
@@ -468,8 +468,7 @@ try {
 }catch (Exception $e) {
     echo '<img src="images/error.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
     echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong>, ERROR AL GENERAR XML, COMUNICAR A : sistemas@surmotriz.com<br>';
-    echo 'Nombre del Error : '.$e->getMessage().'</div>';
+    echo 'Nombre del Error : '.$e->getMessage().$e->getLine().'</div>';
 }
-
 ?>
 
