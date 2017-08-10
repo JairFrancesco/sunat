@@ -233,7 +233,7 @@ $xml->save($ruta.$f8.'.xml');
 // 2.- Firmar documento xml
 // ========================
 
-require './robrichards/html2pdf/xmlseclibs.php';
+require './robrichards/src/xmlseclibs.php';
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 

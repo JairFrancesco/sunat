@@ -113,7 +113,8 @@ try {
     preg_match_all('/<statusMessage>(.*?)<\/statusMessage>/is', $result, $matches_mensaje);
     if($matches_codigo[1][0]=='0004' || $matches_codigo[1][0] == '0001'){
         echo '<img src="images/successful.jpg" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
-        echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong> Si el codigo sale 0004 o 0001 esta bien, pero si sale otro esta mal. <br><strong>Codigo :</strong> ' . $matches_codigo[1][0] . '<br> <strong>Mensaje :</strong> ' . $matches_mensaje[1][0].'</div>';
+        echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong> Si el codigo sale 0004 o 0001 esta bien, pero si sale otro esta mal. <br><strong>Codigo :</strong> ' . $matches_codigo[1][0] . '<br> <strong>Mensaje :</strong> ' . $matches_mensaje[1][0].'<br>';
+        echo '<a href="terminar.php?gen='.$cab_doc_gen['CDG_COD_GEN'].'&emp='.$cab_doc_gen['CDG_COD_EMP'].'&tip='.$cab_doc_gen['CDG_TIP_DOC'].'&num='.$cab_doc_gen['CDG_NUM_DOC'].'"><button class="action bluebtn"><span class="label"><strong>Terminar '.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong></span></button></a></div>';
     }else{
         echo '<img src="images/error.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
         echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong> Si el codigo sale 0004 o 0001 esta bien, pero si sale otro esta mal. <br><strong>Codigo :</strong> ' . $matches_codigo[1][0] . '<br> <strong>Mensaje :</strong> ' . $matches_mensaje[1][0].'</div>';

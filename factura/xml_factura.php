@@ -80,10 +80,10 @@ try {
             $items[$i]['codigo'] = $repuesto['DDR_COD_PRO']; // codigo
             $items[$i]['descripcion'] = $repuesto['LPR_DES_PRO']; // descripcion
             $items[$i]['cantidad'] = $repuesto['DDR_CAN_PRO']; // cantidad
-            $items[$i]['unitario'] = number_format($repuesto['DDR_VVP_SOL'],2,'.',','); // precio unitario
-            $items[$i]['importe'] = number_format(($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']), 2, '.',','); // importe
-            $items[$i]['descuento'] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100), 2, '.', ','); // descuento esta en % hay que sacarle del importe
-            $items[$i]['venta'] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']) - (($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100)),2,'.',','); // valor venta (importe - descuento)
+            $items[$i]['unitario'] = number_format($repuesto['DDR_VVP_SOL'],2,'.',''); // precio unitario
+            $items[$i]['importe'] = number_format(($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']), 2, '.',''); // importe
+            $items[$i]['descuento'] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100), 2, '.', ''); // descuento esta en % hay que sacarle del importe
+            $items[$i]['venta'] = number_format((($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL']) - (($repuesto['DDR_CAN_PRO'] * $repuesto['DDR_VVP_SOL'] * $repuesto['DDR_POR_DES'])/100)),2,'.',''); // valor venta (importe - descuento)
             $i++;
         }
     }
@@ -97,10 +97,10 @@ try {
             $items[$i]['codigo'] = $servicio['DDS_COD_PRO']; // codigo
             $items[$i]['descripcion'] = $servicio['DDS_DES_001']; // descripcion
             $items[$i]['cantidad'] = $servicio['DDS_CAN_PRO']; // cantidad
-            $items[$i]['unitario'] = number_format($servicio['DDS_VVP_SOL'],2,'.',','); // precio unitario
-            $items[$i]['importe'] = number_format(($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']), 2, '.', ','); // importe
-            $items[$i]['descuento'] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100), 2, '.', ','); // descuento
-            $items[$i]['venta'] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']) - (($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100)),2,'.',','); // valor venta (importe - descuento)
+            $items[$i]['unitario'] = number_format($servicio['DDS_VVP_SOL'],2,'.',''); // precio unitario
+            $items[$i]['importe'] = number_format(($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']), 2, '.', ''); // importe
+            $items[$i]['descuento'] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100), 2, '.', ''); // descuento
+            $items[$i]['venta'] = number_format((($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL']) - (($servicio['DDS_CAN_PRO'] * $servicio['DDS_VVP_SOL'] * $servicio['DDS_POR_DES'])/100)),2,'.',''); // valor venta (importe - descuento)
             $i++;
         }
     }
@@ -128,15 +128,15 @@ try {
             $items[$i]['descripcion'] = $cab_doc_gen['CDG_TEN_RES'];
             $items[$i]['cantidad'] = '1';
             if($cab_doc_gen['CDG_EXI_FRA'] == 'S'){
-                $items[$i]['unitario'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.',',');
-                $items[$i]['importe'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.',',');
+                $items[$i]['unitario'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.','');
+                $items[$i]['importe'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.','');
                 $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
-                $items[$i]['venta'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');
+                $items[$i]['venta'] = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.','');
             }else{
-                $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
-                $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
-                $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); //descuentos
-                $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot;
+                $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
+                $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
+                $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',''); //descuentos
+                $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot;
             }
         }
     }
@@ -146,10 +146,10 @@ try {
         $items[$i]['codigo'] = '-- -- --';
         $items[$i]['descripcion'] = $cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'];
         $items[$i]['cantidad'] = '1';
-        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); // precio unitario
-        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); //importe
-        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); //descuentos
-        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
+        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',''); // precio unitario
+        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',''); //importe
+        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',''); //descuentos
+        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
     }
 
     // anticipo pero nota de credito
@@ -161,10 +161,10 @@ try {
         $items[$i]['codigo'] = '-- -- --';
         $items[$i]['descripcion'] = $nota[0]['CDG_NOT_001'].' '.$nota[0]['CDG_NOT_002'].' '.$nota[0]['CDG_NOT_003'];
         $items[$i]['cantidad'] = '1';
-        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');;
-        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');;
-        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');;
-        $items[$i]['venta'] = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','); // total cdg_imp_neto
+        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');;
+        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');;
+        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');;
+        $items[$i]['venta'] = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',''); // total cdg_imp_neto
         //print_r($nota);
     }
 
@@ -173,16 +173,16 @@ try {
     /* TOTALES
     ***********************************************/
     if($cab_doc_gen['CDG_EXI_FRA'] == 'S'){
-        $subtotal = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.',',');
-        $gravadas = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');
-        $igv = number_format(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2,'.',',');
+        $subtotal = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2,'.','');
+        $gravadas = number_format((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))-$cab_doc_gen['CDG_DES_TOT']),2,'.','');
+        $igv = number_format(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2,'.','');
     }else{
-        $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
-        $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
-        $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',','); // igv total
+        $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
+        $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
+        $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',''); // igv total
     }
-    $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
-    $total = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',','); // total cdg_imp_neto
+    $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
+    $total = number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.',''); // total cdg_imp_neto
 
 
 
@@ -299,7 +299,7 @@ try {
         $cac_party = $xml->createElement('cac:Party'); $cac_party = $cac_accounting->appendChild($cac_party);
             // nombre o razon zocial
             $legal = $xml->createElement('cac:PartyLegalEntity'); $legal = $cac_party->appendChild($legal);
-                $cbc = $xml->createElement('cbc:RegistrationName', $cab_doc_gen['CDG_NOM_CLI']); $cbc = $legal->appendChild($cbc);
+                $cbc = $xml->createElement('cbc:RegistrationName', htmlspecialchars($cab_doc_gen['CDG_NOM_CLI'])); $cbc = $legal->appendChild($cbc);
 
     // Sumatoria IGV
     $taxtotal = $xml->createElement('cac:TaxTotal'); $taxtotal = $Invoice->appendChild($taxtotal);
@@ -356,31 +356,31 @@ try {
 
 
 
-    // Cargar el XML a firmar
-    $nom = '20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'];
-    $doc = new DOMDocument();
-    $doc->loadXML($xml->saveXML());
-    $objDSig = new XMLSecurityDSig();
-    $objDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
-    $objDSig->addReference(
-        $doc,
-        XMLSecurityDSig::SHA1,
-        array('http://www.w3.org/2000/09/xmldsig#enveloped-signature'),
-        array('force_uri' => true)
-    );
-    //Crear una nueva clave de seguridad (privada)
-    $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
+        // Cargar el XML a firmar
+        $nom = '20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'];
+        $doc = new DOMDocument();
+        $doc->loadXML($xml->saveXML());
+        $objDSig = new XMLSecurityDSig();
+        $objDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
+        $objDSig->addReference(
+            $doc,
+            XMLSecurityDSig::SHA1,
+            array('http://www.w3.org/2000/09/xmldsig#enveloped-signature'),
+            array('force_uri' => true)
+        );
+        //Crear una nueva clave de seguridad (privada)
+        $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
 
-    //Cargamos la clave privada
-    $objKey->loadKey('../archivos_pem/private_key.pem', true);
-    $objDSig->sign($objKey);
+        //Cargamos la clave privada
+        $objKey->loadKey('../archivos_pem/private_key.pem', true);
+        $objDSig->sign($objKey);
 
-    // Agregue la clave pública asociada a la firma
-    $objDSig->add509Cert(file_get_contents('../archivos_pem/public_key.pem'), true, false, array('subjectName' => true)); // array('issuerSerial' => true, 'subjectName' => true));
+        // Agregue la clave pública asociada a la firma
+        $objDSig->add509Cert(file_get_contents('../archivos_pem/public_key.pem'), true, false, array('subjectName' => true)); // array('issuerSerial' => true, 'subjectName' => true));
 
-    // Anexar la firma al XML
-    $objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(1));
-    $strings_xml = $doc->saveXML();
+        // Anexar la firma al XML
+        $objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(1));
+        $strings_xml = $doc->saveXML();
 
     /* RUTA   ../app/repo/2017/08/08/
     ************************************************************/
@@ -391,73 +391,74 @@ try {
     }
     //echo $ruta;
 
-    ## Creación del archivo .ZIP
-    $zip = new ZipArchive;
-    $res = $zip->open($ruta.$nom.'.zip', ZipArchive::CREATE);
-    $zip->addFromString($nom.'.xml', $strings_xml);
-    $zip->close();
+        ## Creación del archivo .ZIP
+        $zip = new ZipArchive;
+        $res = $zip->open($ruta.$nom.'.zip', ZipArchive::CREATE);
+        $zip->addFromString($nom.'.xml', $strings_xml);
+        $zip->close();
 
-# Procedimiento para enviar comprobante a la SUNAT
-    class feedSoap extends SoapClient{
-        public $XMLStr = "";
-        public function setXMLStr($value){
-            $this->XMLStr = $value;
-        }
-        public function getXMLStr(){
-            return $this->XMLStr;
-        }
-        public function __doRequest($request, $location, $action, $version, $one_way = 0){
-            $request = $this->XMLStr;
-            $dom = new DOMDocument('1.0');
-            try
-            {
-                $dom->loadXML($request);
-            } catch (DOMException $e) {
-                die($e->code);
+    # Procedimiento para enviar comprobante a la SUNAT
+        class feedSoap extends SoapClient{
+            public $XMLStr = "";
+            public function setXMLStr($value){
+                $this->XMLStr = $value;
             }
-            $request = $dom->saveXML();
-            //Solicitud
-            return parent::__doRequest($request, $location, $action, $version, $one_way = 0);
+            public function getXMLStr(){
+                return $this->XMLStr;
+            }
+            public function __doRequest($request, $location, $action, $version, $one_way = 0){
+                $request = $this->XMLStr;
+                $dom = new DOMDocument('1.0');
+                try
+                {
+                    $dom->loadXML($request);
+                } catch (DOMException $e) {
+                    die($e->code);
+                }
+                $request = $dom->saveXML();
+                //Solicitud
+                return parent::__doRequest($request, $location, $action, $version, $one_way = 0);
+            }
+            public function SoapClientCall($SOAPXML){
+                return $this->setXMLStr($SOAPXML);
+            }
         }
-        public function SoapClientCall($SOAPXML){
-            return $this->setXMLStr($SOAPXML);
+
+
+        function soapCall($wsdlURL, $callFunction = "", $XMLString){
+            $client = new feedSoap($wsdlURL, array('trace' => true));
+            $reply  = $client->SoapClientCall($XMLString);
+            $client->__call("$callFunction", array(), array());
+            return $client->__getLastResponse();
         }
-    }
+
+        $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+        $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
+            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+             <soapenv:Header>
+                 <wsse:Security>
+                     <wsse:UsernameToken>
+                         <wsse:Username>20532710066MODDATOS</wsse:Username>
+                         <wsse:Password>MODDATOS</wsse:Password>
+                     </wsse:UsernameToken>
+                 </wsse:Security>
+             </soapenv:Header>
+             <soapenv:Body>
+                 <ser:sendBill>
+                    <fileName>'.$nom.'.zip</fileName>
+                    <contentFile>'.base64_encode(file_get_contents($ruta.$nom.'.zip')).'</contentFile>
+                 </ser:sendBill>
+             </soapenv:Body>
+            </soapenv:Envelope>';
 
 
-    function soapCall($wsdlURL, $callFunction = "", $XMLString){
-        $client = new feedSoap($wsdlURL, array('trace' => true));
-        $reply  = $client->SoapClientCall($XMLString);
-        $client->__call("$callFunction", array(), array());
-        return $client->__getLastResponse();
-    }
+        $result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
+        preg_match_all('/<applicationResponse>(.*?)<\/applicationResponse>/is', $result, $matches);
+        $archivo = fopen($ruta.'R-'.$nom.'.zip', 'w+');
+        fputs($archivo, base64_decode($matches[1][0]));
+        fclose($archivo);
+        chmod($ruta.'R-'.$nom.'.zip', 0777);
 
-    $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
-    $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
-        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-         <soapenv:Header>
-             <wsse:Security>
-                 <wsse:UsernameToken>
-                     <wsse:Username>20532710066MODDATOS</wsse:Username>
-                     <wsse:Password>MODDATOS</wsse:Password>
-                 </wsse:UsernameToken>
-             </wsse:Security>
-         </soapenv:Header>
-         <soapenv:Body>
-             <ser:sendBill>
-                <fileName>'.$nom.'.zip</fileName>
-                <contentFile>'.base64_encode(file_get_contents($ruta.$nom.'.zip')).'</contentFile>
-             </ser:sendBill>
-         </soapenv:Body>
-        </soapenv:Envelope>';
-
-
-    $result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
-    preg_match_all('/<applicationResponse>(.*?)<\/applicationResponse>/is', $result, $matches);
-    $archivo = fopen($ruta.'R-'.$nom.'.zip', 'w+');
-    fputs($archivo, base64_decode($matches[1][0]));
-    fclose($archivo);
-    chmod($ruta.'R-'.$nom.'.zip', 0777);
     //echo $strings_xml;
     echo '<img src="images/ok.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
     echo '<div style="text-align: center;">Se genero el xml y se envio supuestamente <strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong>, por favor comprobar<br><br>';
@@ -467,8 +468,7 @@ try {
 }catch (Exception $e) {
     echo '<img src="images/error.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
     echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong>, ERROR AL GENERAR XML, COMUNICAR A : sistemas@surmotriz.com<br>';
-    echo 'Nombre del Error : '.$e->getMessage().'</div>';
+    echo 'Nombre del Error : '.$e->getMessage().$e->getLine().'</div>';
 }
-
 ?>
 
