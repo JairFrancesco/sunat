@@ -344,8 +344,8 @@ function soapCall($wsdlURL, $callFunction = "", $XMLString)
 
 
 // produccion
-$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
-//$wsdlURL = "billService.wsdl";
+//$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+$wsdlURL = "billService.wsdl";
 // 20532710066SURMOTR1 TOYOTA2051
 //Estructura del XML para la conexión
 $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
