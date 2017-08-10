@@ -382,8 +382,8 @@ try {
         $objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(1));
         $strings_xml = $doc->saveXML();
 
-        /* RUTA   ../app/repo/2017/08/08/
-        ************************************************************/
+    /* RUTA   ../app/repo/2017/08/08/
+    ************************************************************/
     $ruta = explode('-',$fecha);
     $ruta = '../app/repo/'.$ruta[2].'/'.$ruta[1].'/'.$ruta[0].'/';
     if (!file_exists($ruta)) {
