@@ -406,12 +406,12 @@ try {
         $xml->formatOutput = true;
 
         $nom = '20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'];
-        $doc = new DOMDocument();
-        $doc->loadXML($xml->saveXML());
+        $docu = new DOMDocument();
+        $docu->loadXML($xml->saveXML());
         $objDSig = new XMLSecurityDSig();
         $objDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
         $objDSig->addReference(
-            $doc,
+            $docu,
             XMLSecurityDSig::SHA1,
             array('http://www.w3.org/2000/09/xmldsig#enveloped-signature'),
             array('force_uri' => true)
@@ -420,13 +420,13 @@ try {
         $objKey->loadKey('../archivos_pem/private_key.pem', true);
         $objDSig->sign($objKey);
         $objDSig->add509Cert(file_get_contents('../archivos_pem/public_key.pem'), true, false, array('subjectName' => true));
-        $objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(1));
-        $strings_xml = $doc->saveXML();
+        $objDSig->appendSignature($docu->getElementsByTagName('ExtensionContent')->item(1));
+        $strings_xml = $docu->saveXML();
 
         /* RUTA   ../app/repo/2017/08/08/
         ************************************************************/
         $ruta = explode('-',$fecha);
-        $ruta = '../app/repo/'.$ruta[2].'/'.$ruta[1].'/'.$ruta[0].'/';
+        $ruta = '../app/repo/'.$ruta[0].'/'.$ruta[1].'/'.$ruta[2].'/';
         if (!file_exists($ruta)) {
             mkdir($ruta, 0777, true);
         }
@@ -464,8 +464,42 @@ try {
         fputs($archivo, base64_decode($matches[1][0]));
         fclose($archivo);
         chmod($ruta.'R-'.$nom.'.zip', 0777);
-    }catch(Exception $e){
 
+        //header('Content-Type: text/xml; charset=UTF-8');
+        $wsdlURL = 'https://www.sunat.gob.pe/ol-it-wsconscpegem/billConsultService?wsdl';
+        $XMLString = '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <SOAP-ENV:Header xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope">
+            <wsse:Security>
+            <wsse:UsernameToken>
+            <wsse:Username>20532710066SURMOTR1</wsse:Username>
+            <wsse:Password>TOYOTA2051</wsse:Password>
+            </wsse:UsernameToken>
+            </wsse:Security>
+            </SOAP-ENV:Header>
+            <SOAP-ENV:Body>
+            <m:getStatusCdr xmlns:m="http://service.sunat.gob.pe">
+            <rucComprobante>20532710066</rucComprobante>
+            <tipoComprobante>'.$doc.'</tipoComprobante>
+            <serieComprobante>'.$serie.'</serieComprobante>
+            <numeroComprobante>'.$cab_doc_gen['CDG_NUM_DOC'].'</numeroComprobante>
+            </m:getStatusCdr>
+            </SOAP-ENV:Body>
+            </SOAP-ENV:Envelope>';
+        $result = soapCall($wsdlURL, $callFunction = "getStatusCdr", $XMLString);
+        //echo $result;
+        preg_match_all('/<statusCode>(.*?)<\/statusCode>/is', $result, $matches_codigo);
+        preg_match_all('/<statusMessage>(.*?)<\/statusMessage>/is', $result, $matches_mensaje);
+        if($matches_codigo[1][0]=='0004' || $matches_codigo[1][0] == '0001'){
+            echo '<img src="images/successful.jpg" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
+            echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong> Si el codigo sale 0004 o 0001 esta bien, pero si sale otro esta mal. <br><strong>Codigo :</strong> ' . $matches_codigo[1][0] . '<br> <strong>Mensaje :</strong> ' . $matches_mensaje[1][0].'<br>';
+            echo '<a href="terminar.php?gen='.$cab_doc_gen['CDG_COD_GEN'].'&emp='.$cab_doc_gen['CDG_COD_EMP'].'&tip='.$cab_doc_gen['CDG_TIP_DOC'].'&num='.$cab_doc_gen['CDG_NUM_DOC'].'"><button class="action bluebtn"><span class="label"><strong>Terminar '.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong></span></button></a></div>';
+        }else{
+            echo '<img src="images/error.png" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
+            echo '<div style="text-align: center;"><strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong> Si el codigo sale 0004 o 0001 esta bien, pero si sale otro esta mal. <br><strong>Codigo :</strong> ' . $matches_codigo[1][0] . '<br> <strong>Mensaje :</strong> ' . $matches_mensaje[1][0].'</div>';
+        }
+
+    }catch(Exception $e){
+        echo 'Tricash 1'.$e->getMessage().$e->getLine();
     }
 
 }catch (Exception $e) {
