@@ -36,7 +36,6 @@
         }
     }
 
-
     $update = "update cab_doc_gen SET cdg_sun_env='S' WHERE cdg_num_doc='".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab_doc_gen['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."'";
     $stmt = oci_parse($conn, $update);
     oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
