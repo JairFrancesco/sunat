@@ -496,13 +496,16 @@ try {
             if($matches_codigo[1][0]=='0004' || $matches_codigo[1][0] == '0001'){
                 echo '<img src="images/ok.png"><br>';
                 echo 'La factura <strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong> ha sido enviada correctamente..!';
+                $update = "update cab_doc_gen SET cdg_sun_env='S' WHERE cdg_num_doc='".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab_doc_gen['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."'";
+                $stmt = oci_parse($conn, $update);
+                oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+                oci_free_statement($stmt);
             }else{
                 echo '<img src="images/error.png"><br>';
                 echo 'Sucedio un error al enviar la Nota de Credito <strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong>, vuelva intentarlo mas tarde, Codigo Error '.$matches_codigo[1][0];
             }
             echo '</div>';
         }else{
-
             $result2 = soapCall($wsdlURL2, $callFunction = "getStatusCdr", $XMLString2);
             preg_match_all('/<statusCode>(.*?)<\/statusCode>/is', $result2, $matches_codigo);
             preg_match_all('/<statusMessage>(.*?)<\/statusMessage>/is', $result2, $matches_mensaje);
@@ -514,7 +517,6 @@ try {
                 $stmt = oci_parse($conn, $update);
                 oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
                 oci_free_statement($stmt);
-
             }else{
                 echo '<img src="images/error.png"><br>';
                 echo 'Sucedio un error al enviar la Nota de Credito <strong>'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong>, vuelva intentarlo mas tarde, Codigo Error '.$matches_codigo[1][0];
