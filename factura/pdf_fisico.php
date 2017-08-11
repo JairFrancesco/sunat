@@ -420,6 +420,24 @@ ob_start();
                 }
                 echo "<span style='font-style: italic;'>Son: ".$letras."</span><br>";
                 ?>
+                <table>
+                    <tr>
+                        <td colspan="2">RECIBÍ CONFORME</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Nombres y Apellidos : ______________________________________</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            DNI : _______________________
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fecha : _________________</td>
+                        <td>Firma y Sello : ____________________</td>
+                    </tr>
+
+                </table>
 
             </td>
             <td colspan="3" style="text-align: right; border-right: solid 1px #000; padding-right: 3px;">Sub Total S/ :</td>
