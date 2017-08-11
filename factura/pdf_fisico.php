@@ -420,23 +420,23 @@ ob_start();
                 }
                 echo "<span style='font-style: italic;'>Son: ".$letras."</span><br>";
                 ?>
-                <table>
+                <table style="padding-top: 8px;">
                     <tr>
                         <td colspan="2">RECIBÍ CONFORME</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Nombres y Apellidos : ______________________________________</td>
+                        <td>Fecha : _________________</td>
+                        <td>Firma y Sello : _________________________</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2" style="height: 18px;">Nombres y Apellidos : ___________________________________________</td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            DNI : _______________________
+                            DNI : ___________________
                         </td>
                     </tr>
-                    <tr>
-                        <td>Fecha : _________________</td>
-                        <td>Firma y Sello : ____________________</td>
-                    </tr>
-
                 </table>
 
             </td>
