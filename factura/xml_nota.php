@@ -109,10 +109,6 @@ try {
 
     try{
 
-
-
-
-
         if($cab_doc_gen['CDG_SUN_ENV']=='N'){
 
             /*  RUC O DNI
