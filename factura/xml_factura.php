@@ -545,7 +545,7 @@ try {
             /* RUTA   ../app/repo/2017/08/08/
             ************************************************************/
             $ruta = explode('-', $fecha);
-            $ruta = '../app/repo/' . $ruta[2] . '/' . $ruta[1] . '/' . $ruta[0] . '/';
+            $ruta = '../app/repo/'.$ruta[2].'/'.$ruta[1].'/'.$ruta[0].'/';
             if (!file_exists($ruta)) {
                 mkdir($ruta, 0777, true);
             }
@@ -553,19 +553,20 @@ try {
 
             ## Creación del archivo .ZIP
             $zip = new ZipArchive;
-            $res = $zip->open($ruta . $nom . '.zip', ZipArchive::CREATE);
-            $zip->addFromString($nom . '.xml', $strings_xml);
+            $res = $zip->open($ruta.$nom.'.zip', ZipArchive::CREATE);
+            $zip->addFromString($nom.'.xml', $strings_xml);
             $zip->close();
 
             
-            $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+            //$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+            $wsdlURL = "billService.wsdl";
             $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
             <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
              <soapenv:Header>
                  <wsse:Security>
                      <wsse:UsernameToken>
-                         <wsse:Username>20532710066MODDATOS</wsse:Username>
-                         <wsse:Password>MODDATOS</wsse:Password>
+                         <wsse:Username>20532710066SURMOTR1</wsse:Username>
+                         <wsse:Password>TOYOTA2051</wsse:Password>
                      </wsse:UsernameToken>
                  </wsse:Security>
              </soapenv:Header>
@@ -588,6 +589,7 @@ try {
             $result2 = soapCall($wsdlURL2, $callFunction = "getStatusCdr", $XMLString2);
             preg_match_all('/<statusCode>(.*?)<\/statusCode>/is', $result2, $matches_codigo);
             preg_match_all('/<statusMessage>(.*?)<\/statusMessage>/is', $result2, $matches_mensaje);
+
             echo '<div style="text-align: center;">';
             if($matches_codigo[1][0]=='0004' || $matches_codigo[1][0] == '0001'){
                 echo '<img src="images/ok.png"><br>';
