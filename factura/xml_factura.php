@@ -557,7 +557,7 @@ try {
             $zip->addFromString($nom . '.xml', $strings_xml);
             $zip->close();
 
-
+            
             $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
             $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
             <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
@@ -571,8 +571,8 @@ try {
              </soapenv:Header>
              <soapenv:Body>
                  <ser:sendBill>
-                    <fileName>' . $nom . '.zip</fileName>
-                    <contentFile>' . base64_encode(file_get_contents($ruta . $nom . '.zip')) . '</contentFile>
+                    <fileName>'.$nom.'.zip</fileName>
+                    <contentFile>'.base64_encode(file_get_contents($ruta.$nom.'.zip')).'</contentFile>
                  </ser:sendBill>
              </soapenv:Body>
             </soapenv:Envelope>';
@@ -580,10 +580,10 @@ try {
 
             $result = soapCall($wsdlURL, $callFunction = "sendBill", $XMLString);
             preg_match_all('/<applicationResponse>(.*?)<\/applicationResponse>/is', $result, $matches);
-            $archivo = fopen($ruta . 'R-' . $nom . '.zip', 'w+');
+            $archivo = fopen($ruta.'R-'.$nom.'.zip', 'w+');
             fputs($archivo, base64_decode($matches[1][0]));
             fclose($archivo);
-            chmod($ruta . 'R-' . $nom . '.zip', 0777);
+            chmod($ruta.'R-'.$nom.'.zip', 0777);
 
             $result2 = soapCall($wsdlURL2, $callFunction = "getStatusCdr", $XMLString2);
             preg_match_all('/<statusCode>(.*?)<\/statusCode>/is', $result2, $matches_codigo);
