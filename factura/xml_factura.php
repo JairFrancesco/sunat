@@ -402,7 +402,7 @@ try {
             //DATOS CLIENTE
             $cac_accounting = $xml->createElement('cac:AccountingCustomerParty');
             $cac_accounting = $Invoice->appendChild($cac_accounting);
-            $cbc = $xml->createElement('cbc:CustomerAssignedAccountID', $cab_doc_gen['CDG_DOC_CLI']);
+            $cbc = $xml->createElement('cbc:CustomerAssignedAccountID', trim($cab_doc_gen['CDG_DOC_CLI']));
             $cbc = $cac_accounting->appendChild($cbc);
             $cbc = $xml->createElement('cbc:AdditionalAccountID', $tipo_doc_num);
             $cbc = $cac_accounting->appendChild($cbc);
