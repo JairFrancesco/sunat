@@ -51,16 +51,16 @@
 
     $ser = $serie[3];
     $num = ltrim($numero, "0");
-    if ($serie[0] == 'F'){
-        if ($serie[1] == 'N'){
+    if ($serie[0] == 'F' || $serie[0] == 'f'){
+        if ($serie[1] == 'N' || $serie[1] == 'n'){
             $tip = 'A';
             $tipd = '07';
         }elseif ($serie[1] == '0') {
             $tip = 'F';
             $tipd = '01';
         }
-    } elseif ($serie[0] == 'B'){
-        if ($serie[1] == 'N'){
+    } elseif ($serie[0] == 'B' || $serie[0] == 'b'){
+        if ($serie[1] == 'N' || $serie[1] == 'n'){
             $tip = 'A';
             $tipd = '07';
         }elseif ($serie[1] == '0') {
@@ -83,22 +83,25 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8">
-            <table class="table table-bordered">
-                <tr class="well">
-                    <th>#</th>
-                    <th>Serie</th>
-                    <th>Numero</th>
-                    <th>Fecha</th>
-                    <th>Nombre Completo</th>
-                    <th>PDF</th>
-                    <th>XML</th>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td><?php echo $serie; ?></td>
-                    <td><?php echo $numero; ?></td>
-                    <td><?php echo $fecha ?></td>
-                    <td><?php echo $nombre; ?></td>
+            <?php
+                echo '<table class="table table-bordered">';
+                echo '<tr class="well">';
+                echo '<th>#</th>';
+                echo '<th>Serie</th>';
+                echo '<th>Numero</th>';
+                echo '<th>Fecha</th>';
+                echo '<th>Nombre Completo</th>';
+                echo '<th>PDF</th>';
+                echo '<th>XML</th>';
+                echo '</tr>';
+                echo '<tr>';
+                echo '<td>1</td>';
+                echo '<td>'.$serie.'</td>';
+                echo '<td>'.$numero.'</td>';
+                echo '<td>'.$fecha.'</td>';
+                echo '<td>'.$nombre.'</td>';
+            ?>
+
                     <td><a href="consulta_descarga.php?file=<?php echo $ruta ?>.pdf&nombre=<?php echo $nombre.'.pdf'; ?>" class="btn btn-default"><span class="glyphicon glyphicon-file"></span> pdf</a></td>
                     <td><a href="consulta_descarga.php?file=<?php echo $ruta ?>.xml&nombre=<?php echo $nombre.'.xml'; ?>" class="btn btn-default"><span class="glyphicon glyphicon-barcode"></span> xml</a></td>
                 </tr>
