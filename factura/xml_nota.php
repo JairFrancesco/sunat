@@ -251,8 +251,21 @@ try {
                 $sql_ref_parse = oci_parse($conn, $sql_ref);
                 oci_execute($sql_ref_parse);
                 oci_fetch_all($sql_ref_parse, $ref, null, null, OCI_FETCHSTATEMENT_BY_ROW);
-                $ref_doc = $ref[0]['CDG_TIP_DOC'][0].'00'.$ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
                 $ref_fecha = date("d-m-Y", strtotime($ref[0]['CDG_FEC_GEN']));
+
+                // comprueba si la referencia de la nota credito es menos a 13-07-2017
+                $fecha_actual = strtotime(date("d-m-Y", strtotime($ref_fecha)));
+                $fecha_fija = strtotime('13-07-2017');
+
+                if($ref[0]['CDG_TIP_DOC'] != 'B') {
+                    if($fecha_actual >= $fecha_fija){
+                        // referencia electronico
+                        $ref_doc = $ref[0]['CDG_TIP_DOC'][0].'00'.$ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
+                    }else{
+                        // referencia fisica
+                        $ref_doc = '000'.$ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
+                    }
+                }
 
                 if($ref[0]['CDG_TIP_DOC'] == 'F'){
                     $doc_ref_tipo = '01';
@@ -323,7 +336,7 @@ try {
 
             $cac = $xml->createElement('cac:DiscrepancyResponse'); $cac = $CreditNote->appendChild($cac);
             $cbc = $xml->createElement('cbc:ReferenceID',$ref_doc); $cbc = $cac->appendChild($cbc);
-            $cbc = $xml->createElement('cbc:ResponseCode','07'); $cbc = $cac->appendChild($cbc);
+            $cbc = $xml->createElement('cbc:ResponseCode','03'); $cbc = $cac->appendChild($cbc);
             $cbc = $xml->createElement('cbc:Description',$cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003']); $cbc = $cac->appendChild($cbc);
 
             $BillingReference = $xml->createElement('cac:BillingReference'); $BillingReference = $CreditNote->appendChild($BillingReference);

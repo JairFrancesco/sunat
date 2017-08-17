@@ -221,7 +221,7 @@
 
                                     }
 
-                                    if($fisico_electro == 1){
+                                   // if($fisico_electro == 1){
                                         if ($row['CDG_TIP_REF'] !='BR' &&  $row['CDG_TIP_REF'] !='BS' ) {
                                             echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
                                             echo '<a href="factura/xml_nota.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">XML</a> ';
@@ -231,11 +231,13 @@
                                             echo '<a href="" class="btn btn-default btn-xs" disabled="">XML</a> ';
                                             echo '<a href="" class="btn btn-default btn-xs" disabled="">COM</a> ';
                                         }
+                                    /*
                                     }else{
                                         echo '<a href="factura/pdf_fisico.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">FSC</a> ';
                                         echo '<a target="_blank" class="btn btn-default btn-xs" disabled="">XML</a> ';
                                         echo '<a target="_blank" class="btn btn-default btn-xs" disabled="">COM</a> ';
                                     }
+                                    */
                                 }
 
                                 if($fisico_electro == 1){
