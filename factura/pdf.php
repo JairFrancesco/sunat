@@ -265,8 +265,19 @@
         $sql_ref_parse = oci_parse($conn, $sql_ref);
         oci_execute($sql_ref_parse);
         oci_fetch_all($sql_ref_parse, $ref, null, null, OCI_FETCHSTATEMENT_BY_ROW);
-        $ref_doc = $ref[0]['CDG_TIP_DOC'][0].'00'.$ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
         $ref_fecha = date("d-m-Y", strtotime($ref[0]['CDG_FEC_GEN']));
+        $fecha_actual = strtotime(date("d-m-Y", strtotime($ref_fecha)));
+        $fecha_fija = strtotime('13-07-2017');
+
+        if($ref[0]['CDG_TIP_DOC'] != 'B') {
+            if($fecha_actual >= $fecha_fija){
+                // referencia electronico
+                $ref_doc = $ref[0]['CDG_TIP_DOC'][0].'00'.$ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
+            }else{
+                // referencia fisica
+                $ref_doc = '000'.$ref[0]['CDG_SER_DOC'].'-'.$ref[0]['CDG_NUM_DOC'];
+            }
+        }
         //print_r($ref);
         //echo $ref_serie;
     }elseif($cab_doc_gen['CDG_EXI_FRA']=='S' && $cab_doc_gen['CDG_TIP_DOC'] !='A'){
