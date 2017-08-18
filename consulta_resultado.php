@@ -45,7 +45,7 @@
 
 <?php
     require "app/coneccion.php";
-    $serie = $_POST['serie'];
+    $serie = strtoupper($_POST['serie']);
     $numero = $_POST['numero'];
     $fecha = $_POST['fecha'];
 
@@ -69,9 +69,41 @@
         }
     }
     $fecha_partida = explode("-", $fecha);
-    $ruta = './app/repo/'.$fecha_partida[2].'/'.$fecha_partida[1].'/'.$fecha_partida[0].'/20532710066-'.$tipd.'-'.$serie.'-'.$numero;
+    $ruta = './app/repo/'.$fecha_partida[2].'/'.$fecha_partida[1].'/'.$fecha_partida[0].'/';
     $nombre = '20532710066-'.$tipd.'-'.$serie.'-'.$numero;
 
+    // comprobacion del pdf
+    if (file_exists($ruta.'20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.pdf')) {
+        $pdf= $ruta.'20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.pdf';
+        $pdf_nombre = '20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.pdf';
+    }else {
+        $pdf = '';
+        $pdf_nombre = '';
+    }
+
+    // comprobacion del xml
+    if (file_exists($ruta.'20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.xml')) {
+        $xml= $ruta.'20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.xml';
+        $xml_nombre = '20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.xml';
+    }elseif(file_exists($ruta.'20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.zip')){
+        $xml= $ruta.'20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.zip';
+        $xml_nombre = '20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.zip';
+    }else{
+        $xml = '';
+        $xml_nombre = '';
+    }
+
+    // comprobacion del cdr
+    if (file_exists($ruta.'R-20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.xml')) {
+        $cdr = $ruta.'R-20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.xml';
+        $cdr_nombre = 'R-20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.xml';
+    }elseif(file_exists($ruta.'R-20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.zip')){
+        $cdr = $ruta.'R-20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.zip';
+        $cdr_nombre = 'R-20532710066-'.$tipd.'-'.$serie.'-'.$numero.'.zip';
+    }else{
+        $cdr = '';
+        $cdr_nombre = '';
+    }
     //$sql_boletas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_anu_sn !='S' and cdg_doc_anu !='S' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_fec_gen Asc"); oci_execute($sql_boletas);
     //while($res_boletas = oci_fetch_array($sql_boletas)){ $boletas[] = $res_boletas; }
 ?>
@@ -84,28 +116,33 @@
     <div class="row">
         <div class="col-lg-8">
             <?php
-                echo '<table class="table table-bordered">';
-                echo '<tr class="well">';
-                echo '<th>#</th>';
-                echo '<th>Serie</th>';
-                echo '<th>Numero</th>';
-                echo '<th>Fecha</th>';
-                echo '<th>Nombre Completo</th>';
-                echo '<th>PDF</th>';
-                echo '<th>XML</th>';
-                echo '</tr>';
-                echo '<tr>';
-                echo '<td>1</td>';
-                echo '<td>'.$serie.'</td>';
-                echo '<td>'.$numero.'</td>';
-                echo '<td>'.$fecha.'</td>';
-                echo '<td>'.$nombre.'</td>';
+                if($pdf != '' && $xml != '' && $cdr != ''){
+                    echo '<table class="table table-bordered">';
+                    echo '<tr class="well">';
+                    echo '<th>#</th>';
+                    echo '<th>Serie</th>';
+                    echo '<th>Numero</th>';
+                    echo '<th>Fecha</th>';
+                    echo '<th>Nombre Completo</th>';
+                    echo '<th>PDF</th>';
+                    echo '<th>XML</th>';
+                    echo '<th>CDR</th>';
+                    echo '</tr>';
+                    echo '<tr>';
+                    echo '<td>1</td>';
+                    echo '<td>'.$serie.'</td>';
+                    echo '<td>'.$numero.'</td>';
+                    echo '<td>'.$fecha.'</td>';
+                    echo '<td>'.$nombre.'</td>';
+                    echo '<td><a href="consulta_descarga.php?file='.$pdf.'&nombre='.$pdf_nombre.'" class="btn btn-default"><span class="glyphicon glyphicon-file"></span> PDF</a></td>';
+                    echo '<td><a href="consulta_descarga.php?file='.$xml.'&nombre='.$xml_nombre.'" class="btn btn-default"><span class="glyphicon glyphicon-barcode"></span> XML</a></td>';
+                    echo '<td><a href="consulta_descarga.php?file='.$cdr.'&nombre='.$cdr_nombre.'" class="btn btn-default"><span class="glyphicon glyphicon-barcode"></span> CDR</a></td>';
+                    echo '</tr>';
+                    echo '</table>';
+                }else{
+                    echo 'Sucedio un error, uno de los documentos no esta disponible por favor informar a sistemas@surmotriz.com';
+                }
             ?>
-
-                    <td><a href="consulta_descarga.php?file=<?php echo $ruta ?>.pdf&nombre=<?php echo $nombre.'.pdf'; ?>" class="btn btn-default"><span class="glyphicon glyphicon-file"></span> pdf</a></td>
-                    <td><a href="consulta_descarga.php?file=<?php echo $ruta ?>.xml&nombre=<?php echo $nombre.'.xml'; ?>" class="btn btn-default"><span class="glyphicon glyphicon-barcode"></span> xml</a></td>
-                </tr>
-            </table>
         </div>
     </div>
     <br>
