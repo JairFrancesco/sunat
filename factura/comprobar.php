@@ -113,6 +113,11 @@ try {
     preg_match_all('/<statusCode>(.*?)<\/statusCode>/is', $result, $matches_codigo);
     preg_match_all('/<statusMessage>(.*?)<\/statusMessage>/is', $result, $matches_mensaje);
     if($matches_codigo[1][0] == '0001' || $matches_codigo[1][0] == '0003'){
+        $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='".$matches_codigo[1][0]."' WHERE cdg_num_doc='".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab_doc_gen['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."'";
+        $stmt = oci_parse($conn, $update);
+        oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+        oci_free_statement($stmt);
+
         echo '<img src="images/successful.jpg" width="400" height="395" style="display:block; margin:auto;" alt=""><br>';
         echo '<div style="text-align: center;">'.$matches_codigo[1][0].'-'.$matches_mensaje[1][0].' '.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'];
         //echo '<a href="terminar.php?gen='.$cab_doc_gen['CDG_COD_GEN'].'&emp='.$cab_doc_gen['CDG_COD_EMP'].'&tip='.$cab_doc_gen['CDG_TIP_DOC'].'&num='.$cab_doc_gen['CDG_NUM_DOC'].'"><button class="action bluebtn"><span class="label"><strong>Terminar '.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'</strong></span></button></a></div>';

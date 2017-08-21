@@ -181,13 +181,16 @@
 						            <td>'.$row['ANU_SN11'].' '.$row['DOC_ANU12'].'</td>
 						            <td>'.$row['SOLES8'].'</td>
 						            <td class="text-right">'.number_format($row['VVP_TOT7'], 2, ".", ",").'</td>';
+                            echo '<td class="text-center">'.$row['CDG_COD_SNT'].'</td>';
+                            /*
                             if ($row['CDG_SUN_ENV']=='S'){
-                                echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
+
                             } elseif ($row['CDG_SUN_ENV']=='C'){
                                 echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
                             } else{
                                 echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
                             }
+                            */
 
                             // arranca el 1 la facturacion electronica
                             $fisico_electro = 1;
