@@ -453,7 +453,11 @@ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
 
 //Realizamos la llamada a nuestra función
 $result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
-$result = trim($result);
+$resultado = trim($result);
+$update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='".$resultado."' WHERE cdg_num_doc='13833' and cdg_cla_doc='BR' and cdg_cod_emp='01' and cdg_cod_gen='01'";
+$stmt = oci_parse($conn, $update);
+oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+oci_free_statement($stmt);
 /*
     // Boletas
     if (isset($boletas))
@@ -475,7 +479,7 @@ $result = trim($result);
         }
     }
 */
-echo $result;
+echo $resultado;
     //print_r($codigo);
 
 

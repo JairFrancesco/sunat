@@ -139,8 +139,8 @@ if (isset($nots)) {
         <div class="col-lg-6 text-right">
             <br>
             <a class="btn btn-primary" href="index.php?emp=<?php echo $_GET['emp']; ?>"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>
-            <a class="btn btn-success" href="resumen_envio.php?gen=<?php echo $_GET['gen']; ?>&emp=<?php echo $_GET['emp']; ?>&fecha=<?php echo $_GET['fecha']; ?>"> Enviar Resumen</a>
-            <a class="btn btn-default" href="./factura/rcomprobacion.php?ticket=201701284687038">Comprobar</a>
+            <a class="btn btn-success" href="factura/resumen_enviar.php?gen=<?php echo $_GET['gen']; ?>&emp=<?php echo $_GET['emp']; ?>&fecha=<?php echo $_GET['fecha']; ?>" target="_blank"> Enviar Resumen</a>
+            <a class="btn btn-default" href="./factura/rcomprobacion.php?ticket=201701284687038" target="_blank">Comprobar</a>
         </div>
     </div>
     <br>
