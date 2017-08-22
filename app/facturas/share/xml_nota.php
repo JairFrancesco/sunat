@@ -60,7 +60,7 @@ $CreditNote->setAttribute('xmlns:xsi',"http://www.w3.org/2001/XMLSchema-instance
     //
     $cac = $xml->createElement('cac:DiscrepancyResponse'); $cac = $CreditNote->appendChild($cac);
         $cbc = $xml->createElement('cbc:ReferenceID',$c13); $cbc = $cac->appendChild($cbc);
-        $cbc = $xml->createElement('cbc:ResponseCode','07'); $cbc = $cac->appendChild($cbc);
+        $cbc = $xml->createElement('cbc:ResponseCode','03'); $cbc = $cac->appendChild($cbc);
         $cbc = $xml->createElement('cbc:Description',$c35); $cbc = $cac->appendChild($cbc);
 
     $BillingReference = $xml->createElement('cac:BillingReference'); $BillingReference = $CreditNote->appendChild($BillingReference);
