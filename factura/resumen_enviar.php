@@ -81,11 +81,11 @@
                 $sql_rboletas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_num_doc between ".$bol[0]." and ".$bol[1]." and cdg_tip_doc='B' order by cdg_fec_gen ASC"); oci_execute($sql_rboletas);
                 while($res_rboletas = oci_fetch_array($sql_rboletas))
                 {
-                    $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
-                    $desc = $desc + $res_rboletas['CDG_DES_TOT'];
-                    $grabadas = $grabadas + ($res_rboletas['CDG_VVP_TOT'] - $res_rboletas['CDG_DES_TOT']);
-                    $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
-                    $total = $total + $res_rboletas['CDG_IMP_NETO'];
+                    $bols[$i]['subtotal'] = $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
+                    $bols[$i]['descuento'] = $desc = $desc + $res_rboletas['CDG_DES_TOT'];
+                    $bols[$i]['gravada'] = $grabadas = $grabadas + ($res_rboletas['CDG_VVP_TOT'] - $res_rboletas['CDG_DES_TOT']);
+                    $bols[$i]['igv'] = $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
+                    $bols[$i]['total'] = $total = $total + $res_rboletas['CDG_IMP_NETO'];
                 }
 
                 $SummaryDocumentsLine = $xml->createElement('sac:SummaryDocumentsLine'); $SummaryDocumentsLine = $Invoice->appendChild($SummaryDocumentsLine);
@@ -157,11 +157,11 @@
                 $sql_rnotas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='" . $gen . "' and cdg_cod_emp='" . $emp . "' and cdg_num_doc between " . $not[0] . " and " . $not[1] . " and cdg_tip_doc='A' order by cdg_fec_gen ASC");
                 oci_execute($sql_rnotas);
                 while ($res_rnotas = oci_fetch_array($sql_rnotas)) {
-                    $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
-                    $desc = $desc + $res_rboletas['CDG_DES_TOT'];
-                    $grabadas = $grabadas + ($res_rnotas['CDG_VVP_TOT'] - $res_rnotas['CDG_DES_TOT']);
-                    $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
-                    $total = $total + $res_rnotas['CDG_IMP_NETO'];
+                    $nots[$i]['subtotal'] = $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
+                    $nots[$i]['descuento'] =  $desc = $desc + $res_rboletas['CDG_DES_TOT'];
+                    $nots[$i]['gravada'] = $grabadas = $grabadas + ($res_rnotas['CDG_VVP_TOT'] - $res_rnotas['CDG_DES_TOT']);
+                    $nots[$i]['igv'] = $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
+                    $nots[$i]['total'] = $total = $total + $res_rnotas['CDG_IMP_NETO'];
                 }
 
                 $SummaryDocumentsLine = $xml->createElement('sac:SummaryDocumentsLine'); $SummaryDocumentsLine = $Invoice->appendChild($SummaryDocumentsLine);
@@ -308,6 +308,7 @@
     preg_match_all('/<statusCode>(.*?)<\/statusCode>/is',soapCall($wsdlURL, $callFunction = "getStatus", $XMLString2) , $codigo); $codigo = $codigo[1][0];
 
     if($codigo == '0'){
+        // guarda las boletas y sus notas en cada uno de sus items
         if (isset($boletas)){
             foreach ( $boletas as $boleta ){
                 $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='".$ticket."' WHERE cdg_num_doc='".$boleta['CDG_NUM_DOC']."' and cdg_cla_doc='".$boleta['CDG_CLA_DOC']."' and cdg_cod_emp='".$boleta['CDG_COD_EMP']."' and cdg_cod_gen='".$boleta['CDG_COD_GEN']."'";
@@ -324,6 +325,21 @@
                 oci_free_statement($stmt);
             }
         }
+        // guarda en la tabla resumenes
+        if (isset($bols)){
+            foreach ($bols as $bol){
+                $update = "update resumenes SET fecha='S', ticket='".$ticket."' WHERE cdg_num_doc='".$boleta['CDG_NUM_DOC']."' and cdg_cla_doc='".$boleta['CDG_CLA_DOC']."' and cdg_cod_emp='".$boleta['CDG_COD_EMP']."' and cdg_cod_gen='".$boleta['CDG_COD_GEN']."'";
+                $stmt = oci_parse($conn, $update);
+                oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+                oci_free_statement($stmt);
+            }
+        }
+        if (isset($nots)){
+            foreach ($nots as $bol){
+
+            }
+        }
+        print_r($bols);
         echo '<div style="text-align: center;">';
         echo '<img src="./images/ok.png"><br>';
         echo 'El Resumen existe y fue procesado correctamente Nro '.$ticket;
