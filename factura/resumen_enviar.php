@@ -328,10 +328,9 @@
         // guarda en la tabla resumenes
         if (isset($bols)){
             foreach ($bols as $bol){
-                $update = "update resumenes SET fecha='S', ticket='".$ticket."' WHERE cdg_num_doc='".$boleta['CDG_NUM_DOC']."' and cdg_cla_doc='".$boleta['CDG_CLA_DOC']."' and cdg_cod_emp='".$boleta['CDG_COD_EMP']."' and cdg_cod_gen='".$boleta['CDG_COD_GEN']."'";
-                $stmt = oci_parse($conn, $update);
-                oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
-                oci_free_statement($stmt);
+                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'4','4','4','4','4','4','4','4','4')";
+                $stmt_insert = oci_parse($conn, $sql_insert);
+                oci_execute($stmt_insert);
             }
         }
         if (isset($nots)){
@@ -339,7 +338,7 @@
 
             }
         }
-        print_r($bols);
+        //print_r($bols);
         echo '<div style="text-align: center;">';
         echo '<img src="./images/ok.png"><br>';
         echo 'El Resumen existe y fue procesado correctamente Nro '.$ticket;
