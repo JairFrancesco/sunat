@@ -336,14 +336,14 @@
         // guarda en la tabla resumenes
         if (isset($bols)){
             foreach ($bols as $bol){
-                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol[2]."','".$bol[0]."','".$bol[1]."','".$bol['subtotal']."','".$bol['descuento']."','".$bol['gravada']."','".$bol['igv']."','".$bol['total']."','".$codigo."')";
+                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol[2]."','".$bol[0]."','".$bol[1]."','".$bol['subtotal']."','".$bol['descuento']."','".$bol['gravada']."','".$bol['igv']."','".$bol['total']."','".$codigo."','".$emp."')";
                 $stmt_insert = oci_parse($conn, $sql_insert);
                 oci_execute($stmt_insert);
             }
         }
         if (isset($nots)){
             foreach ($nots as $not){
-                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$not[2]."','".$not[0]."','".$not[1]."','".$not['subtotal']."','".$not['descuento']."','".$not['gravada']."','".$not['igv']."','".$not['total']."','".$codigo."')";
+                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$not[2]."','".$not[0]."','".$not[1]."','".$not['subtotal']."','".$not['descuento']."','".$not['gravada']."','".$not['igv']."','".$not['total']."','".$codigo."','".$emp."')";
                 $stmt_insert = oci_parse($conn, $sql_insert);
                 oci_execute($stmt_insert);
             }

@@ -181,7 +181,14 @@
 						            <td>'.$row['ANU_SN11'].' '.$row['DOC_ANU12'].'</td>
 						            <td>'.$row['SOLES8'].'</td>
 						            <td class="text-right">'.number_format($row['VVP_TOT7'], 2, ".", ",").'</td>';
-                            echo '<td class="text-center">'.$row['CDG_COD_SNT'].'</td>';
+
+                            //cantidad caracteres sunat
+                            if(strlen($row['CDG_COD_SNT'])==4){
+                                $codigo_sunat = $row['CDG_COD_SNT'];
+                            }else{
+                                $codigo_sunat = substr($row['CDG_COD_SNT'],11,4);
+                            }
+                            echo '<td class="text-center">'.$codigo_sunat.'</td>';
                             /*
                             if ($row['CDG_SUN_ENV']=='S'){
 
