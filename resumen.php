@@ -52,7 +52,11 @@ $dia = date("d-m-Y", strtotime($_GET['fecha']));
 require("app/coneccion.php");
 include "factura/__resumen_boleta_notas.php";
 
-//print_r($nots);
+
+    $sql_resumen = "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_tip_doc='".$tip."' and cdg_num_doc='".$num."'";
+    $sql_parse = oci_parse($conn,$sql_resumen);
+    oci_execute($sql_parse);
+    oci_fetch_all($sql_parse, $cab_doc_gen, null, null, OCI_FETCHSTATEMENT_BY_ROW); $cab_doc_gen = $cab_doc_gen[0];
 
 
     if (isset($bols))

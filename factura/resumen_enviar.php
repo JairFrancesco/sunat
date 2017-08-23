@@ -288,7 +288,12 @@
     </ser:sendSummary>
     </soapenv:Body>
     </soapenv:Envelope>';
+    //$resul = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
+    //echo $resul;
+
+
     preg_match_all('/<ticket>(.*?)<\/ticket>/is', soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString), $ticket); $ticket= $ticket[1][0];
+    //echo $ticket;
 
     $XMLString2 = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
     <soapenv:Header>
@@ -305,9 +310,12 @@
     </ser:getStatus>
     </soapenv:Body>
     </soapenv:Envelope>';
-    preg_match_all('/<statusCode>(.*?)<\/statusCode>/is',soapCall($wsdlURL, $callFunction = "getStatus", $XMLString2) , $codigo); $codigo = $codigo[1][0];
+    //echo $XMLString2;
 
-    if($codigo == '0'){
+    preg_match_all('/<statusCode>(.*?)<\/statusCode>/is',soapCall($wsdlURL, $callFunction = "getStatus", $XMLString2) , $codigo); $codigo = $codigo[1][0];
+    //echo $codigo;
+
+    if($codigo == '0' || $codigo == '0098'){
         // guarda las boletas y sus notas en cada uno de sus items
         if (isset($boletas)){
             foreach ( $boletas as $boleta ){
@@ -328,14 +336,16 @@
         // guarda en la tabla resumenes
         if (isset($bols)){
             foreach ($bols as $bol){
-                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'4','4','4','4','4','4','4','4','4')";
+                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol[2]."','".$bol[0]."','".$bol[1]."','".$bol['subtotal']."','".$bol['descuento']."','".$bol['gravada']."','".$bol['igv']."','".$bol['total']."','".$codigo."')";
                 $stmt_insert = oci_parse($conn, $sql_insert);
                 oci_execute($stmt_insert);
             }
         }
         if (isset($nots)){
-            foreach ($nots as $bol){
-
+            foreach ($nots as $not){
+                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$not[2]."','".$not[0]."','".$not[1]."','".$not['subtotal']."','".$not['descuento']."','".$not['gravada']."','".$not['igv']."','".$not['total']."','".$codigo."')";
+                $stmt_insert = oci_parse($conn, $sql_insert);
+                oci_execute($stmt_insert);
             }
         }
         //print_r($bols);
