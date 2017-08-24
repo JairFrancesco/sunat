@@ -313,29 +313,44 @@
     //echo $XMLString2;
 
     preg_match_all('/<statusCode>(.*?)<\/statusCode>/is',soapCall($wsdlURL, $callFunction = "getStatus", $XMLString2) , $codigo); $codigo = $codigo[1][0];
-    //echo $codigo;
+    echo $codigo;
 
     if($codigo == '0' || $codigo == '0098'){
         // guarda las boletas y sus notas en cada uno de sus items
-        if (isset($boletas)){
-            foreach ( $boletas as $boleta ){
-                $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='".$ticket."' WHERE cdg_num_doc='".$boleta['CDG_NUM_DOC']."' and cdg_cla_doc='".$boleta['CDG_CLA_DOC']."' and cdg_cod_emp='".$boleta['CDG_COD_EMP']."' and cdg_cod_gen='".$boleta['CDG_COD_GEN']."'";
-                $stmt = oci_parse($conn, $update);
-                oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
-                oci_free_statement($stmt);
+        if($codigo == '0'){
+            if (isset($boletas)){
+                foreach ( $boletas as $boleta ){
+                    $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc='".$boleta['CDG_NUM_DOC']."' and cdg_cla_doc='".$boleta['CDG_CLA_DOC']."' and cdg_cod_emp='".$boleta['CDG_COD_EMP']."' and cdg_cod_gen='".$boleta['CDG_COD_GEN']."'";
+                    $stmt = oci_parse($conn, $update);
+                    oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+                    oci_free_statement($stmt);
+                }
             }
-        }
-        if (isset($notas)) {
-            foreach ($notas as $nota) {
-                $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='".$ticket."' WHERE cdg_num_doc='".$nota['CDG_NUM_DOC']."' and cdg_cla_doc='".$nota['CDG_CLA_DOC']."' and cdg_cod_emp='".$nota['CDG_COD_EMP']."' and cdg_cod_gen='".$nota['CDG_COD_GEN']."'";
-                $stmt = oci_parse($conn, $update);
-                oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
-                oci_free_statement($stmt);
+            if (isset($notas)) {
+                foreach ($notas as $nota) {
+                    $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc='".$nota['CDG_NUM_DOC']."' and cdg_cla_doc='".$nota['CDG_CLA_DOC']."' and cdg_cod_emp='".$nota['CDG_COD_EMP']."' and cdg_cod_gen='".$nota['CDG_COD_GEN']."'";
+                    $stmt = oci_parse($conn, $update);
+                    oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+                    oci_free_statement($stmt);
+                }
             }
         }
         // guarda en la tabla resumenes
         if (isset($bols)){
             foreach ($bols as $bol){
+                // consulta los anteriores para los ticket
+                $sql_anterior = "select * from resumenes where inicio='".$bol[0]."' and final='".$bol[1]."' and emp='".$emp."' ";
+                $sql_parse = oci_parse($conn,$sql_anterior);
+                oci_execute($sql_parse);
+                oci_fetch_all($sql_parse, $anteriores, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+                //print_r($anterior);
+                foreach ($anteriores as $anterior){
+                    // eliminar los anteriores
+                    $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol[2]."','".$bol[0]."','".$bol[1]."','".$bol['subtotal']."','".$bol['descuento']."','".$bol['gravada']."','".$bol['igv']."','".$bol['total']."','".$codigo."','".$emp."')";
+                    $stmt_insert = oci_parse($conn, $sql_insert);
+                    oci_execute($stmt_insert);
+                }
+
                 $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol[2]."','".$bol[0]."','".$bol[1]."','".$bol['subtotal']."','".$bol['descuento']."','".$bol['gravada']."','".$bol['igv']."','".$bol['total']."','".$codigo."','".$emp."')";
                 $stmt_insert = oci_parse($conn, $sql_insert);
                 oci_execute($stmt_insert);
