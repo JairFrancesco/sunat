@@ -10,6 +10,12 @@
         include ('__soap.php');
         $wsdlURL = "billService.wsdl";
         $ticket = $_GET['ticket'];
+        if(isset($_GET['op'])){
+            $op = $_GET['op'];
+        }else{
+            $op = '';
+        }
+
         $XMLString2 = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
         <soapenv:Header>
         <wsse:Security>
@@ -29,7 +35,11 @@
         echo $codigo;
         echo '<div style="text-align: center;">';
             if($codigo == '0'){
-                if($_GET['op']=='terminar'){
+                if($op == 'terminar'){
+                    $dia = date("d-m-Y", strtotime($_GET['fecha']));
+                    $gen = $_GET['gen'];
+                    $emp = $_GET['emp'];
+
                     include "conexion.php";
                     include "__resumen_boleta_notas.php";
                     $update = "update resumenes SET CODIGO='".$codigo."' WHERE ticket='".$ticket."'";
@@ -45,7 +55,7 @@
                             oci_free_statement($stmt);
                         }
                     }
-                    if (isset($notas)) {
+                    if (isset($notas)){
                         foreach ($notas as $nota) {
                             $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc='".$nota['CDG_NUM_DOC']."' and cdg_cla_doc='".$nota['CDG_CLA_DOC']."' and cdg_cod_emp='".$nota['CDG_COD_EMP']."' and cdg_cod_gen='".$nota['CDG_COD_GEN']."'";
                             $stmt = oci_parse($conn, $update);

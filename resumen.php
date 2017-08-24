@@ -73,9 +73,6 @@ include "factura/__resumen_boleta_notas.php";
         $check = 0;
     }
 
-    echo $check;
-
-
     if (isset($bols))
     {
         $i = 0;
@@ -169,8 +166,10 @@ if (isset($nots)) {
                     echo '<a class="btn btn-default" href="./factura/rcomprobacion.php?ticket='.$resumenes[0]['TICKET'].'" target="_blank"><span class="glyphicon glyphicon-refresh"></span> Comprobar</a>';
                 // codigo 0098
                 }elseif($check==2){
-                    echo '<a class="btn btn-success" href="factura/rcomprobacion.php?ticket='.$resumenes[0]['TICKET'].'&op=terminar" target="_blank"> Terminar</a> ';
-                    echo '<a class="btn btn-default" href="factura/resumen_enviar.php?gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"> Enviar Denuevo</a>';
+                    echo '<a class="btn btn-warning" href="factura/resumen_enviar.php?gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"><span class="glyphicon glyphicon-upload"></span> Enviar Resumen</a> ';
+                    //echo '<a class="btn btn-success" href="factura/rcomprobacion.php?ticket='.$resumenes[0]['TICKET'].'&op=terminar" target="_blank"> Terminar</a> ';
+                    //echo '<a class="btn btn-default" href="factura/resumen_enviar.php?gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"> Enviar Denuevo</a>';
+                    echo '<a class="btn btn-default" href="./factura/rcomprobacion.php?ticket='.$resumenes[0]['TICKET'].'&op=terminar&gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"><span class="glyphicon glyphicon-refresh"></span> Comprobar</a>';
 
                 }
 

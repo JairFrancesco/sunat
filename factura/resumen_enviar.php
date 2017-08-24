@@ -338,17 +338,17 @@
         // guarda en la tabla resumenes
         if (isset($bols)){
             foreach ($bols as $bol){
+
                 // consulta los anteriores para los ticket
-                $sql_anterior = "select * from resumenes where inicio='".$bol[0]."' and final='".$bol[1]."' and emp='".$emp."' ";
+                $sql_anterior = "select * from resumenes where serie='".$bol[2]."' and  inicio='".$bol[0]."' and emp='".$emp."' ";
                 $sql_parse = oci_parse($conn,$sql_anterior);
                 oci_execute($sql_parse);
                 oci_fetch_all($sql_parse, $anteriores, null, null, OCI_FETCHSTATEMENT_BY_ROW);
-                //print_r($anterior);
                 foreach ($anteriores as $anterior){
                     // eliminar los anteriores
-                    $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol[2]."','".$bol[0]."','".$bol[1]."','".$bol['subtotal']."','".$bol['descuento']."','".$bol['gravada']."','".$bol['igv']."','".$bol['total']."','".$codigo."','".$emp."')";
-                    $stmt_insert = oci_parse($conn, $sql_insert);
-                    oci_execute($stmt_insert);
+                    $sql_delete = "DELETE FROM resumenes WHERE ticket= '".$anterior['TICKET']."' ";
+                    $stmt_delete = oci_parse($conn, $sql_delete);
+                    oci_execute($stmt_delete);
                 }
 
                 $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol[2]."','".$bol[0]."','".$bol[1]."','".$bol['subtotal']."','".$bol['descuento']."','".$bol['gravada']."','".$bol['igv']."','".$bol['total']."','".$codigo."','".$emp."')";
