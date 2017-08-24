@@ -1,4 +1,43 @@
 <?php
+
+
+# Procedimiento para enviar comprobante a la SUNAT
+class feedSoap extends SoapClient{
+    public $XMLStr = "";
+    public function setXMLStr($value){
+        $this->XMLStr = $value;
+    }
+    public function getXMLStr(){
+        return $this->XMLStr;
+    }
+    public function __doRequest($request, $location, $action, $version, $one_way = 0){
+        $request = $this->XMLStr;
+        $dom = new DOMDocument('1.0');
+        try{
+            $dom->loadXML($request);
+        } catch (DOMException $e) {
+            die($e->code);
+        }
+        $request = $dom->saveXML();
+        //Solicitud
+        return parent::__doRequest($request, $location, $action, $version, $one_way = 0);
+    }
+    public function SoapClientCall($SOAPXML){
+        return $this->setXMLStr($SOAPXML);
+    }
+}
+function soapCall($wsdlURL, $callFunction = "", $XMLString){
+    $client = new feedSoap($wsdlURL, array('trace' => true));
+    $reply  = $client->SoapClientCall($XMLString);
+    //echo "REQUEST:\n" . $client->__getFunctions() . "\n";
+    $client->__call("$callFunction", array(), array());
+    //$request = prettyXml($client->__getLastRequest());
+    //echo highlight_string($request, true) . "<br/>\n";
+    return $client->__getLastResponse();
+    //print_r($client);
+}
+
+
     date_default_timezone_set('America/Lima');
     $gen = $_GET['gen'];
     $emp = $_GET['emp'];
@@ -6,26 +45,26 @@
 
     require("app/coneccion.php");
 
-    $sql_boletas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and (cdg_anu_sn, cdg_doc_anu) in (('S','N'),('N','N')) and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_num_doc Asc"); oci_execute($sql_boletas);
-    while($res_boletas = oci_fetch_array($sql_boletas)){
-        //echo $res_boletas['CDG_NUM_DOC'].' '.$res_boletas['CDG_FEC_GEN'].'<br>';
-        $boletas[] = $res_boletas;
-    }
+$sql_boletas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and (cdg_anu_sn, cdg_doc_anu) in (('S','N'),('N','N')) and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_num_doc Asc"); oci_execute($sql_boletas);
+while($res_boletas = oci_fetch_array($sql_boletas)){
+    //echo $res_boletas['CDG_NUM_DOC'].' '.$res_boletas['CDG_FEC_GEN'].'<br>';
+    $boletas[] = $res_boletas;
+}
 
 
-    $sql_notas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_num_doc ASC"); oci_execute($sql_notas);
-    while($res_notas = oci_fetch_array($sql_notas)){ $notas[] = $res_notas; }
+$sql_notas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_num_doc ASC"); oci_execute($sql_notas);
+while($res_notas = oci_fetch_array($sql_notas)){ $notas[] = $res_notas; }
 
 
-    if ($emp == '01')
-    {
-        $serie_boleta = 'B001';
-        $serie_nota = 'BN03';
-    } else
-    {
-        $serie_boleta = 'B004';
-        $serie_nota = 'BN04';
-    }
+if ($emp == '01')
+{
+    $serie_boleta = 'B001';
+    $serie_nota = 'BN03';
+} else
+{
+    $serie_boleta = 'B004';
+    $serie_nota = 'BN04';
+}
 
 $ant = 0;
 $i = 0;
@@ -124,18 +163,14 @@ if (isset($notas)){
     }
 }
 
-
 $ruta = './app/resumenes/'.date('Y').'/'.date('m').'/'.date('d').'/';
 
-if (!file_exists($ruta)) { mkdir($ruta, 0777, true); }
-$j=1;
-while(file_exists($ruta.'20532710066-RC-'.date('Ymd').'-'.$j.'.xml')){
-    $j++;
-    // el valor de i es el actual que se va crear
-}
-
-
-
+    if (!file_exists($ruta)) { mkdir($ruta, 0777, true); }
+    $j=1;
+    while(file_exists($ruta.'20532710066-RC-'.date('Ymd').'-'.$j.'.xml')){
+        $j++;
+        // el valor de i es el actual que se va crear
+    }
 
 
 
@@ -390,43 +425,6 @@ chmod($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.zip', 0777);
 
 
 
-// Envio cliente
-
-# Procedimiento para enviar comprobante a la SUNAT
-class feedSoap extends SoapClient{
-    public $XMLStr = "";
-    public function setXMLStr($value){
-        $this->XMLStr = $value;
-    }
-    public function getXMLStr(){
-        return $this->XMLStr;
-    }
-    public function __doRequest($request, $location, $action, $version, $one_way = 0){
-        $request = $this->XMLStr;
-        $dom = new DOMDocument('1.0');
-        try{
-            $dom->loadXML($request);
-        } catch (DOMException $e) {
-            die($e->code);
-        }
-        $request = $dom->saveXML();
-        //Solicitud
-        return parent::__doRequest($request, $location, $action, $version, $one_way = 0);
-    }
-    public function SoapClientCall($SOAPXML){
-        return $this->setXMLStr($SOAPXML);
-    }
-}
-function soapCall($wsdlURL, $callFunction = "", $XMLString){
-    $client = new feedSoap($wsdlURL, array('trace' => true));
-    $reply  = $client->SoapClientCall($XMLString);
-    //echo "REQUEST:\n" . $client->__getFunctions() . "\n";
-    $client->__call("$callFunction", array(), array());
-    //$request = prettyXml($client->__getLastRequest());
-    //echo highlight_string($request, true) . "<br/>\n";
-    return $client->__getLastResponse();
-    //print_r($client);
-}
 //URL para enviar las solicitudes a SUNAT
 //$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
 $wsdlURL = "billService.wsdl";
@@ -453,11 +451,36 @@ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
 </soapenv:Body>
 </soapenv:Envelope>';
 
-//echo $XMLString;
 //Realizamos la llamada a nuestra función
 $result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
-echo 'codigo de envio: '.$result.' se envio correctamente, cerrar esta ventana.';
-
+$resultado = trim($result);
+$update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='".$resultado."' WHERE cdg_num_doc='13833' and cdg_cla_doc='BR' and cdg_cod_emp='01' and cdg_cod_gen='01'";
+$stmt = oci_parse($conn, $update);
+oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+oci_free_statement($stmt);
+/*
+    // Boletas
+    if (isset($boletas))
+    {
+        foreach ($boletas as $cab_doc_gen){
+            $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='123456' WHERE cdg_num_doc='".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab_doc_gen['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."'";
+            $stmt = oci_parse($conn, $update);
+            oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+            oci_free_statement($stmt);
+        }
+    }
+    // Notas
+    if (isset($notas)){
+        foreach ($notas as $cab_doc_gen){
+            $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='123456' WHERE cdg_num_doc='".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab_doc_gen['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."'";
+            $stmt = oci_parse($conn, $update);
+            oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+            oci_free_statement($stmt);
+        }
+    }
+*/
+echo $resultado;
+    //print_r($codigo);
 
 
 ?>

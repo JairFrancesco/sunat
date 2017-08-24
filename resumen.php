@@ -49,165 +49,29 @@ $gen = $_GET['gen'];
 $emp = $_GET['emp'];
 date_default_timezone_set('America/Lima');
 $dia = date("d-m-Y", strtotime($_GET['fecha']));
-//echo $dia;
-/*
-if ($hace == 0){
-    $dia = date('d-m-Y');
-    //$dia = '27-06-2017';     
-}elseif ($hace == 1){
-    //$fecha = date('d-m-Y');
-    $dia = date("d-m-Y", strtotime("$fecha -1 day"));
-    //$dia = '12-04-2017';
-}elseif ($hace == 2){
-    $fecha = date('d-m-Y');
-    //$dia = date("d-m-Y", strtotime("$fecha -2 day"));
-    $dia = '11-04-2017';
-}elseif ($hace == 3){
-    $fecha = date('d-m-Y');
-    //$dia = date("d-m-Y", strtotime("$fecha -3 day"));
-    $dia = '10-04-2017';
-}elseif ($hace == 4){
-    $fecha = date('d-m-Y');
-    //$dia = date("d-m-Y", strtotime("$fecha -4 day"));
-    $dia = '09-04-2017';
-}elseif ($hace == 5){
-    $fecha = date('d-m-Y');
-    //$dia = date("d-m-Y", strtotime("$fecha -5 day"));
-    $dia = '08-04-2017';
-}elseif ($hace == 6){
-    $fecha = date('d-m-Y');
-    //$dia = date("d-m-Y", strtotime("$fecha -6 day"));
-    $dia = '07-04-2017';
-}elseif ($hace == 7){
-    $fecha = date('d-m-Y');
-    //$dia = date("d-m-Y", strtotime("$fecha -7 day"));
-    $dia = '06-04-2017';
-}
-*/
 require("app/coneccion.php");
-
-$sql_boletas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and (cdg_anu_sn, cdg_doc_anu) in (('S','N'),('N','N')) and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_num_doc Asc"); oci_execute($sql_boletas);
-while($res_boletas = oci_fetch_array($sql_boletas)){
-    //echo $res_boletas['CDG_NUM_DOC'].' '.$res_boletas['CDG_FEC_GEN'].'<br>';
-    $boletas[] = $res_boletas;
-}
+include "factura/__resumen_boleta_notas.php";
 
 
 
-$sql_notas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_num_doc ASC"); oci_execute($sql_notas);
-while($res_notas = oci_fetch_array($sql_notas)){ $notas[] = $res_notas; }
+    $sql_resumen = "select * from resumenes where to_char(fecha,'yyyy-mm-dd')='".$_GET['fecha']."'";
+    $sql_parse = oci_parse($conn,$sql_resumen);
+    oci_execute($sql_parse);
+    oci_fetch_all($sql_parse, $resumenes, null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
-//echo $res_notas['CDG_NUM_DOC'].' '.$res_notas['CDG_FEC_GEN'].'<br>';
-
-if ($emp == '01')
-{
-    $serie_boleta = 'B001';
-    $serie_nota = 'BN03';
-} else
-{
-    $serie_boleta = 'B004';
-    $serie_nota = 'BN04';
-}
-
-$ant = 0;
-$i = 0;
-$h = 0;
-
-if (isset($boletas)){
-    foreach ( $boletas as $boleta ){
-        if ($i==0){
-            $bols[$h][0] = $boleta['CDG_NUM_DOC'];
-            $ant = $boleta['CDG_NUM_DOC'];
-            $i++;
-            if (count($boletas)==1){
-                $bols[$h][1] = $boleta['CDG_NUM_DOC'];
-                $bols[$h][2] = $serie_boleta;
-            }
-        }else {
-            if (($ant+1) == $boleta['CDG_NUM_DOC']){
-                if ($boleta['CDG_NUM_DOC'] == $boletas[count($boletas)-1]['CDG_NUM_DOC']){
-                    if (($ant+2) == $boleta['CDG_NUM_DOC']){
-                        $bols[$h][1] = $ant;
-                        $bols[$h][2] = $serie_boleta;
-                        $h++;
-                        $bols[$h][0] = $boleta['CDG_NUM_DOC'];
-                        $bols[$h][1] = $boleta['CDG_NUM_DOC'];
-                        $bols[$h][2] = $serie_boleta;
-                    }else {
-                        $bols[$h][1] = $boleta['CDG_NUM_DOC'];
-                        $bols[$h][2] = $serie_boleta;
-                    }
-                    $h++;
-                    $i=0;
-                }else {
-                    $ant = $boleta['CDG_NUM_DOC'];
-                }
-            }else {
-                $bols[$h][1] = $ant;
-                $bols[$h][2] = $serie_boleta;
-                $h++;
-                $bols[$h][0] = $boleta['CDG_NUM_DOC'];
-                $ant = $boleta['CDG_NUM_DOC'];
-                if ($boleta['CDG_NUM_DOC'] == $boletas[count($boletas)-1]['CDG_NUM_DOC']){
-                    $bols[$h][1] = $boleta['CDG_NUM_DOC'];
-                    $bols[$h][2] = $serie_boleta;
-                }
-
-            }
+    //print_r($resumenes);
+    if(isset($resumenes[0]['CODIGO'])){
+        if($resumenes[0]['CODIGO'] == '0'){
+            // esta aceptado y comprobado
+            $check = 1;
+        }elseif($resumenes[0]['CODIGO'] == '0098'){
+            //hay resumen pero esta en 0098
+            $check = 2;
         }
+    }else{
+        // no hay resumenes
+        $check = 0;
     }
-}
-
-$ant = 0;
-$i = 0;
-$h = 0;
-if (isset($notas)){
-    foreach ( $notas as $nota ){
-        if ($i==0){
-            $nots[$h][0] = $nota['CDG_NUM_DOC'];
-            $ant = $nota['CDG_NUM_DOC'];
-            $i++;
-            if (count($notas)==1){
-                $nots[$h][1] = $nota['CDG_NUM_DOC'];
-                $nots[$h][2] = $serie_nota;
-            }
-        }else {
-            if (($ant+1) == $nota['CDG_NUM_DOC']){
-                if ($nota['CDG_NUM_DOC'] == $notas[count($notas)-1]['CDG_NUM_DOC']){
-                    if (($ant+2) == $nota['CDG_NUM_DOC']){
-                        $nots[$h][1] = $ant;
-                        $nots[$h][2] = $serie_nota;
-                        $h++;
-                        $nots[$h][0] = $nota['CDG_NUM_DOC'];
-                        $nots[$h][1] = $nota['CDG_NUM_DOC'];
-                        $nots[$h][2] = $serie_nota;
-                    }else {
-                        $nots[$h][1] = $nota['CDG_NUM_DOC'];
-                        $nots[$h][2] = $serie_nota;
-                    }
-                    $h++;
-                    $i=0;
-                }else {
-                    $ant = $nota['CDG_NUM_DOC'];
-                }
-            }else {
-                $nots[$h][1] = $ant;
-                $nots[$h][2] = $serie_nota;
-                $h++;
-                $nots[$h][0] = $nota['CDG_NUM_DOC'];
-                $ant = $nota['CDG_NUM_DOC'];
-                if ($nota['CDG_NUM_DOC'] == $notas[count($notas)-1]['CDG_NUM_DOC']){
-                    $nots[$h][1] = $nota['CDG_NUM_DOC'];
-                    $nots[$h][2] = $serie_nota;
-                }
-
-            }
-        }
-    }
-}
-
-//print_r($nots);
-
 
     if (isset($bols))
     {
@@ -291,63 +155,123 @@ if (isset($nots)) {
             ?>
         </div>
         <div class="col-lg-6 text-right">
-            <br>
-            <a class="btn btn-primary" href="index.php?emp=<?php echo $_GET['emp']; ?>"><span class="glyphicon glyphicon-arrow-left"></span> Regresar</a>
-            <a class="btn btn-success" href="resumen_envio.php?gen=<?php echo $_GET['gen']; ?>&emp=<?php echo $_GET['emp']; ?>&fecha=<?php echo $_GET['fecha']; ?>"> Enviar Resumen</a>
+            <br><br>
+            <?php
+                // no hay nada
+                if($check==0){
+                    echo '<a class="btn btn-primary" href="factura/resumen_enviar.php?gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"> Enviar Resumen</a>';
+
+                // codigo 0
+                }elseif($check==1){
+                    echo '<a class="btn btn-default" href="./factura/rcomprobacion.php?ticket='.$resumenes[0]['TICKET'].'" target="_blank"><span class="glyphicon glyphicon-refresh"></span> Comprobar</a>';
+                // codigo 0098
+                }elseif($check==2){
+                    echo '<a class="btn btn-warning" href="factura/resumen_enviar.php?gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"><span class="glyphicon glyphicon-upload"></span> Enviar Resumen</a> ';
+                    //echo '<a class="btn btn-success" href="factura/rcomprobacion.php?ticket='.$resumenes[0]['TICKET'].'&op=terminar" target="_blank"> Terminar</a> ';
+                    //echo '<a class="btn btn-default" href="factura/resumen_enviar.php?gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"> Enviar Denuevo</a>';
+                    echo '<a class="btn btn-default" href="./factura/rcomprobacion.php?ticket='.$resumenes[0]['TICKET'].'&op=terminar&gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"><span class="glyphicon glyphicon-refresh"></span> Comprobar</a>';
+
+                }
+
+
+            ?>
         </div>
     </div>
     <br>
     <div class="row">
-        <div class="col-lg-10">
+        <div class="col-lg-12">
 
-            <table class="table table-bordered table-stripedd">
-                <tr class="well">
-                    <th>#Nro</th>
-                    <th>Serie</th>
-                    <th>Rango</th>
-                    <th>Sub Total</th>
-                    <th>Total Descuentos</th>
-                    <th>Operaciones Gravadas</th>
-                    <th>IGV 18%</th>
-                    <th class="text-right">Total</th>
-                </tr>
+
                 <?php
+
                     $i = 1;
-                    if (isset($bols))
-                    {
-                        foreach ($matriz_boletas as $bol) {
-                            echo '<tr>';
+                    if($check==2 || $check==1){ // enviado pero esta en 98 o 0
+                        if($check==2){
+                            $class = 'warning';
+                        }else{
+                            $class = 'success';
+                        }
+                        echo '<table class="table table-bordered table-stripedd">
+                            <tr class="'.$class.'">
+                                <th>#Nro</th>
+                                <th>Fecha</th>
+                                <th>Ticket</th>
+                                <th>Serie</th>
+                                <th>Rango</th>
+                                <th>Sub Total</th>
+                                <th>Descuentos</th>
+                                <th>Gravadas</th>
+                                <th>IGV 18%</th>
+                                <th class="text-right">Total</th>
+                                <th>Codigo</th>
+                            </tr>';
+                        foreach($resumenes as $resumen){
+                            echo '<tr class="'.$class.'">';
                             echo '<td>'.$i.'</td>';
-                            echo '<td>'.$bol[2].'</td>';
-                            echo '<td>['.$bol[0].' - '.$bol[1].']</td>';
-                            echo '<td>'.$bol[7].'</td>';
-                            echo '<td>'.$bol[6].'</td>';
-                            /*Grabvadas*/echo '<td>'.$bol[3].'</td>';
-                            echo '<td>'.$bol[4].'</td>';
-                            echo '<td class="text-right">'.$bol[5].'</td>';
+                            echo '<td>'.$resumen['FECHA'].'</td>';
+                            echo '<td>'.$resumen['TICKET'].'</td>';
+                            echo '<td class="text-right">'.$resumen['SERIE'].'</td>';
+                            echo '<td class="text-right">'.$resumen['INICIO'].' - '.$resumen['FINAL'].'</td>';
+                            echo '<td class="text-right">'.$resumen['SUBTOTAL'].'</td>';
+                            echo '<td class="text-right">'.$resumen['DESCUENTO'].'</td>';
+                            echo '<td class="text-right">'.$resumen['GRAVADA'].'</td>';
+                            echo '<td class="text-right">'.$resumen['IGV'].'</td>';
+                            echo '<td class="text-right">'.$resumen['TOTAL'].'</td>';
+                            echo '<td class="text-right">'.$resumen['CODIGO'].'</td>';
                             echo '</tr>';
                             $i++;
                         }
-                    }
-                    if (isset($nots))
-                    {
-                        foreach ($matriz_notas as $not) {
-                            echo '<tr>';
-                            echo '<td>'.$i.'</td>';
-                            echo '<td>'.$not[2].'</td>';
-                            echo '<td>['.$not[0].' - '.$not[1].']</td>';
-                            echo '<td>'.number_format($not[7], 2, '.', ',').'</td>';
-                            echo '<td>'.number_format($not[6], 2, '.', ',').'</td>';
-                            /*Grabvadas*/echo '<td>'.number_format($not[3], 2, '.', ',').'</td>';
-                            echo '<td>'.$not[4].'</td>';
-                            echo '<td class="text-right">'.$not[5].'</td>';
-                            echo '</tr>';
-                            echo '</tr>';
-                            $i++;
+                        echo '</table>';
+                    }elseif($check==0){ // no se nevio nada
+                        echo '<table class="table table-bordered table-stripedd">
+                            <tr class="well">
+                                <th>#Nro</th>
+                                <th>Serie</th>
+                                <th>Rango</th>
+                                <th>Sub Total</th>
+                                <th>Total Descuentos</th>
+                                <th>Operaciones Gravadas</th>
+                                <th>IGV 18%</th>
+                                <th class="text-right">Total</th>
+                            </tr>';
+                        if (isset($bols))
+                        {
+                            foreach ($matriz_boletas as $bol) {
+                                echo '<tr>';
+                                echo '<td>'.$i.'</td>';
+                                echo '<td>'.$bol[2].'</td>';
+                                echo '<td>['.$bol[0].' - '.$bol[1].']</td>';
+                                echo '<td>'.$bol[7].'</td>';
+                                echo '<td>'.$bol[6].'</td>';
+                                /*Grabvadas*/echo '<td>'.$bol[3].'</td>';
+                                echo '<td>'.$bol[4].'</td>';
+                                echo '<td class="text-right">'.$bol[5].'</td>';
+                                echo '</tr>';
+                                $i++;
+                            }
                         }
+                        if (isset($nots))
+                        {
+                            foreach ($matriz_notas as $not) {
+                                echo '<tr>';
+                                echo '<td>'.$i.'</td>';
+                                echo '<td>'.$not[2].'</td>';
+                                echo '<td>['.$not[0].' - '.$not[1].']</td>';
+                                echo '<td>'.number_format($not[7], 2, '.', ',').'</td>';
+                                echo '<td>'.number_format($not[6], 2, '.', ',').'</td>';
+                                /*Grabvadas*/echo '<td>'.number_format($not[3], 2, '.', ',').'</td>';
+                                echo '<td>'.$not[4].'</td>';
+                                echo '<td class="text-right">'.$not[5].'</td>';
+                                echo '</tr>';
+                                echo '</tr>';
+                                $i++;
+                            }
+                        }
+                        echo '</table>';
                     }
+
                 ?>
-            </table>
+
 
         </div>
     </div>

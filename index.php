@@ -181,13 +181,23 @@
 						            <td>'.$row['ANU_SN11'].' '.$row['DOC_ANU12'].'</td>
 						            <td>'.$row['SOLES8'].'</td>
 						            <td class="text-right">'.number_format($row['VVP_TOT7'], 2, ".", ",").'</td>';
+
+                            //cantidad caracteres sunat
+                            if(strlen($row['CDG_COD_SNT'])==4){
+                                $codigo_sunat = $row['CDG_COD_SNT'];
+                            }else{
+                                $codigo_sunat = substr($row['CDG_COD_SNT'],11,4);
+                            }
+                            echo '<td class="text-center">'.$codigo_sunat.'</td>';
+                            /*
                             if ($row['CDG_SUN_ENV']=='S'){
-                                echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
+
                             } elseif ($row['CDG_SUN_ENV']=='C'){
                                 echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
                             } else{
                                 echo '<td class="text-center"><span class="'.$icon.'" aria-hidden="true"></span></td>';
                             }
+                            */
 
                             // arranca el 1 la facturacion electronica
                             $fisico_electro = 1;
@@ -198,8 +208,8 @@
                                     echo '<a href="factura/comprobar.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">COM</a> ';
                                 }elseif($row['CDG_TIP_DOC'] == 'B'){
                                     echo '<a href="factura/pdf.php?gen='.$row['CDG_COD_GEN'].'&emp='.$row['CDG_COD_EMP'].'&tip='.$row['CDG_TIP_DOC'].'&num='.$row['CDG_NUM_DOC'].'" target="_blank" class="btn btn-default btn-xs">PDF</a> ';
-                                    echo '<a href="" class="btn btn-default btn-xs" disabled="">XML</a> ';
-                                    echo '<a href="" class="btn btn-default btn-xs" disabled="">COM</a> ';
+                                    echo '<a class="btn btn-default btn-xs" disabled="">XML</a> ';
+                                    echo '<a href="factura/rbcomprobacion.php?serie='.substr($row['NOMBRE10'],3,4).'&num='.$row['CDG_NUM_DOC'].'&fecha='.date("d-m-Y", strtotime($row['FEC_GEN1'])).'" class="btn btn-default btn-xs" target="_blank">COM</a> ';
                                 }elseif($row['CDG_TIP_DOC'] == 'A'){
                                     $sql_ref = "select * from cab_doc_gen where cdg_cod_gen='".$row['CDG_COD_GEN']."' and cdg_cod_emp='".$row['CDG_COD_EMP']."' and cdg_cla_doc='".$row['CDG_TIP_REF']."' and cdg_num_doc='".$row['CDG_DOC_REF']."'";
                                     $sql_ref_parse = oci_parse($conn, $sql_ref);
