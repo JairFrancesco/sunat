@@ -105,7 +105,7 @@
     /* SEGUNDA FILA cabezera_tipo 0 (no sale nada), 1 si sale
     ***********************************************************/
     if ($cab_doc_gen['CDG_CLA_DOC']=='FS' || $cab_doc_gen['CDG_CLA_DOC']=='BS'  ){
-        if($cab_doc_gen['CDG_CO_CR'] != 'AN'){
+        if($cab_doc_gen['CDG_CO_CR'] != 'AN' && $cab_doc_gen['CDG_CO_CC'] != 'GR'){
             $cabezera_tipo = 1;
             $sql_extendido = "select * from cab_ord_ser 
                     inner join det_ing_ser on dis_pla_veh=cab_ord_ser.cos_pla_veh and dis_cod_gen=cab_ord_ser.cos_cod_gen
@@ -128,7 +128,6 @@
     }else{
         $cabezera_tipo = 0;
     }
-
 
 
     /* ITEMS
