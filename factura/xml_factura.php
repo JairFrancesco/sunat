@@ -145,12 +145,27 @@ try {
             }
 
             if ($cab_doc_gen['CDG_TIP_IMP'] != 'R') {
-                $sql_servicios = "select * from det_doc_ser where DDS_COD_GEN='" . $cab_doc_gen['CDG_COD_GEN'] . "' and DDS_COD_EMP='" . $cab_doc_gen['CDG_COD_EMP'] . "' and DDS_NUM_DOC='" . $cab_doc_gen['CDG_NUM_DOC'] . "' and DDS_CLA_DOC='" . $cab_doc_gen['CDG_CLA_DOC'] . "' ORDER BY rowid Desc";
+                if($cab_doc_gen['CDG_TIP_DOC']=='A'){
+                    $sql_servicios = "select * from det_doc_ser where DDS_COD_GEN='" . $cab_doc_gen['CDG_COD_GEN'] . "' and DDS_COD_EMP='" . $cab_doc_gen['CDG_COD_EMP'] . "' and DDS_NUM_DOC='" . $cab_doc_gen['CDG_DOC_REF'] . "' and DDS_CLA_DOC='" . $cab_doc_gen['CDG_TIP_REF'] . "' ORDER BY rowid Desc";
+                }else{
+                    if($cab_doc_gen['CDG_CO_CC'] == 'GR'){
+                        $sql_servicios = "select * from det_doc_ser inner join cab_ord_ser on cos_num_ot=dds_num_ot and cos_cod_emp=dds_cod_emp and cos_cod_gen=dds_cod_gen where DDS_COD_GEN='" . $cab_doc_gen['CDG_COD_GEN'] . "' and DDS_COD_EMP='" . $cab_doc_gen['CDG_COD_EMP'] . "' and DDS_NUM_DOC='" . $cab_doc_gen['CDG_NUM_DOC'] . "' and DDS_CLA_DOC='" . $cab_doc_gen['CDG_CLA_DOC'] . "' ";
+                    }else{
+                        $sql_servicios = "select * from det_doc_ser where DDS_COD_GEN='" . $cab_doc_gen['CDG_COD_GEN'] . "' and DDS_COD_EMP='" . $cab_doc_gen['CDG_COD_EMP'] . "' and DDS_NUM_DOC='" . $cab_doc_gen['CDG_NUM_DOC'] . "' and DDS_CLA_DOC='" . $cab_doc_gen['CDG_CLA_DOC'] . "' ORDER BY rowid Desc";
+                    }
+
+                }
+                //$sql_servicios = "select * from det_doc_ser where DDS_COD_GEN='" . $cab_doc_gen['CDG_COD_GEN'] . "' and DDS_COD_EMP='" . $cab_doc_gen['CDG_COD_EMP'] . "' and DDS_NUM_DOC='" . $cab_doc_gen['CDG_NUM_DOC'] . "' and DDS_CLA_DOC='" . $cab_doc_gen['CDG_CLA_DOC'] . "' ORDER BY rowid Desc";
                 $sql_servicios_parse = oci_parse($conn, $sql_servicios);
                 oci_execute($sql_servicios_parse);
                 oci_fetch_all($sql_servicios_parse, $servicios, null, null, OCI_FETCHSTATEMENT_BY_ROW);
                 foreach ($servicios as $servicio) {
-                    $items[$i]['codigo'] = $servicio['DDS_COD_PRO']; // codigo
+                    if($cab_doc_gen['CDG_CO_CC'] == 'GR'){
+                        $items[$i]['codigo'] = $servicio['COS_COD_SAP']; // codigo
+                    }else{
+                        $items[$i]['codigo'] = $servicio['DDS_COD_PRO']; // codigo
+                    }
+                    //$items[$i]['codigo'] = $servicio['DDS_COD_PRO']; // codigo
                     $items[$i]['descripcion'] = $servicio['DDS_DES_001']; // descripcion
                     $items[$i]['cantidad'] = $servicio['DDS_CAN_PRO']; // cantidad
                     $items[$i]['unitario'] = number_format($servicio['DDS_VVP_SOL'], 2, '.', ''); // precio unitario
