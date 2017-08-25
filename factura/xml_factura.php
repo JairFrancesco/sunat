@@ -61,6 +61,18 @@
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $cab_doc_gen, null, null, OCI_FETCHSTATEMENT_BY_ROW); $cab_doc_gen = $cab_doc_gen[0];
 
+    /*  MONEDA
+    *********************************************/
+    if($cab_doc_gen['CDG_TIP_CAM'] != 0){
+        $moneda = 'USD';
+        $moneda_nombre = '$$';
+        $moneda_leyenda = 'dolares';
+    }else{
+        $moneda = 'PEN';
+        $moneda_nombre = 'S/';
+        $moneda_leyenda = 'soles';
+    }
+
     /* FECHA 26-07-2017
      ********************/
     $fecha = date("d-m-Y", strtotime($cab_doc_gen['CDG_FEC_GEN']));
@@ -176,19 +188,27 @@ try {
                 }
             }
 
+            // otros contabilidad
             if ($cab_doc_gen['CDG_TIP_IMP'] != 'R') {
                 $sql_otros = "select * from det_doc_otr where DDO_COD_GEN='" . $cab_doc_gen['CDG_COD_GEN'] . "' and DDO_COD_EMP='" . $cab_doc_gen['CDG_COD_EMP'] . "' and DDO_NUM_DOC='" . $cab_doc_gen['CDG_NUM_DOC'] . "' and DDO_CLA_DOC='" . $cab_doc_gen['CDG_CLA_DOC'] . "' ORDER BY rowid Desc";
                 $sql_otros_parse = oci_parse($conn, $sql_otros);
                 oci_execute($sql_otros_parse);
                 oci_fetch_all($sql_otros_parse, $otros, null, null, OCI_FETCHSTATEMENT_BY_ROW);
                 foreach ($otros as $otro) {  // DDO_DES_OTR
-                    $items[$i]['codigo'] = '';
+                    $items[$i]['codigo'] = '-- -- --';
                     $items[$i]['descripcion'] = $otro['DDO_DES_OTR'];
-                    $items[$i]['cantidad'] = '';
-                    $items[$i]['unitario'] = '';
-                    $items[$i]['importe'] = '';
-                    $items[$i]['descuento'] = '';
-                    $items[$i]['venta'] = '';
+                    $items[$i]['cantidad'] = '1';
+                    if($moneda == 'PEN'){
+                        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); // subtotal
+                        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); // subtotal
+                        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); // descuento
+                        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas
+                    }else{
+                        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.',','); // subtotal
+                        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.',','); // subtotal
+                        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_DOL'],2,'.',','); // descuento
+                        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_DOL']-$cab_doc_gen['CDG_DES_DOL']),2,'.',',');  // gravadas
+                    }
                     $i++;
                 }
             }
@@ -245,14 +265,22 @@ try {
             ***********************************************/
             if ($cab_doc_gen['CDG_EXI_FRA'] == 'S') {
                 $subtotal = number_format((($cab_doc_gen['CDG_VVP_TOT']) - ($cab_doc_gen['CDG_TOT_FRA'] / (1 + $cab_doc_gen['CDG_POR_IGV'] / 100))), 2, '.', '');
+                $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
                 $gravadas = number_format((($cab_doc_gen['CDG_VVP_TOT']) - ($cab_doc_gen['CDG_TOT_FRA'] / (1 + $cab_doc_gen['CDG_POR_IGV'] / 100)) - $cab_doc_gen['CDG_DES_TOT']), 2, '.', '');
                 $igv = number_format(($cab_doc_gen['CDG_IGV_TOT'] - ($cab_doc_gen['CDG_TOT_FRA'] / (1 + $cab_doc_gen['CDG_POR_IGV'] / 100)) * ($cab_doc_gen['CDG_POR_IGV'] / 100)), 2, '.', '');
             } else {
-                $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'], 2, '.', '');
-                $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT'] - $cab_doc_gen['CDG_DES_TOT']), 2, '.', '');  // gravadas cdg_vvp_tot-cdg_des_tot
-                $igv = number_format($cab_doc_gen['CDG_IGV_TOT'], 2, '.', ''); // igv total
+                if($moneda == 'PEN'){
+                    $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
+                    $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
+                    $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
+                    $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',','); // igv total
+                }else{ // dolares
+                    $subtotal = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.',',');
+                    $descuentos = number_format($cab_doc_gen['CDG_DES_DOL'],2,'.',',');
+                    $gravadas = number_format(($cab_doc_gen['CDG_VVP_DOL']-$cab_doc_gen['CDG_DES_DOL']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
+                    $igv = number_format($cab_doc_gen['CDG_IGV_DOL'],2,'.',','); // igv total
+                }
             }
-            $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'], 2, '.', '');
             $total = number_format($cab_doc_gen['CDG_IMP_NETO'], 2, '.', ''); // total cdg_imp_neto
 
 
@@ -309,7 +337,7 @@ try {
             $cbc = $monetary->appendChild($cbc);
             $cbc = $xml->createElement('cbc:PayableAmount', $descuentos);
             $cbc = $monetary->appendChild($cbc);
-            $cbc->setAttribute('currencyID', "PEN");
+            $cbc->setAttribute('currencyID', $moneda);
             // 1001 operaciones gravadas
             $monetary = $xml->createElement('sac:AdditionalMonetaryTotal');
             $monetary = $sac->appendChild($monetary);
@@ -317,7 +345,7 @@ try {
             $cbc = $monetary->appendChild($cbc);
             $cbc = $xml->createElement('cbc:PayableAmount', $gravadas);
             $cbc = $monetary->appendChild($cbc);
-            $cbc->setAttribute('currencyID', "PEN");
+            $cbc->setAttribute('currencyID', $moneda);
             // 1002 operaciones inafectas
             $monetary = $xml->createElement('sac:AdditionalMonetaryTotal');
             $monetary = $sac->appendChild($monetary);
@@ -325,7 +353,7 @@ try {
             $cbc = $monetary->appendChild($cbc);
             $cbc = $xml->createElement('cbc:PayableAmount', '0.00');
             $cbc = $monetary->appendChild($cbc);
-            $cbc->setAttribute('currencyID', "PEN");
+            $cbc->setAttribute('currencyID', $moneda);
 
             // el 1003 total valor venta - operaciones exoneradas
             $monetary = $xml->createElement('sac:AdditionalMonetaryTotal');
@@ -334,7 +362,7 @@ try {
             $cbc = $monetary->appendChild($cbc);
             $cbc = $xml->createElement('cbc:PayableAmount', '0.00');
             $cbc = $monetary->appendChild($cbc);
-            $cbc->setAttribute('currencyID', "PEN");
+            $cbc->setAttribute('currencyID', $moneda);
 
             // Firma electronica
             $ext = $xml->createElement('ext:UBLExtension');
@@ -358,7 +386,7 @@ try {
             $cbc = $xml->createElement('cbc:InvoiceTypeCode', $doc);
             $cbc = $Invoice->appendChild($cbc);
             //Tipo de moneda en la cual se emite la factura electronica
-            $cbc = $xml->createElement('cbc:DocumentCurrencyCode', 'PEN');
+            $cbc = $xml->createElement('cbc:DocumentCurrencyCode', $moneda);
             $cbc = $Invoice->appendChild($cbc);
 
             // 2.- Parte de la firma electronica. esto es de quien creo la firma electronica
@@ -435,12 +463,12 @@ try {
             $taxtotal = $Invoice->appendChild($taxtotal);
             $cbc = $xml->createElement('cbc:TaxAmount', $igv);
             $cbc = $taxtotal->appendChild($cbc);
-            $cbc->setAttribute('currencyID', "PEN");
+            $cbc->setAttribute('currencyID', $moneda);
             $taxtsubtotal = $xml->createElement('cac:TaxSubtotal');
             $taxtsubtotal = $taxtotal->appendChild($taxtsubtotal);
             $cbc = $xml->createElement('cbc:TaxAmount', $igv);
             $cbc = $taxtsubtotal->appendChild($cbc);
-            $cbc->setAttribute('currencyID', "PEN");
+            $cbc->setAttribute('currencyID', $moneda);
             $taxtcategory = $xml->createElement('cac:TaxCategory');
             $taxtcategory = $taxtsubtotal->appendChild($taxtcategory);
             $taxscheme = $xml->createElement('cac:TaxScheme');
@@ -457,7 +485,7 @@ try {
             $legal = $Invoice->appendChild($legal);
             $cbc = $xml->createElement('cbc:PayableAmount', $total);
             $cbc = $legal->appendChild($cbc);
-            $cbc->setAttribute('currencyID', "PEN");
+            $cbc->setAttribute('currencyID', $moneda);
 
             $i = 1;
             foreach ($items as $item) {
@@ -470,14 +498,14 @@ try {
                 $cbc->setAttribute('unitCode', "NIU");// cantidad
                 $cbc = $xml->createElement('cbc:LineExtensionAmount', $item['venta']);
                 $cbc = $InvoiceLine->appendChild($cbc);
-                $cbc->setAttribute('currencyID', "PEN");// valor venta con descuento
+                $cbc->setAttribute('currencyID', $moneda);// valor venta con descuento
                 $pricing = $xml->createElement('cac:PricingReference');
                 $pricing = $InvoiceLine->appendChild($pricing);// precio unitario del producto con igv
                 $cac = $xml->createElement('cac:AlternativeConditionPrice');
                 $cac = $pricing->appendChild($cac);
                 $cbc = $xml->createElement('cbc:PriceAmount', $item['unitario']);
                 $cbc = $cac->appendChild($cbc);
-                $cbc->setAttribute('currencyID', "PEN");// precio unitario con igv
+                $cbc->setAttribute('currencyID', $moneda);// precio unitario con igv
                 $cbc = $xml->createElement('cbc:PriceTypeCode', '01');
                 $cbc = $cac->appendChild($cbc);// 01 con igv, 02 operaciones no onerosas
                 $allowance = $xml->createElement('cac:AllowanceCharge');
@@ -486,17 +514,17 @@ try {
                 $cbc = $allowance->appendChild($cbc);// false para descuento
                 $cbc = $xml->createElement('cbc:Amount', $item['descuento']);
                 $cbc = $allowance->appendChild($cbc);
-                $cbc->setAttribute('currencyID', "PEN");// descuento
+                $cbc->setAttribute('currencyID', $moneda);// descuento
                 $taxtotal = $xml->createElement('cac:TaxTotal');
                 $taxtotal = $InvoiceLine->appendChild($taxtotal);// igv del total del producto aplicado ya el descuento *0.18
                 $cbc = $xml->createElement('cbc:TaxAmount', number_format($item['venta'] * 0.18, 2, '.', ''));
                 $cbc = $taxtotal->appendChild($cbc);
-                $cbc->setAttribute('currencyID', "PEN");
+                $cbc->setAttribute('currencyID', $moneda);
                 $taxtsubtotal = $xml->createElement('cac:TaxSubtotal');
                 $taxtsubtotal = $taxtotal->appendChild($taxtsubtotal);
                 $cbc = $xml->createElement('cbc:TaxAmount', number_format($item['venta'] * 0.18, 2, '.', ''));
                 $cbc = $taxtsubtotal->appendChild($cbc);
-                $cbc->setAttribute('currencyID', "PEN");
+                $cbc->setAttribute('currencyID', $moneda);
                 $taxtcategory = $xml->createElement('cac:TaxCategory');
                 $taxtcategory = $taxtsubtotal->appendChild($taxtcategory);
                 $cbc = $xml->createElement('cbc:TaxExemptionReasonCode', '10');
@@ -521,7 +549,7 @@ try {
                 $price = $InvoiceLine->appendChild($price);// precio unitario sin igv ejm 83.05
                 $cbc = $xml->createElement('cbc:PriceAmount', $item['unitario']);
                 $cbc = $price->appendChild($cbc);
-                $cbc->setAttribute('currencyID', "PEN");
+                $cbc->setAttribute('currencyID', $moneda);
                 $i++;
             }
 
@@ -574,16 +602,16 @@ try {
             $zip->close();
 
             
-            //$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+            $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
             //20532710066SURMOTR1  TOYOTA2051
-            $wsdlURL = "billService.wsdl";
+            //$wsdlURL = "billService.wsdl";
             $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
             <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
              <soapenv:Header>
                  <wsse:Security>
                      <wsse:UsernameToken>
-                         <wsse:Username>20532710066SURMOTR1</wsse:Username>
-                         <wsse:Password>TOYOTA2051</wsse:Password>
+                         <wsse:Username>20532710066MODDATOS</wsse:Username>
+                         <wsse:Password>MODDATOS</wsse:Password>
                      </wsse:UsernameToken>
                  </wsse:Security>
              </soapenv:Header>
