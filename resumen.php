@@ -52,9 +52,7 @@ $dia = date("d-m-Y", strtotime($_GET['fecha']));
 require("app/coneccion.php");
 include "factura/__resumen_boleta_notas.php";
 
-
-
-    $sql_resumen = "select * from resumenes where to_char(fecha,'yyyy-mm-dd')='".$_GET['fecha']."'";
+    $sql_resumen = "select * from resumenes where serie='".$bols[0][2]."' and  inicio='".$bols[0][0]."' and emp='".$emp."' and to_char(fecha,'yyyy-mm-dd')='".$_GET['fecha']."'";
     $sql_parse = oci_parse($conn,$sql_resumen);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $resumenes, null, null, OCI_FETCHSTATEMENT_BY_ROW);
