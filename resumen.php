@@ -42,6 +42,7 @@
     </style>
 </head>
 <body>
+
 <?php
 
 $hace = $_GET['h'];
@@ -168,11 +169,15 @@ if (isset($nots)) {
                     //echo '<a class="btn btn-success" href="factura/rcomprobacion.php?ticket='.$resumenes[0]['TICKET'].'&op=terminar" target="_blank"> Terminar</a> ';
                     //echo '<a class="btn btn-default" href="factura/resumen_enviar.php?gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"> Enviar Denuevo</a>';
                     echo '<a class="btn btn-default" href="./factura/rcomprobacion.php?ticket='.$resumenes[0]['TICKET'].'&op=terminar&gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"><span class="glyphicon glyphicon-refresh"></span> Comprobar</a>';
-
                 }
-
-
             ?>
+        </div>
+        <div class="col-lg-12">
+            <blockquote>
+                <p>0: Proceso Correctamente <br>
+                    98: En Proceso <br>
+                    99: Proceso con Errores</p>
+            </blockquote>
         </div>
     </div>
     <br>
