@@ -265,20 +265,20 @@ try {
             ***********************************************/
             if ($cab_doc_gen['CDG_EXI_FRA'] == 'S') {
                 $subtotal = number_format((($cab_doc_gen['CDG_VVP_TOT']) - ($cab_doc_gen['CDG_TOT_FRA'] / (1 + $cab_doc_gen['CDG_POR_IGV'] / 100))), 2, '.', '');
-                $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
+                $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
                 $gravadas = number_format((($cab_doc_gen['CDG_VVP_TOT']) - ($cab_doc_gen['CDG_TOT_FRA'] / (1 + $cab_doc_gen['CDG_POR_IGV'] / 100)) - $cab_doc_gen['CDG_DES_TOT']), 2, '.', '');
                 $igv = number_format(($cab_doc_gen['CDG_IGV_TOT'] - ($cab_doc_gen['CDG_TOT_FRA'] / (1 + $cab_doc_gen['CDG_POR_IGV'] / 100)) * ($cab_doc_gen['CDG_POR_IGV'] / 100)), 2, '.', '');
             } else {
                 if($moneda == 'PEN'){
-                    $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',',');
-                    $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
-                    $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
+                    $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
+                    $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
+                    $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
                     $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',','); // igv total
                 }else{ // dolares
-                    $subtotal = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.',',');
-                    $descuentos = number_format($cab_doc_gen['CDG_DES_DOL'],2,'.',',');
-                    $gravadas = number_format(($cab_doc_gen['CDG_VVP_DOL']-$cab_doc_gen['CDG_DES_DOL']),2,'.',',');  // gravadas cdg_vvp_tot-cdg_des_tot
-                    $igv = number_format($cab_doc_gen['CDG_IGV_DOL'],2,'.',','); // igv total
+                    $subtotal = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.','');
+                    $descuentos = number_format($cab_doc_gen['CDG_DES_DOL'],2,'.','');
+                    $gravadas = number_format(($cab_doc_gen['CDG_VVP_DOL']-$cab_doc_gen['CDG_DES_DOL']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
+                    $igv = number_format($cab_doc_gen['CDG_IGV_DOL'],2,'.',''); // igv total
                 }
             }
             $total = number_format($cab_doc_gen['CDG_IMP_NETO'], 2, '.', ''); // total cdg_imp_neto
