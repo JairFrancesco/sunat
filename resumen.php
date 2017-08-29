@@ -153,9 +153,10 @@ if (isset($nots)) {
                 }
             ?>
         </div>
-        <div class="col-lg-6 text-right">
+        <div class="col-lg-6 text-right">           
             <br><br>
             <?php
+                echo '<a class="btn btn-primary" href="factura/resumenes.php?mes='.date("Y-m", strtotime($_GET['fecha'])).'&emp='.$_GET['emp'].'" target="_blank"> Resumenes Mes</a> ';
                 // no hay nada
                 if($check==0){
                     echo '<a class="btn btn-primary" href="factura/resumen_enviar.php?gen='.$_GET["gen"].'&emp='.$_GET["emp"].'&fecha='.$_GET["fecha"].'" target="_blank"> Enviar Resumen</a>';
