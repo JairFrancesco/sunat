@@ -157,8 +157,8 @@
                 $sql_rnotas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='" . $gen . "' and cdg_cod_emp='" . $emp . "' and cdg_num_doc between " . $not[0] . " and " . $not[1] . " and cdg_tip_doc='A' order by cdg_fec_gen ASC");
                 oci_execute($sql_rnotas);
                 while ($res_rnotas = oci_fetch_array($sql_rnotas)) {
-                    $nots[$i]['subtotal'] = $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
-                    $nots[$i]['descuento'] =  $desc = $desc + $res_rboletas['CDG_DES_TOT'];
+                    $nots[$i]['subtotal'] = $sub = $sub +  $res_rnotas['CDG_VVP_TOT'];
+                    $nots[$i]['descuento'] =  $desc = $desc + $res_rnotas['CDG_DES_TOT'];
                     $nots[$i]['gravada'] = $grabadas = $grabadas + ($res_rnotas['CDG_VVP_TOT'] - $res_rnotas['CDG_DES_TOT']);
                     $nots[$i]['igv'] = $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
                     $nots[$i]['total'] = $total = $total + $res_rnotas['CDG_IMP_NETO'];
