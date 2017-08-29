@@ -53,7 +53,7 @@ $dia = date("d-m-Y", strtotime($_GET['fecha']));
 require("app/coneccion.php");
 include "factura/__resumen_boleta_notas.php";
 
-    $sql_resumen = "select * from resumenes where serie='".$bols[0][2]."' and  inicio='".$bols[0][0]."' and emp='".$emp."' and to_char(fecha,'yyyy-mm-dd')='".$_GET['fecha']."'";
+    $sql_resumen = "select * from resumenes where emp='".$emp."' and to_char(fecha,'yyyy-mm-dd')='".$_GET['fecha']."'";
     $sql_parse = oci_parse($conn,$sql_resumen);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $resumenes, null, null, OCI_FETCHSTATEMENT_BY_ROW);
@@ -82,7 +82,7 @@ include "factura/__resumen_boleta_notas.php";
             $grabadas = 0;
             $igv = 0;
             $total = 0;
-        $sql_rboletas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_num_doc between ".$bol[0]." and ".$bol[1]." and cdg_tip_doc='B' order by cdg_fec_gen ASC"); oci_execute($sql_rboletas);
+            $sql_rboletas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_num_doc between ".$bol[0]." and ".$bol[1]." and cdg_tip_doc='B' order by cdg_fec_gen ASC"); oci_execute($sql_rboletas);
             while($res_rboletas = oci_fetch_array($sql_rboletas))
             {
                 $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
@@ -118,8 +118,8 @@ if (isset($nots)) {
         $sql_rnotas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='" . $gen . "' and cdg_cod_emp='" . $emp . "' and cdg_num_doc between " . $not[0] . " and " . $not[1] . " and cdg_tip_doc='A' order by cdg_fec_gen ASC");
         oci_execute($sql_rnotas);
         while ($res_rnotas = oci_fetch_array($sql_rnotas)) {
-            $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
-            $desc = $desc + $res_rboletas['CDG_DES_TOT'];
+            $sub = $sub +  $res_rnotas['CDG_VVP_TOT'];
+            $desc = $desc + $res_rnotas['CDG_DES_TOT'];
             $grabadas = $grabadas + ($res_rnotas['CDG_VVP_TOT'] - $res_rnotas['CDG_DES_TOT']);
             $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
             $total = $total + $res_rnotas['CDG_IMP_NETO'];
