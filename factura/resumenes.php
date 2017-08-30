@@ -37,7 +37,7 @@
             <div class="col-lg-12">
                 <?php 
                     require ('conexion.php');
-                    $sql_resumenes = "select * from resumenes WHERE to_char(fecha,'yyyy-mm')='".$_GET['mes']."' and emp='".$_GET['emp']."'";
+                    $sql_resumenes = "select * from resumenes WHERE to_char(fecha,'yyyy-mm')='".$_GET['mes']."' and emp='".$_GET['emp']."' order by fecha Desc";
                     $sql_parse = oci_parse($conn,$sql_resumenes);
                     oci_execute($sql_parse);
                     oci_fetch_all($sql_parse, $resumenes, null, null, OCI_FETCHSTATEMENT_BY_ROW); 
