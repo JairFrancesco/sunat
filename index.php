@@ -147,7 +147,6 @@
 			</thead>
 			<tbody>
 				<?php
-
                     require("app/coneccion.php");
                     $curs = oci_new_cursor($conn);
 					$sql = "begin PKG_ELECTRONICA.docs('02','".$emp."',".$pagina.",'".$fecha_inicio."','".$fecha_final."',:docs); end;";
