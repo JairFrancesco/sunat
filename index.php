@@ -97,6 +97,7 @@
                 $fecha = date("Y-m-d");
             }
 
+
             if ($fecha != 'N'){
                 echo '<br><br><a class="btn btn-primary" href="resumen.php?h=0&gen=02&emp=' . $emp . '&fecha=' . $fecha . '" target="_blank"><span class="glyphicon glyphicon-download-alt"></span> Resumen Diario</a>';
             }
@@ -148,6 +149,27 @@
 			<tbody>
 				<?php
                     require("app/coneccion.php");
+                    if(isset($_GET['fecha_inicio']) && isset($_GET['fecha_final'])){
+                        if ($_GET['fecha_inicio'] == $_GET['fecha_final']) {
+                            $fecha_documentos = $_GET['fecha_inicio'];
+                            $check_documentos = 1;
+                        }else{
+                            $check_documentos = 0;    
+                        }
+                        
+                    }else{
+                        $fecha_documentos = date("d-m-Y");
+                        $check_documentos = 1;
+                    }
+                    echo $check_documentos;
+                    if($check_documentos == 1){
+                        $sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='02' and cdg_cod_emp='".$_GET['emp']."' and to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha_documentos."'";
+                        $sql_parse = oci_parse($conn,$sql_cab_doc_gen);
+                        oci_execute($sql_parse);
+                        oci_fetch_all($sql_parse, $documentos, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+                    }
+                        //print_r($documentos);
+
                     $curs = oci_new_cursor($conn);
 					$sql = "begin PKG_ELECTRONICA.docs('02','".$emp."',".$pagina.",'".$fecha_inicio."','".$fecha_final."',:docs); end;";
 					$stid = oci_parse($conn,$sql);
@@ -269,7 +291,66 @@
 
                         //}
                     }
-				?>
+                    if($check_documentos == 1){
+                        $total_sf = 0;
+                        $total_ef = 0;
+                        $total_sb = 0;
+                        $total_eb = 0;
+                        $total_sa = 0;
+                        $total_ea = 0;
+                        $total_s = 0;
+                        $total_e = 0;
+                        echo count($documentos);
+                        foreach ($documentos as $documento) {
+                            // sacamos los eliminados
+                            if($documento['CDG_ANU_SN']!='S' && $documento['CDG_DOC_ANU']!='S'){
+                                //facturas
+                                if($documento['CDG_TIP_DOC'] == 'F'){
+                                    $total_sf = $total_sf + $documento['CDG_IMP_NETO'];
+                                    if($documento['CDG_COD_SNT'] == '0001'){
+                                        $total_ef = $total_ef + $documento['CDG_IMP_NETO'];
+                                    }
+                                }
+                                //boletas
+                                if($documento['CDG_TIP_DOC'] == 'B'){
+                                    $total_sb = $total_sb + $documento['CDG_IMP_NETO'];
+                                    if($documento['CDG_COD_SNT'] == '0001'){
+                                        $total_eb = $total_eb + $documento['CDG_IMP_NETO'];
+                                    }
+                                }
+                                //notas                            
+                                if($documento['CDG_TIP_DOC'] == 'A'){
+                                    $total_sa = $total_sa + $documento['CDG_IMP_NETO'];
+                                    if($documento['CDG_COD_SNT'] == '0001'){
+                                        $total_ea = $total_ea + $documento['CDG_IMP_NETO'];
+                                    }
+                                }
+                                //totales
+                                $total_s = $total_s + $documento['CDG_IMP_NETO'];
+                                if($documento['CDG_COD_SNT'] == '0001'){
+                                    $total_e = $total_e + $documento['CDG_IMP_NETO'];
+                                }
+                            }
+                        }
+
+                        if($total_s == $total_e){
+                            $class_total = 'success';
+                        }else{
+                            $class_total = 'danger';
+                        }
+                        echo '<tr class="'.$class_total.'">';
+                        echo '<td colspan="2"><strong>Facturas '.$total_sf.' | '.$total_ef.'</strong></td>';
+                        echo '<td><strong>Boletas '.$total_sb.' | '.$total_eb.'</strong></td>';
+                        echo '<td colspan="2"><strong>Notas '.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</strong></td>';
+                        echo '<td colspan="3"><strong>Totales '.$total_s.' | '.$total_e.'</strong></td>';
+                        echo '<td colspan="2"></td>';
+                        echo '</tr>';
+                    }
+
+				?>                
+                    
+                    
+                </tr>
 			</tbody>				
 		</table>
         <?php } else { ?>
