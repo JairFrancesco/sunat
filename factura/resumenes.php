@@ -58,8 +58,7 @@
     echo '<td class="well"><strong>&nbsp;&nbsp;F | &nbsp;B &nbsp;| &nbsp;A | &nbsp;E &nbsp;| C</strong></td>';
     echo '<td class="text-center well"><strong>Facturas</strong></td>';
     echo '<td class="text-center well"><strong>Boletas</strong></td>';
-    echo '<td class="text-center well"><strong>Notas</strong></td>';
-    echo '<td class="text-center well"><strong>Total</strong></td>';    
+    echo '<td class="text-center well"><strong>Notas</strong></td>';    
     echo '<td><strong>Resumen</strong></td>';
     echo '<td><strong>Acciones</strong></td>';
     echo '</tr>';
@@ -102,8 +101,9 @@
             }elseif($documento['CDG_TIP_DOC'] == 'A'){
                 $can_A = $can_A +1;
             }
+
             // sacamos los eliminados
-            if($documento['CDG_ANU_SN']!='S' && $documento['CDG_DOC_ANU']!='S'){
+            if($documento['CDG_DOC_ANU'] =='N'){
                 //facturas
                 if($documento['CDG_TIP_DOC'] == 'F'){
                     $total_sf = $total_sf + $documento['CDG_IMP_NETO'];
@@ -117,21 +117,16 @@
                     if($documento['CDG_COD_SNT'] == '0001'){
                         $total_eb = $total_eb + $documento['CDG_IMP_NETO'];
                     }
+                }                
+                //notas                            
+                if($documento['CDG_TIP_DOC'] == 'A'){
+                    $total_sa = $total_sa + $documento['CDG_IMP_NETO'];
+                    if($documento['CDG_COD_SNT'] == '0001'){
+                        $total_ea = $total_ea + $documento['CDG_IMP_NETO'];
+                    }
                 }
+            }
                 
-                //totales
-                $total_s = $total_s + $documento['CDG_IMP_NETO'];
-                if($documento['CDG_COD_SNT'] == '0001'){
-                    $total_e = $total_e + $documento['CDG_IMP_NETO'];
-                }
-            }
-            //notas                            
-            if($documento['CDG_TIP_DOC'] == 'A'){
-                $total_sa = $total_sa + $documento['CDG_IMP_NETO'];
-                if($documento['CDG_COD_SNT'] == '0001'){
-                    $total_ea = $total_ea + $documento['CDG_IMP_NETO'];
-                }
-            }
 
             //resumen
             $cierre = 0;
@@ -157,8 +152,7 @@
         echo '<td>'.str_pad($can_F,2,'0',STR_PAD_LEFT).' | '.str_pad($can_B,2,'0',STR_PAD_LEFT).' | '.str_pad($can_A,2,'0',STR_PAD_LEFT).' | '.str_pad($can_E,2,'0',STR_PAD_LEFT).' | '.str_pad(($can_T-$can_SNT),2,'0',STR_PAD_LEFT).'</td>';
         echo '<td class="text-center">'.number_format($total_sf,2,'.','').' | '.number_format($total_ef,2,'.','').'</td>';
         echo '<td class="text-center">'.number_format($total_sb,2,'.','').' | '.number_format($total_eb,2,'.','').'</td>';
-        echo '<td class="text-center">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';
-        echo '<td class="text-center">'.number_format($total_s,2,'.','').' | '.number_format($total_e,2,'.','').'</td>';        
+        echo '<td class="text-center">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';        
         echo '<td class="text-center '.$class_resumen.'">'.$resumen_s.'</td>';
         echo '<td>';
         echo '<a href="../index.php?fecha_inicio='.$fecha_resumen_item.'&fecha_final='.$fecha_resumen_item.'&pagina=1&emp='.$emp.'" target="_blank" class="btn btn-default btn-xs">Dia</a> ';
