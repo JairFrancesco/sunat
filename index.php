@@ -303,7 +303,8 @@
                         echo count($documentos);
                         foreach ($documentos as $documento) {
                             // sacamos los eliminados
-                            if($documento['CDG_ANU_SN']!='S' && $documento['CDG_DOC_ANU']!='S'){
+                            if($documento['CDG_DOC_ANU']=='N'){
+
                                 //facturas
                                 if($documento['CDG_TIP_DOC'] == 'F'){
                                     $total_sf = $total_sf + $documento['CDG_IMP_NETO'];
@@ -318,6 +319,7 @@
                                         $total_eb = $total_eb + $documento['CDG_IMP_NETO'];
                                     }
                                 }
+
                                 //notas                            
                                 if($documento['CDG_TIP_DOC'] == 'A'){
                                     $total_sa = $total_sa + $documento['CDG_IMP_NETO'];
@@ -325,12 +327,14 @@
                                         $total_ea = $total_ea + $documento['CDG_IMP_NETO'];
                                     }
                                 }
+                                
                                 //totales
                                 $total_s = $total_s + $documento['CDG_IMP_NETO'];
                                 if($documento['CDG_COD_SNT'] == '0001'){
                                     $total_e = $total_e + $documento['CDG_IMP_NETO'];
                                 }
                             }
+                            
                         }
 
                         if($total_s == $total_e){
