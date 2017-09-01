@@ -52,15 +52,14 @@
     //print_r($resumen_items);
     //echo date('d-m-Y', strtotime($resumen_items[0]['FECHA']));
 
-    echo '<table class="table table-striped table-bordered table-condensed">';
+    echo '<table class="table table-striped table-bordered table-condensed table-hover">';
     echo '<tr>';
     echo '<td class="text-center well"><strong>Dia</strong></td>';
     echo '<td class="well"><strong>&nbsp;&nbsp;F | &nbsp;B &nbsp;| &nbsp;A | &nbsp;E &nbsp;| C</strong></td>';
     echo '<td class="text-center well"><strong>Facturas</strong></td>';
     echo '<td class="text-center well"><strong>Boletas</strong></td>';
     echo '<td class="text-center well"><strong>Notas</strong></td>';
-    echo '<td><strong>Total Saes</strong></td>';
-    echo '<td><strong>Total FE</strong></td>';
+    echo '<td class="text-center well"><strong>Total</strong></td>';    
     echo '<td><strong>Resumen</strong></td>';
     echo '<td><strong>Acciones</strong></td>';
     echo '</tr>';
@@ -87,10 +86,12 @@
         foreach ($documentos as $documento) {
             //docuementos totals
             $can_T = $can_T + 1;
+
             if ($documento['CDG_COD_SNT'] == '0001' || $documento['CDG_COD_SNT'] == '0003') {
                 //enviados
                 $can_SNT = $can_SNT + 1;
             }
+
             if($documento['CDG_TIP_DOC'] == 'F'){
                 $can_F = $can_F +1;
                 if($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S'){
@@ -157,8 +158,7 @@
         echo '<td class="text-center">'.number_format($total_sf,2,'.','').' | '.number_format($total_ef,2,'.','').'</td>';
         echo '<td class="text-center">'.number_format($total_sb,2,'.','').' | '.number_format($total_eb,2,'.','').'</td>';
         echo '<td class="text-center">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';
-        echo '<td>'.number_format($total_s,2,'.','').'</td>';
-        echo '<td>'.number_format($total_e,2,'.','').'</td>';
+        echo '<td class="text-center">'.number_format($total_s,2,'.','').' | '.number_format($total_e,2,'.','').'</td>';        
         echo '<td class="text-center '.$class_resumen.'">'.$resumen_s.'</td>';
         echo '<td>';
         echo '<a href="../index.php?fecha_inicio='.$fecha_resumen_item.'&fecha_final='.$fecha_resumen_item.'&pagina=1&emp='.$emp.'" target="_blank" class="btn btn-default btn-xs">Dia</a> ';
