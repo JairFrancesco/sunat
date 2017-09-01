@@ -40,19 +40,29 @@
     require("conexion.php");
     date_default_timezone_set('America/Lima');
     echo '<h1>Resumen Mes '.date('F Y', strtotime('01-08-2017')).'</h1>';
+    $emp = $_GET['emp'];
     $inicio_mes = '01';
     $mes = substr($_GET['mes'],5,2);
     $anho = substr($_GET['mes'],0,4);
     $fin_mes = date("d",(mktime(0,0,0,substr($_GET['mes'],5,2)+1,1,substr($_GET['mes'],0,4))-1));
+    $sql_resumen_item = "select * from resumenes where emp='".$emp."' and to_char(fecha,'mm-yyyy')='08-2017'";
+    $sql_parse_item = oci_parse($conn,$sql_resumen_item);
+    oci_execute($sql_parse_item);
+    oci_fetch_all($sql_parse_item, $resumen_items, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+    //print_r($resumen_items);
+    //echo date('d-m-Y', strtotime($resumen_items[0]['FECHA']));
+
     echo '<table class="table table-striped table-bordered table-condensed">';
     echo '<tr>';
-    echo '<td>Dia</td>';
-    echo '<td>&nbsp;&nbsp;F | &nbsp;B &nbsp;| &nbsp;A | &nbsp;E</td>';
-    echo '<td>Resumen</td>';
-    echo '<td>Total Saes</td>';
-    echo '<td>Total FE</td>';
-    echo '<td>Faltan Enviar</td>';
-    echo '<td>Acciones</td>';
+    echo '<td class="text-center well"><strong>Dia</strong></td>';
+    echo '<td class="well"><strong>&nbsp;&nbsp;F | &nbsp;B &nbsp;| &nbsp;A | &nbsp;E &nbsp;| C</strong></td>';
+    echo '<td class="text-center well"><strong>Facturas</strong></td>';
+    echo '<td class="text-center well"><strong>Boletas</strong></td>';
+    echo '<td class="text-center well"><strong>Notas</strong></td>';
+    echo '<td><strong>Total Saes</strong></td>';
+    echo '<td><strong>Total FE</strong></td>';
+    echo '<td><strong>Resumen</strong></td>';
+    echo '<td><strong>Acciones</strong></td>';
     echo '</tr>';
     for($i=$inicio_mes;$i<=$fin_mes;$i++){
         $fecha_documentos = str_pad($i,2,'0',STR_PAD_LEFT).'-'.$mes.'-'.$anho;
@@ -120,15 +130,39 @@
                     $total_e = $total_e + $documento['CDG_IMP_NETO'];
                 }
             }
+
+            //resumen
+            $cierre = 0;
+            $fecha_resumen_item = str_pad($i,2,'0',STR_PAD_LEFT).'-'.$mes.'-'.$anho;
+            foreach ($resumen_items as $resumen_item) {
+                //$fecha_temp = date('d-m-Y', strtotime($resumen_item['FECHA']));                
+                if($cierre == 0){
+                    if ($fecha_resumen_item == date('d-m-Y', strtotime($resumen_item['FECHA']))){
+                        $resumen_s = 'SI';
+                        $class_resumen = 'success';
+                        $cierre++;
+                    }else{
+                        $resumen_s = 'NO';
+                        $class_resumen = 'danger';
+                    }
+                }
+                
+            } 
+            
         }
         echo '<tr>';
-        echo '<td style="padding:0px;">'.str_pad($i,2,'0',STR_PAD_LEFT).'</td>';
-        echo '<td>'.str_pad($can_F,2,'0',STR_PAD_LEFT).' | '.str_pad($can_B,2,'0',STR_PAD_LEFT).' | '.str_pad($can_A,2,'0',STR_PAD_LEFT).' | '.str_pad($can_E,2,'0',STR_PAD_LEFT).'</td>';
-        echo '<td>'.$fecha_documentos.'</td>';
-        echo '<td>'.$total_s.'</td>';
+        echo '<td class="text-center well"><strong>'.str_pad($i,2,'0',STR_PAD_LEFT).'</strong></td>';
+        echo '<td>'.str_pad($can_F,2,'0',STR_PAD_LEFT).' | '.str_pad($can_B,2,'0',STR_PAD_LEFT).' | '.str_pad($can_A,2,'0',STR_PAD_LEFT).' | '.str_pad($can_E,2,'0',STR_PAD_LEFT).' | '.str_pad(($can_T-$can_SNT),2,'0',STR_PAD_LEFT).'</td>';
+        echo '<td class="text-center">'.number_format($total_sf,2,'.','').' | '.number_format($total_ef,2,'.','').'</td>';
+        echo '<td class="text-center">'.number_format($total_sb,2,'.','').' | '.number_format($total_eb,2,'.','').'</td>';
+        echo '<td class="text-center">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';
+        echo '<td>'.number_format($total_s,2,'.','').'</td>';
         echo '<td>'.number_format($total_e,2,'.','').'</td>';
-        echo '<td>'.str_pad(($can_T-$can_SNT),2,'0',STR_PAD_LEFT).'</td>';
-        echo '<td></td>';
+        echo '<td class="text-center '.$class_resumen.'">'.$resumen_s.'</td>';
+        echo '<td>';
+        echo '<a href="../index.php?fecha_inicio='.$fecha_resumen_item.'&fecha_final='.$fecha_resumen_item.'&pagina=1&emp='.$emp.'" target="_blank" class="btn btn-default btn-xs">Dia</a> ';
+        echo '<a href="../resumen.php?h=0&gen=02&emp='.$emp.'&fecha='.date('Y-m-d', strtotime($fecha_resumen_item)).'" target="_blank" class="btn btn-default btn-xs">Resumen</a> ';        
+        echo '</td>';
         echo '</tr>';
     }
     echo '<tr>';
@@ -136,116 +170,13 @@
     echo '</tr>';
     echo '</table>';
     
-    //$fecha = $_GET['mes'];
-    //$month=substr($_GET['mes'],5,2);
     
-    //echo date("d",(mktime(0,0,0,$month+1,1,$year)-1));
-
-    require ('conexion.php');
-    $sql_resumenes = "select * from resumenes WHERE to_char(fecha,'yyyy-mm')='".$_GET['mes']."' and emp='".$_GET['emp']."' order by fecha Desc";
-    $sql_parse = oci_parse($conn,$sql_resumenes);
-    oci_execute($sql_parse);
-    oci_fetch_all($sql_parse, $resumenes, null, null, OCI_FETCHSTATEMENT_BY_ROW); 
-    $i=1;
-    if($_GET['emp']=='01'){
-        $total_B001 = 0;
-        $total_BN03 = 0;
-        $local = 'Tacna';
-    }else{
-        $total_B004 = 0;
-        $total_BN04 = 0;
-        $local = 'Moquegua';
-    }
 ?>
-                <h1>Resumen <?php echo $local; ?> <small>mes <?php echo $_GET['mes']; ?></small></h1>
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>#</th>
-                        <th>Fecha</th>
-                        <th>Ticket</th>
-                        <th>Serie</th>
-                        <th>Inicio</th>
-                        <th>Final</th>
-                        <th>Subtotal</th>
-                        <th>Descuento</th>
-                        <th>Gravada</th>
-                        <th>IGV</th>
-                        <th>TOTAL</th>
-                        <th>Codigo</th>                        
-                    </tr>
-                    <?php                        
-                        foreach ($resumenes as $resumen) {
-                            echo '<tr>';
-                            echo '<td>'.$i.'</td>';                            
-                            echo '<td>'.$resumen['FECHA'].'</td>';
-                            echo '<td>'.$resumen['TICKET'].'</td>';
-                            echo '<td>'.$resumen['SERIE'].'</td>';
-                            echo '<td>'.$resumen['INICIO'].'</td>';                            
-                            echo '<td>'.$resumen['FINAL'].'</td>';                            
-                            echo '<td>'.$resumen['SUBTOTAL'].'</td>';                            
-                            echo '<td>'.$resumen['DESCUENTO'].'</td>';                           
-                            echo '<td>'.$resumen['GRAVADA'].'</td>';                            
-                            echo '<td>'.$resumen['IGV'].'</td>';                            
-                            echo '<td>'.$resumen['TOTAL'].'</td>';                            
-                            echo '<td>'.$resumen['CODIGO'].'</td>';
-                            echo '</tr>';
-                            $i++;
-
-                            if($_GET['emp']=='01'){
-                                if($resumen['SERIE']=='B001'){
-                                    $total_B001 = $total_B001 + $resumen['TOTAL'];
-                                }elseif($resumen['SERIE']=='BN03') {
-                                    $total_BN03 = $total_BN03 + $resumen['TOTAL'];    
-                                }                                
-                            }else{
-                                if($resumen['SERIE']=='B004'){
-                                    $total_B004 = $total_B004 + $resumen['TOTAL'];
-                                }elseif($resumen['SERIE']=='BN04') {
-                                    $total_BN04 = $total_BN04 + $resumen['TOTAL'];
-                                }                                
-                            }
-                        }                        
-                    ?>
-                </table>
-            </div>
-            <div class="col-lg-6">
-                <h2>Totales por Serie <?php echo $local; ?></h2>
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>#</th>
-                        <th>Tipo</th>
-                        <th>Serie</th>
-                        <th>Total Sumatoria</th>
-                    </tr>
-                    <?php
-                        echo '<tr>';
-                        echo '<td>1</td>';
-                        echo '<td>Boletas</td>';
-                        if($_GET['emp']=='01'){
-                            echo '<td>B001</td>';
-                            echo '<td>'.$total_B001.'</td>';
-                        }else{
-                            echo '<td>B004</td>';
-                            echo '<td>'.$total_B004.'</td>';
-                        }
-                        echo '</tr>';
-
-                        echo '<tr>';
-                        echo '<td>2</td>';
-                        echo '<td>Notas de Credito</td>';
-                        if($_GET['emp']=='01'){
-                            echo '<td>BN01</td>';
-                            echo '<td>'.number_format($total_BN03,2,'.','').'</td>';
-                        }else{
-                            echo '<td>BN04</td>';
-                            echo '<td>'.$total_BN04.'</td>';
-                        }
-                        echo '</tr>';
-                    ?>
-                </table>    
-            </div>            
-        </div>
+                
+               
+        </div>            
     </div>
+</div>
 
 </body>
 </html>
