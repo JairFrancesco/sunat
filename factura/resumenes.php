@@ -138,7 +138,7 @@
             foreach ($resumen_items as $resumen_item) {
                 //$fecha_temp = date('d-m-Y', strtotime($resumen_item['FECHA']));                
                 if($cierre == 0){
-                    if ($fecha_resumen_item == date('d-m-Y', strtotime($resumen_item['FECHA']))){
+                    if ($fecha_resumen_item == date('d-m-Y', strtotime($resumen_item['FECHA'])) && $resumen_item['CODIGO'] == '0'){
                         $resumen_s = 'SI';
                         $class_resumen = 'success';
                         $cierre++;
