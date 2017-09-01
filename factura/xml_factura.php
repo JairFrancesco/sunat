@@ -199,15 +199,15 @@ try {
                     $items[$i]['descripcion'] = $otro['DDO_DES_OTR'];
                     $items[$i]['cantidad'] = '1';
                     if($moneda == 'PEN'){
-                        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); // subtotal
-                        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',','); // subtotal
-                        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',','); // descuento
-                        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.',',');  // gravadas
+                        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',''); // subtotal
+                        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.',''); // subtotal
+                        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',''); // descuento
+                        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas
                     }else{
-                        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.',','); // subtotal
-                        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.',','); // subtotal
-                        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_DOL'],2,'.',','); // descuento
-                        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_DOL']-$cab_doc_gen['CDG_DES_DOL']),2,'.',',');  // gravadas
+                        $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.',''); // subtotal
+                        $items[$i]['importe'] = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.',''); // subtotal
+                        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_DOL'],2,'.',''); // descuento
+                        $items[$i]['venta'] = number_format(($cab_doc_gen['CDG_VVP_DOL']-$cab_doc_gen['CDG_DES_DOL']),2,'.','');  // gravadas
                     }
                     $i++;
                 }
@@ -221,7 +221,7 @@ try {
                     if ($cab_doc_gen['CDG_EXI_FRA'] == 'S') {
                         $items[$i]['unitario'] = number_format((($cab_doc_gen['CDG_VVP_TOT']) - ($cab_doc_gen['CDG_TOT_FRA'] / (1 + $cab_doc_gen['CDG_POR_IGV'] / 100))), 2, '.', '');
                         $items[$i]['importe'] = number_format((($cab_doc_gen['CDG_VVP_TOT']) - ($cab_doc_gen['CDG_TOT_FRA'] / (1 + $cab_doc_gen['CDG_POR_IGV'] / 100))), 2, '.', '');
-                        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'], 2, '.', ',');
+                        $items[$i]['descuento'] = number_format($cab_doc_gen['CDG_DES_TOT'], 2, '.','');
                         $items[$i]['venta'] = number_format((($cab_doc_gen['CDG_VVP_TOT']) - ($cab_doc_gen['CDG_TOT_FRA'] / (1 + $cab_doc_gen['CDG_POR_IGV'] / 100)) - $cab_doc_gen['CDG_DES_TOT']), 2, '.', '');
                     } else {
                         $items[$i]['unitario'] = number_format($cab_doc_gen['CDG_VVP_TOT'], 2, '.', '');
