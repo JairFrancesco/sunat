@@ -273,7 +273,7 @@ try {
                     $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
                     $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
                     $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
-                    $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',','); // igv total
+                    $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',''); // igv total
                 }else{ // dolares
                     $subtotal = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.','');
                     $descuentos = number_format($cab_doc_gen['CDG_DES_DOL'],2,'.','');
