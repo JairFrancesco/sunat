@@ -117,7 +117,7 @@
                     if($documento['CDG_COD_SNT'] == '0001'){
                         $total_eb = $total_eb + $documento['CDG_IMP_NETO'];
                     }
-                }                
+                }
                 //notas                            
                 if($documento['CDG_TIP_DOC'] == 'A'){
                     $total_sa = $total_sa + $documento['CDG_IMP_NETO'];
@@ -144,15 +144,19 @@
                     }
                 }
                 
-            } 
-            
+            }
         }
+        (number_format($total_sf,2,'.','') == number_format($total_ef,2,'.','')) ? $class_f='success':$class_f='danger';
+        (number_format($total_sb,2,'.','') == number_format($total_eb,2,'.','')) ? $class_b='success':$class_b='danger';
+        (number_format($total_sa,2,'.','') == number_format($total_ea,2,'.','')) ? $class_a='success':$class_a='danger';
+        (($can_T-$can_SNT)==0) ? $class_can='success':$class_can='danger';
+
         echo '<tr>';
         echo '<td class="text-center well"><strong>'.str_pad($i,2,'0',STR_PAD_LEFT).'</strong></td>';
-        echo '<td>'.str_pad($can_F,2,'0',STR_PAD_LEFT).' | '.str_pad($can_B,2,'0',STR_PAD_LEFT).' | '.str_pad($can_A,2,'0',STR_PAD_LEFT).' | '.str_pad($can_E,2,'0',STR_PAD_LEFT).' | '.str_pad(($can_T-$can_SNT),2,'0',STR_PAD_LEFT).'</td>';
-        echo '<td class="text-center">'.number_format($total_sf,2,'.','').' | '.number_format($total_ef,2,'.','').'</td>';
-        echo '<td class="text-center">'.number_format($total_sb,2,'.','').' | '.number_format($total_eb,2,'.','').'</td>';
-        echo '<td class="text-center">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';        
+        echo '<td class="'.$class_can.'">'.str_pad($can_F,2,'0',STR_PAD_LEFT).' | '.str_pad($can_B,2,'0',STR_PAD_LEFT).' | '.str_pad($can_A,2,'0',STR_PAD_LEFT).' | '.str_pad($can_E,2,'0',STR_PAD_LEFT).' | '.str_pad(($can_T-$can_SNT),2,'0',STR_PAD_LEFT).'</td>';
+        echo '<td class="text-center '.$class_f.'">'.number_format($total_sf,2,'.','').' | '.number_format($total_ef,2,'.','').'</td>';
+        echo '<td class="text-center '.$class_b.'">'.number_format($total_sb,2,'.','').' | '.number_format($total_eb,2,'.','').'</td>';
+        echo '<td class="text-center '.$class_a.'">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';        
         echo '<td class="text-center '.$class_resumen.'">'.$resumen_s.'</td>';
         echo '<td>';
         echo '<a href="../index.php?fecha_inicio='.$fecha_resumen_item.'&fecha_final='.$fecha_resumen_item.'&pagina=1&emp='.$emp.'" target="_blank" class="btn btn-default btn-xs">Dia</a> ';
