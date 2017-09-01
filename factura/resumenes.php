@@ -87,7 +87,7 @@
         foreach ($documentos as $documento) {
             //docuementos totals
             $can_T = $can_T + 1;
-            if ($documento['CDG_COD_SNT'] == '0001') {
+            if ($documento['CDG_COD_SNT'] == '0001' || $documento['CDG_COD_SNT'] == '0003') {
                 //enviados
                 $can_SNT = $can_SNT + 1;
             }
@@ -117,17 +117,18 @@
                         $total_eb = $total_eb + $documento['CDG_IMP_NETO'];
                     }
                 }
-                //notas                            
-                if($documento['CDG_TIP_DOC'] == 'A'){
-                    $total_sa = $total_sa + $documento['CDG_IMP_NETO'];
-                    if($documento['CDG_COD_SNT'] == '0001'){
-                        $total_ea = $total_ea + $documento['CDG_IMP_NETO'];
-                    }
-                }
+                
                 //totales
                 $total_s = $total_s + $documento['CDG_IMP_NETO'];
                 if($documento['CDG_COD_SNT'] == '0001'){
                     $total_e = $total_e + $documento['CDG_IMP_NETO'];
+                }
+            }
+            //notas                            
+            if($documento['CDG_TIP_DOC'] == 'A'){
+                $total_sa = $total_sa + $documento['CDG_IMP_NETO'];
+                if($documento['CDG_COD_SNT'] == '0001'){
+                    $total_ea = $total_ea + $documento['CDG_IMP_NETO'];
                 }
             }
 
