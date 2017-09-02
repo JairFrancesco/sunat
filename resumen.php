@@ -109,6 +109,7 @@ include "factura/__resumen_boleta_notas.php";
 
 // Notas
 if (isset($nots)) {
+    $i = 0;
     foreach ($nots as $not){
         $sub = 0;
         $grabadas = 0;

@@ -18,7 +18,6 @@
         // el valor de i es el actual que se va crear
     }
 
-
     // creacion del xml
     $xml = new DomDocument('1.0', 'ISO-8859-1');
     $xml->standalone         = false;
@@ -64,8 +63,6 @@
         $cbc = $xml->createElement('cbc:Name', 'TOYOTA SURMOTRIZ'); $cbc = $cac->appendChild($cbc);
         $legal = $xml->createElement('cac:PartyLegalEntity'); $legal = $cac_party->appendChild($legal);
         $cbc = $xml->createElement('cbc:RegistrationName', 'SURMOTRIZ S.R.L.'); $cbc = $legal->appendChild($cbc);
-
-
         $line = 1;
         // Boletas
         if (isset($bols))
@@ -86,8 +83,7 @@
                     $bols[$i]['gravada'] = $grabadas = $grabadas + ($res_rboletas['CDG_VVP_TOT'] - $res_rboletas['CDG_DES_TOT']);
                     $bols[$i]['igv'] = $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
                     $bols[$i]['total'] = $total = $total + $res_rboletas['CDG_IMP_NETO'];
-                }
-                $i++;
+                }                
                 $SummaryDocumentsLine = $xml->createElement('sac:SummaryDocumentsLine'); $SummaryDocumentsLine = $Invoice->appendChild($SummaryDocumentsLine);
                 $cbc = $xml->createElement('cbc:LineID',$line); $cbc = $SummaryDocumentsLine->appendChild($cbc);
                 $cbc = $xml->createElement('cbc:DocumentTypeCode','03'); $cbc = $SummaryDocumentsLine->appendChild($cbc);
@@ -142,12 +138,14 @@
                 $cbc = $xml->createElement('cbc:ID','9999'); $cbc = $TaxScheme->appendChild($cbc);
                 $cbc = $xml->createElement('cbc:Name','OTROS'); $cbc = $TaxScheme->appendChild($cbc);
                 $cbc = $xml->createElement('cbc:TaxTypeCode','OTH'); $cbc = $TaxScheme->appendChild($cbc);
+                $i++;
                 $line++;
             }
         }
 
         // Notas
         if (isset($nots)) {
+            $i = 0;
             foreach ($nots as $not){
                 $sub = 0;
                 $grabadas = 0;
@@ -163,7 +161,6 @@
                     $nots[$i]['igv'] = $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
                     $nots[$i]['total'] = $total = $total + $res_rnotas['CDG_IMP_NETO'];
                 }
-                $i++;
 
                 $SummaryDocumentsLine = $xml->createElement('sac:SummaryDocumentsLine'); $SummaryDocumentsLine = $Invoice->appendChild($SummaryDocumentsLine);
                 $cbc = $xml->createElement('cbc:LineID',$line); $cbc = $SummaryDocumentsLine->appendChild($cbc);
@@ -219,6 +216,7 @@
                 $cbc = $xml->createElement('cbc:ID','9999'); $cbc = $TaxScheme->appendChild($cbc);
                 $cbc = $xml->createElement('cbc:Name','OTROS'); $cbc = $TaxScheme->appendChild($cbc);
                 $cbc = $xml->createElement('cbc:TaxTypeCode','OTH'); $cbc = $TaxScheme->appendChild($cbc);
+                $i++;
                 $line++;
             }
         }
