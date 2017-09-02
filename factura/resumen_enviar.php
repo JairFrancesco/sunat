@@ -376,7 +376,6 @@
         echo '</div>';
     }
 
-print_r($nots);
 /*
 $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='".$resultado."' WHERE cdg_num_doc='13833' and cdg_cla_doc='BR' and cdg_cod_emp='01' and cdg_cod_gen='02'";
 $stmt = oci_parse($conn, $update);
