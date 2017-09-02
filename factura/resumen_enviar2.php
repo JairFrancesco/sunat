@@ -12,6 +12,7 @@
         $i = 0;
         foreach ($bols as $bol)
         {
+            
             $sub = 0;
             $desc = 0;
             $grabadas = 0;
@@ -26,11 +27,12 @@
                 $bols[$i]['igv'] = $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
                 $bols[$i]['total'] = $total = $total + $res_rboletas['CDG_IMP_NETO'];
             }
+            $i++;
         }
     }
-
+    $i=0;
     if (isset($nots)) {
-        foreach ($nots as $not){
+        foreach ($nots as $not){            
             $sub = 0;
             $grabadas = 0;
             $igv = 0;
@@ -45,9 +47,12 @@
                 $nots[$i]['igv'] = $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
                 $nots[$i]['total'] = $total = $total + $res_rnotas['CDG_IMP_NETO'];
             }
+            $i++;
         }
     }
-    
+    print_r($bols);
+    print_r($nots);
+    /*
     if (isset($boletas)){
         foreach ( $boletas as $boleta ){
             $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc='".$boleta['CDG_NUM_DOC']."' and cdg_cla_doc='".$boleta['CDG_CLA_DOC']."' and cdg_cod_emp='".$boleta['CDG_COD_EMP']."' and cdg_cod_gen='".$boleta['CDG_COD_GEN']."'";
@@ -93,4 +98,5 @@
             oci_execute($stmt_insert);
         }
     }
+    */
 ?>
