@@ -300,7 +300,7 @@
                         $total_ea = 0;
                         $total_s = 0;
                         $total_e = 0;
-                        echo count($documentos);
+                        //echo count($documentos);
                         foreach ($documentos as $documento) {
                             // sacamos los eliminados
                             if($documento['CDG_DOC_ANU']=='N'){

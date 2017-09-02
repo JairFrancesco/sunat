@@ -87,7 +87,7 @@
                     $bols[$i]['igv'] = $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
                     $bols[$i]['total'] = $total = $total + $res_rboletas['CDG_IMP_NETO'];
                 }
-
+                $i++;
                 $SummaryDocumentsLine = $xml->createElement('sac:SummaryDocumentsLine'); $SummaryDocumentsLine = $Invoice->appendChild($SummaryDocumentsLine);
                 $cbc = $xml->createElement('cbc:LineID',$line); $cbc = $SummaryDocumentsLine->appendChild($cbc);
                 $cbc = $xml->createElement('cbc:DocumentTypeCode','03'); $cbc = $SummaryDocumentsLine->appendChild($cbc);
@@ -163,6 +163,7 @@
                     $nots[$i]['igv'] = $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
                     $nots[$i]['total'] = $total = $total + $res_rnotas['CDG_IMP_NETO'];
                 }
+                $i++;
 
                 $SummaryDocumentsLine = $xml->createElement('sac:SummaryDocumentsLine'); $SummaryDocumentsLine = $Invoice->appendChild($SummaryDocumentsLine);
                 $cbc = $xml->createElement('cbc:LineID',$line); $cbc = $SummaryDocumentsLine->appendChild($cbc);
@@ -313,7 +314,7 @@
     //echo $XMLString2;
 
     preg_match_all('/<statusCode>(.*?)<\/statusCode>/is',soapCall($wsdlURL, $callFunction = "getStatus", $XMLString2) , $codigo); $codigo = $codigo[1][0];
-    echo $codigo;
+    //echo $codigo;
 
     if($codigo == '0' || $codigo == '0098'){
         // guarda las boletas y sus notas en cada uno de sus items
@@ -374,7 +375,6 @@
         echo 'hubo un error al enviar el resumen intentelo mas tarde';
         echo '</div>';
     }
-
 
 /*
 $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='".$resultado."' WHERE cdg_num_doc='13833' and cdg_cla_doc='BR' and cdg_cod_emp='01' and cdg_cod_gen='02'";
