@@ -139,15 +139,28 @@
                             $class_resumen = 'success';
                             $cierre++;
                         }else{
-                            $resumen_s = 'NO';
-                            $class_resumen = 'danger';
+                            if($can_B==0){
+                                $resumen_s = '-- --';
+                                $class_resumen = 'success';
+                            }else{
+                                $resumen_s = 'NO';
+                                $class_resumen = 'danger';    
+                            }
+                            
                         }
                     }
                     
                 }
-            }else{                
-                $resumen_s = 'NO';
-                $class_resumen = 'danger';
+            }else{
+                //echo 'cantidad'.$can_B;
+                if($can_B==0){
+                    $resumen_s = '-- --';
+                    $class_resumen = 'success';
+                }else{
+                    $resumen_s = 'NO';
+                    $class_resumen = 'danger';    
+                }
+                
             }
         }
         (number_format($total_sf,2,'.','') == number_format($total_ef,2,'.','')) ? $class_f='success':$class_f='danger';
@@ -163,8 +176,8 @@
         echo '<td class="text-center '.$class_a.'">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';        
         echo '<td class="text-center '.$class_resumen.'">'.$resumen_s.'</td>';
         echo '<td>';
-        echo '<a href="../index.php?fecha_inicio='.$fecha_resumen_item.'&fecha_final='.$fecha_resumen_item.'&pagina=1&emp='.$emp.'" target="_blank" class="btn btn-default btn-xs">Dia</a> ';
-        echo '<a href="../resumen.php?h=0&gen=02&emp='.$emp.'&fecha='.date('Y-m-d', strtotime($fecha_resumen_item)).'" target="_blank" class="btn btn-default btn-xs">Resumen</a> ';        
+        echo '<a href="../index.php?fecha_inicio='.$fecha_documentos.'&fecha_final='.$fecha_resumen_item.'&pagina=1&emp='.$emp.'" target="_blank" class="btn btn-default btn-xs">Dia</a> ';
+        echo '<a href="../resumen.php?h=0&gen=02&emp='.$emp.'&fecha='.date('Y-m-d', strtotime($fecha_documentos)).'" target="_blank" class="btn btn-default btn-xs">Resumen</a> ';        
         echo '</td>';
         echo '</tr>';
     }
