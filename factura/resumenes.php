@@ -39,19 +39,19 @@
 <?php
     require("conexion.php");
     date_default_timezone_set('America/Lima');
-    echo '<h1>Resumen Mes '.date('F Y', strtotime('01-08-2017')).'</h1>';
+    
     $emp = $_GET['emp'];
     $inicio_mes = '01';
+    $dia = '01';
     $mes = substr($_GET['mes'],5,2);
     $anho = substr($_GET['mes'],0,4);
-    $fin_mes = date("d",(mktime(0,0,0,substr($_GET['mes'],5,2)+1,1,substr($_GET['mes'],0,4))-1));
-    $sql_resumen_item = "select * from resumenes where emp='".$emp."' and to_char(fecha,'mm-yyyy')='08-2017'";
+    $fin_mes = date("d",(mktime(0,0,0,$mes+1,1,$anho)-1));
+    $sql_resumen_item = "select * from resumenes where emp='".$emp."' and to_char(fecha,'mm-yyyy')='".$mes.'-'.$anho."'";
     $sql_parse_item = oci_parse($conn,$sql_resumen_item);
     oci_execute($sql_parse_item);
-    oci_fetch_all($sql_parse_item, $resumen_items, null, null, OCI_FETCHSTATEMENT_BY_ROW);
-    //print_r($resumen_items);
-    //echo date('d-m-Y', strtotime($resumen_items[0]['FECHA']));
-
+    oci_fetch_all($sql_parse_item, $resumen_items, null, null, OCI_FETCHSTATEMENT_BY_ROW);    
+    ($emp == '01') ? $local='Tacna':$local='Moquegua';
+    echo '<h1>'.$local.' Resumen Mes '.date('F Y', strtotime($dia.'-'.$mes.'-'.$anho)).'</h1>';
     echo '<table class="table table-striped table-bordered table-condensed table-hover">';
     echo '<tr>';
     echo '<td class="text-center well"><strong>Dia</strong></td>';
@@ -62,8 +62,7 @@
     echo '<td><strong>Resumen</strong></td>';
     echo '<td><strong>Acciones</strong></td>';
     echo '</tr>';
-    for($i=$inicio_mes;$i<=$fin_mes;$i++){
-        $fecha_documentos = str_pad($i,2,'0',STR_PAD_LEFT).'-'.$mes.'-'.$anho;
+    for($i=$inicio_mes;$i<=$fin_mes;$i++){        
         $total_sf = 0; //total saes facturas
         $total_ef = 0;
         $total_sb = 0;
@@ -78,6 +77,7 @@
         $can_E = 0;
         $can_T = 0;
         $can_SNT = 0;
+        $fecha_documentos = str_pad($i,2,'0',STR_PAD_LEFT).'-'.$mes.'-'.$anho;
         $sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='02' and cdg_cod_emp='".$_GET['emp']."' and to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha_documentos."'";
         $sql_parse = oci_parse($conn,$sql_cab_doc_gen);
         oci_execute($sql_parse);
@@ -134,7 +134,7 @@
             foreach ($resumen_items as $resumen_item) {
                 //$fecha_temp = date('d-m-Y', strtotime($resumen_item['FECHA']));                
                 if($cierre == 0){
-                    if ($fecha_resumen_item == date('d-m-Y', strtotime($resumen_item['FECHA'])) && $resumen_item['CODIGO'] == '0'){
+                    if (date('d-m-Y', strtotime($fecha_documentos)) == date('d-m-Y', strtotime($resumen_item['FECHA'])) && $resumen_item['CODIGO'] == '0'){
                         $resumen_s = 'SI';
                         $class_resumen = 'success';
                         $cierre++;
