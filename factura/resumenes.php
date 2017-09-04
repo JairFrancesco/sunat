@@ -130,20 +130,24 @@
 
             //resumen
             $cierre = 0;
-            $fecha_resumen_item = str_pad($i,2,'0',STR_PAD_LEFT).'-'.$mes.'-'.$anho;
-            foreach ($resumen_items as $resumen_item) {
-                //$fecha_temp = date('d-m-Y', strtotime($resumen_item['FECHA']));                
-                if($cierre == 0){
-                    if (date('d-m-Y', strtotime($fecha_documentos)) == date('d-m-Y', strtotime($resumen_item['FECHA'])) && $resumen_item['CODIGO'] == '0'){
-                        $resumen_s = 'SI';
-                        $class_resumen = 'success';
-                        $cierre++;
-                    }else{
-                        $resumen_s = 'NO';
-                        $class_resumen = 'danger';
+            $fecha_resumen_item = str_pad($i,2,'0',STR_PAD_LEFT).'-'.$mes.'-'.$anho;                        
+            if(count($resumen_items)!=0){
+                foreach ($resumen_items as $resumen_item) {                    
+                    if($cierre == 0){
+                        if ($fecha_resumen_item == date('d-m-Y', strtotime($resumen_item['FECHA'])) && $resumen_item['CODIGO'] == '0'){
+                            $resumen_s = 'SI';
+                            $class_resumen = 'success';
+                            $cierre++;
+                        }else{
+                            $resumen_s = 'NO';
+                            $class_resumen = 'danger';
+                        }
                     }
+                    
                 }
-                
+            }else{                
+                $resumen_s = 'NO';
+                $class_resumen = 'danger';
             }
         }
         (number_format($total_sf,2,'.','') == number_format($total_ef,2,'.','')) ? $class_f='success':$class_f='danger';
