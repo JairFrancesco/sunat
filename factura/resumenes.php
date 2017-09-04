@@ -129,39 +129,35 @@
                 
 
             //resumen
-            $cierre = 0;
-            $fecha_resumen_item = str_pad($i,2,'0',STR_PAD_LEFT).'-'.$mes.'-'.$anho;                        
-            if(count($resumen_items)!=0){
-                foreach ($resumen_items as $resumen_item) {                    
-                    if($cierre == 0){
-                        if ($fecha_resumen_item == date('d-m-Y', strtotime($resumen_item['FECHA'])) && $resumen_item['CODIGO'] == '0'){
-                            $resumen_s = 'SI';
-                            $class_resumen = 'success';
-                            $cierre++;
-                        }else{
-                            if($can_B==0){
-                                $resumen_s = '-- --';
-                                $class_resumen = 'success';
-                            }else{
-                                $resumen_s = 'NO';
-                                $class_resumen = 'danger';    
-                            }
-                            
-                        }
+            $cierre = 0;                        
+            foreach ($resumen_items as $resumen_item) {                    
+                if($cierre == 0){
+                    if ($fecha_documentos == date('d-m-Y', strtotime($resumen_item['FECHA'])) && $resumen_item['CODIGO'] == '0'){
+                        $resumen_s = 'SI';
+                        $class_resumen = 'success';
+                        $cierre++;
+                    }else{                        
+                        $resumen_s = 'NO';
+                        $class_resumen = 'danger';                        
                     }
-                    
-                }
-            }else{
-                //echo 'cantidad'.$can_B;
-                if($can_B==0){
-                    $resumen_s = '-- --';
-                    $class_resumen = 'success';
-                }else{
-                    $resumen_s = 'NO';
-                    $class_resumen = 'danger';    
                 }
                 
             }
+            
+        }
+
+        if($can_B!=0 && $cierre!=0){
+            $resumen_s = 'SI';
+            $class_resumen = 'success';
+        }else{
+            if ($can_B==0) {
+                $resumen_s = '--';
+                $class_resumen = 'success';
+            }else{
+                $resumen_s = 'NO';
+                $class_resumen = 'danger';
+            }
+            
         }
         (number_format($total_sf,2,'.','') == number_format($total_ef,2,'.','')) ? $class_f='success':$class_f='danger';
         (number_format($total_sb,2,'.','') == number_format($total_eb,2,'.','')) ? $class_b='success':$class_b='danger';
@@ -176,7 +172,7 @@
         echo '<td class="text-center '.$class_a.'">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';        
         echo '<td class="text-center '.$class_resumen.'">'.$resumen_s.'</td>';
         echo '<td>';
-        echo '<a href="../index.php?fecha_inicio='.$fecha_documentos.'&fecha_final='.$fecha_resumen_item.'&pagina=1&emp='.$emp.'" target="_blank" class="btn btn-default btn-xs">Dia</a> ';
+        echo '<a href="../index.php?fecha_inicio='.$fecha_documentos.'&fecha_final='.$fecha_documentos.'&pagina=1&emp='.$emp.'" target="_blank" class="btn btn-default btn-xs">Dia</a> ';
         echo '<a href="../resumen.php?h=0&gen=02&emp='.$emp.'&fecha='.date('Y-m-d', strtotime($fecha_documentos)).'" target="_blank" class="btn btn-default btn-xs">Resumen</a> ';        
         echo '</td>';
         echo '</tr>';

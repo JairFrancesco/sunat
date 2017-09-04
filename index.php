@@ -161,7 +161,7 @@
                         $fecha_documentos = date("d-m-Y");
                         $check_documentos = 1;
                     }
-                    echo $check_documentos;
+                    //echo $check_documentos;
                     if($check_documentos == 1){
                         $sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='02' and cdg_cod_emp='".$_GET['emp']."' and to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha_documentos."'";
                         $sql_parse = oci_parse($conn,$sql_cab_doc_gen);
@@ -298,8 +298,6 @@
                         $total_eb = 0;
                         $total_sa = 0;
                         $total_ea = 0;
-                        $total_s = 0;
-                        $total_e = 0;
                         //echo count($documentos);
                         foreach ($documentos as $documento) {
                             // sacamos los eliminados
@@ -326,27 +324,14 @@
                                     if($documento['CDG_COD_SNT'] == '0001'){
                                         $total_ea = $total_ea + $documento['CDG_IMP_NETO'];
                                     }
-                                }
-                                
-                                //totales
-                                $total_s = $total_s + $documento['CDG_IMP_NETO'];
-                                if($documento['CDG_COD_SNT'] == '0001'){
-                                    $total_e = $total_e + $documento['CDG_IMP_NETO'];
-                                }
-                            }
-                            
-                        }
-
-                        if($total_s == $total_e){
-                            $class_total = 'success';
-                        }else{
-                            $class_total = 'danger';
-                        }
-                        echo '<tr class="'.$class_total.'">';
-                        echo '<td colspan="2"><strong>Facturas '.$total_sf.' | '.$total_ef.'</strong></td>';
-                        echo '<td><strong>Boletas '.$total_sb.' | '.$total_eb.'</strong></td>';
+                                }                                
+                            }                            
+                        }                        
+                        echo '<tr>';
+                        echo '<td colspan="2"><strong>Facturas '.number_format($total_sf,2,'.','').' | '.number_format($total_ef,2,'.','').'</strong></td>';
+                        echo '<td><strong>Boletas '.number_format($total_sb,2,'.','').' | '.number_format($total_eb,2,'.','').'</strong></td>';
                         echo '<td colspan="2"><strong>Notas '.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</strong></td>';
-                        echo '<td colspan="3"><strong>Totales '.$total_s.' | '.$total_e.'</strong></td>';
+                        echo '<td colspan="3"></td>';
                         echo '<td colspan="2"></td>';
                         echo '</tr>';
                     }
