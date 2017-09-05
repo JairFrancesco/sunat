@@ -62,7 +62,18 @@
     echo '<td><strong>Resumen</strong></td>';
     echo '<td><strong>Acciones</strong></td>';
     echo '</tr>';
-    for($i=$inicio_mes;$i<=$fin_mes;$i++){        
+
+    $can_F_total = 0;
+    $can_B_total = 0;
+    $can_A_total = 0;
+    $can_FE_total = 0;
+    $can_BE_total = 0;
+    $can_AE_total = 0;
+
+    for($i=$inicio_mes;$i<=$fin_mes;$i++){
+        // Totales
+        
+
         $total_sf = 0; //total saes facturas
         $total_ef = 0;
         $total_sb = 0;
@@ -159,6 +170,14 @@
             }
             
         }
+
+        $can_F_total = $can_F_total + $total_sf;
+        $can_B_total = $can_B_total + $total_sb;
+        $can_A_total = $can_A_total + $total_sa;
+        $can_FE_total = $can_FE_total + $total_ef;
+        $can_BE_total = $can_BE_total + $total_eb;
+        $can_AE_total = $can_AE_total + $total_ea;
+
         (number_format($total_sf,2,'.','') == number_format($total_ef,2,'.','')) ? $class_f='success':$class_f='danger';
         (number_format($total_sb,2,'.','') == number_format($total_eb,2,'.','')) ? $class_b='success':$class_b='danger';
         (number_format($total_sa,2,'.','') == number_format($total_ea,2,'.','')) ? $class_a='success':$class_a='danger';
@@ -178,11 +197,14 @@
         echo '</tr>';
     }
     echo '<tr>';
-    echo '<tb></tb>';
+    echo '<td colspan="2"><strong>Totales</strong></td>';
+    echo '<td class="text-center"><strong>'.number_format($can_F_total,2,'.','\'' ).' | '.number_format($can_FE_total,2,'.','\'').'</strong></td>';
+    echo '<td class="text-center"><strong>'.number_format($can_B_total,2,'.','\'').' | '.number_format($can_BE_total,2,'.','\'').'</strong></td>';
+    echo '<td class="text-center"><strong>'.number_format($can_A_total,2,'.','\'').' | '.number_format($can_AE_total,2,'.','\'').'</strong></td>';
+    echo '<td></td>';
+    echo '<td></td>';
     echo '</tr>';
-    echo '</table>';
-    
-    
+    echo '</table>';    
 ?>
                 
                
