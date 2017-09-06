@@ -88,18 +88,14 @@ function convertir_a_letras($num, $fem = false, $dec = true) {
                 $punt = true;
                 continue;
             }
-
         }elseif (! (strpos('0123456789', $n) === false)) {
             if ($punt) {
                 if ($n != '0') $zeros = false;
                 $fra .= $n;
             }else
-
                 $ent .= $n;
         }else
-
             break;
-
     }
     $ent = '     ' . $ent;
     if ($dec and $fra and ! $zeros) {
