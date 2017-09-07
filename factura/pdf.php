@@ -18,6 +18,7 @@
     $sql_parse = oci_parse($conn,$sql_cab_doc_gen);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $cab_doc_gen, null, null, OCI_FETCHSTATEMENT_BY_ROW); $cab_doc_gen = $cab_doc_gen[0];
+    //print_r($cab_doc_gen);
 
 
     /*  MONEDA
@@ -300,7 +301,13 @@
     /*LETRAS DEL TOTAL
     *******************************/
     include ("convertir_a_letras.php");
-    $letras = convertir_a_letras(number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.','')).' '.$moneda_leyenda.'.';
+    if($cab_doc_gen['CDG_IMP_NETO']==0 || $cab_doc_gen['CDG_IMP_NETO']=='0.00' || $cab_doc_gen['CDG_IMP_NETO']=='0'){
+        $letras = 'cero con 0/00 '.$moneda_leyenda;
+    }else{
+        $letras = convertir_a_letras(number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.','')).' '.$moneda_leyenda.'.';   
+    }
+    //$letras = convertir_a_letras(number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.','')).' '.$moneda_leyenda.'.';
+    //$letras = convertir_a_letras('0').$moneda_leyenda;
 
 
     /*REFERENCIA 0:sin  1:nota  2:franquisia 3:anticipo
@@ -533,19 +540,21 @@
     <span style="text-align: center; font-size: 11px;">Representación Impresa de la Factura Electrónica. SURMOTRIZ S.R.L. Autorizado para ser Emisor electrónico mediante Resolución de Intendencia N° 112-005-0000143/SUNAT Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php</span>
 
 <?php
-
+    
     $content = ob_get_clean();
     use Spipu\Html2Pdf\Html2Pdf;
     $html2pdf = new Html2Pdf('P', 'A4', 'es', true, 'UTF-8', array(8, 8, 8, 8));
     $html2pdf->writeHTML($content);
     $html2pdf->output($ruta.'20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.pdf','F');
     $html2pdf->output('20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.pdf');
-    unlink($ruta.'20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.png');
+    //unlink($ruta.'20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.png');
 
+    /*
     if($cab_doc_gen['CDG_TIP_DOC']=='B'){
         $update = "update cab_doc_gen SET cdg_sun_env='S' WHERE cdg_num_doc='".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab_doc_gen['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."'";
         $stmt = oci_parse($conn, $update);
         oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
         oci_free_statement($stmt);
     }
+    */
 ?>
