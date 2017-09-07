@@ -108,6 +108,9 @@
                     $can_E = $can_E +1;
                 }
             }elseif($documento['CDG_TIP_DOC'] == 'B'){
+                if($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S'){
+                    $can_E = $can_E +1;
+                }
                 $can_B = $can_B +1;
             }elseif($documento['CDG_TIP_DOC'] == 'A'){
                 $can_A = $can_A +1;
