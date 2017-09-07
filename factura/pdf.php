@@ -488,7 +488,15 @@
                     // notas
                     if($cab_doc_gen['CDG_TIP_DOC']=='F' || $cab_doc_gen['CDG_TIP_DOC']=='B'){
                         if($cab_doc_gen['CDG_CO_CR'] != 'AN'){
-                            echo $cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'].'<br>';
+                            echo $cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'].'<br>';                            
+                            // si es franquisia anticipo
+                            if($reference==2){
+                                $sql_fra = "select * from cab_doc_gen where cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cla_doc='".$cab_doc_gen['CDG_TIP_FRA']."' and cdg_num_doc='".$cab_doc_gen['CDG_DOC_FRA']."'";
+                                $sql_fra_parse = oci_parse($conn, $sql_fra);
+                                oci_execute($sql_fra_parse);
+                                oci_fetch_all($sql_fra_parse, $fra, null, null, OCI_FETCHSTATEMENT_BY_ROW); $fra = $fra[0];
+                                echo 'Ref. '.$fra['CDG_TIP_DOC'].'00'.$fra['CDG_SER_DOC'].'-'.$fra['CDG_NUM_DOC'].' Fecha Ref. '.date("d-m-Y", strtotime($fra['CDG_FEC_GEN'])).'<br>';
+                            }
                         }
                     }elseif($cab_doc_gen['CDG_TIP_DOC']=='A'){
                         echo 'MOTIVO : '.$cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'].'<br>';
