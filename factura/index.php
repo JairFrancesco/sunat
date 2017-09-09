@@ -54,23 +54,11 @@
 				      	<td class="text-xs-center">{{ props.item.eliminado }}</td>			      
 				      	<td class="text-xs-center">{{ props.item.sunat }}</td>			      
 				      	<td class="text-xs-right">{{ props.item.total }}</td>			      
-				      	<td class="text-xs-right">{{ props.item.acciones }} <v-btn primary dark slot="activator">Open Dialog</v-btn></td>			      
+				      	<td class="text-xs-right">
+					      	<v-chip label>Facturar</v-chip>
+				      	</td>			      
 				    </template>
-			  	</v-data-table>
-			  	<v-layout row justify-center>
-				    <v-dialog v-model="dialog" persistent>
-				      <v-btn primary dark slot="activator">Open Dialog</v-btn>
-				      <v-card>
-				        <v-card-title class="headline">Use Google's location service?</v-card-title>
-				        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
-				        <v-card-actions>
-				          <v-spacer></v-spacer>
-				          <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Disagree</v-btn>
-				          <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Agree</v-btn>
-				        </v-card-actions>
-				      </v-card>
-				    </v-dialog>
-				</v-layout>
+			  	</v-data-table>			  	
 	      	</v-container>
 	    </main>
 	  </v-app>
@@ -104,6 +92,30 @@
 						{ text: 'Acciones', value: 'acciones' }					
 					],
 					items: [
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
+						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
 						{ id: '01', docu: 'F001-17153', cliente: 'Caceres Mamani Angela cec', eliminado: 'Si', sunat: '0001', total: '3,338.72 S/.', acciones: 'PDF XML COMP'},					
 					],
 				dialog: false
