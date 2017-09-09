@@ -85,10 +85,17 @@ include "factura/__resumen_boleta_notas.php";
             $sql_rboletas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_num_doc between ".$bol[0]." and ".$bol[1]." and cdg_tip_doc='B' order by cdg_fec_gen ASC"); oci_execute($sql_rboletas);
             while($res_rboletas = oci_fetch_array($sql_rboletas))
             {
-                $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
-                $desc = $desc + $res_rboletas['CDG_DES_TOT'];
-                $grabadas = $grabadas + ($res_rboletas['CDG_VVP_TOT'] - $res_rboletas['CDG_DES_TOT']);
-                $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
+                if($res_rboletas['CDG_EXI_FRA']=='S'){
+                    $sub = $sub +  number_format($res_rboletas['CDG_VVP_TOT']-($res_rboletas['CDG_TOT_FRA']/(1+$res_rboletas['CDG_POR_IGV']/100)),2,'.','');
+                    $desc = $desc + $res_rboletas['CDG_DES_TOT'];
+                    $grabadas = $grabadas + number_format($res_rboletas['CDG_VVP_TOT']-($res_rboletas['CDG_TOT_FRA']/(1+$res_rboletas['CDG_POR_IGV']/100)) - $res_rboletas['CDG_DES_TOT'],2,'.','');
+                    $igv = $igv + 0;
+                }else{
+                    $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
+                    $desc = $desc + $res_rboletas['CDG_DES_TOT'];
+                    $grabadas = $grabadas + ($res_rboletas['CDG_VVP_TOT'] - $res_rboletas['CDG_DES_TOT']);
+                    $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
+                }                
                 $total = $total + $res_rboletas['CDG_IMP_NETO'];
             }
 
