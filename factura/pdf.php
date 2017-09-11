@@ -278,7 +278,7 @@
     if($cab_doc_gen['CDG_EXI_FRA'] == 'S'){
         $subtotal = number_format(round((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2),2,'.',',');
         $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.',',');
-        $gravadas = number_format($subtotal-$descuentos,2,'.',',');                
+        $gravadas = number_format((round((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2) - $cab_doc_gen['CDG_DES_TOT']),2,'.',',');
         $igv = number_format(round(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2),2,'.',',');        
     }else{
         if($moneda == 'PEN'){
