@@ -15,7 +15,7 @@
     $j=1;
     while(file_exists($ruta.'20532710066-RC-'.date('Ymd').'-'.$j.'.xml')){
         $j++;
-        // el valor de i es el actual que se va crear
+        // el valor de i es el actual que se va crear 
     }
 
     // creacion del xml
