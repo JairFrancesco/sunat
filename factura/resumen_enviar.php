@@ -78,7 +78,7 @@
                 $sql_rboletas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_num_doc between ".$bol[0]." and ".$bol[1]." and cdg_tip_doc='B' order by cdg_fec_gen ASC"); oci_execute($sql_rboletas);
                 while($res_rboletas = oci_fetch_array($sql_rboletas))
                 {
-                    /*
+
                     if($res_rboletas['CDG_EXI_FRA']=='S'){
                         $bols[$i]['subtotal'] = $sub = $sub +  number_format($res_rboletas['CDG_VVP_TOT']-($res_rboletas['CDG_TOT_FRA']/(1+$res_rboletas['CDG_POR_IGV']/100)),2,'.','');
                         $bols[$i]['descuento'] = $desc = $desc + $res_rboletas['CDG_DES_TOT'];
@@ -96,12 +96,7 @@
                         $bols[$i]['descuento'] = $desc = $desc + $res_rboletas['CDG_DES_TOT'];
                         $bols[$i]['gravada'] = $grabadas = $grabadas + ($res_rboletas['CDG_VVP_TOT'] - $res_rboletas['CDG_DES_TOT']);
                         $bols[$i]['igv'] = $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
-                    }
-                    */
-                    $bols[$i]['subtotal'] = $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
-                        $bols[$i]['descuento'] = $desc = $desc + $res_rboletas['CDG_DES_TOT'];
-                        $bols[$i]['gravada'] = $grabadas = $grabadas + ($res_rboletas['CDG_VVP_TOT'] - $res_rboletas['CDG_DES_TOT']);
-                        $bols[$i]['igv'] = $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
+                    }                    
                     
                     $bols[$i]['total'] = $total = $total + $res_rboletas['CDG_IMP_NETO'];
                 }                
