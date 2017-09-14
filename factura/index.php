@@ -1,167 +1,268 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title></title>
-	<link rel="stylesheet" href="">
-	<!-- Add this to <head> -->
-	<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap@next/dist/css/bootstrap.min.css"/>
-	<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+        <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="app">
+            <v-app>
+                <v-navigation-drawer  :mini-variant.sync="mini" permanent light v-model="drawer" >
+                    <v-toolbar flat class="transparent">
+                        <v-list class="pa-0">
+                            <v-list-tile avatar>
+                                <v-list-tile-avatar>
+                                    <img src="https://randomuser.me/api/portraits/men/85.jpg" />
+                                </v-list-tile-avatar>
+                                <v-list-tile-content>
+                                    <v-list-tile-title>Surmotriz SRL</v-list-tile-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <v-btn icon @click.native.stop="mini = !mini">
+                                        <v-icon>chevron_left</v-icon>
+                                    </v-btn>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                        </v-list>
+                    </v-toolbar>
+                    <v-divider></v-divider>
+                    <v-list>
+                        <template v-for="(item, i) in items2">
+                            <v-layout row v-if="item.heading" align-center :key="i">
+                                <v-flex xs6>
+                                    <v-subheader v-if="item.heading">
+                                        {{ item.heading }}
+                                    </v-subheader>
+                                </v-flex>
+                                <v-flex xs6 class="text-xs-center">
+                                    <a href="#!" class="body-2 black--text"></a>
+                                </v-flex>
+                            </v-layout>
+                            <v-list-group v-else-if="item.children" v-model="item.model" no-action>
+                                <v-list-tile slot="item" @click="">
+                                    <v-list-tile-action>
+                                        <v-icon>{{ item.model ? item.icon : item['icon-alt'] }}</v-icon>
+                                    </v-list-tile-action>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            {{ item.text }}
+                                        </v-list-tile-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                                <v-list-tile v-for="(child, i) in item.children" :key="i" @click="">
+                                    <v-list-tile-action v-if="child.icon">
+                                        <v-icon>{{ child.icon }}</v-icon>
+                                    </v-list-tile-action>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>
+                                            {{ child.text }}
+                                        </v-list-tile-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </v-list-group>
+                            <v-list-tile v-else @click="">
+                                <v-list-tile-action>
+                                    <v-icon>{{ item.icon }}</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-content>
+                                    <v-list-tile-title>
+                                        {{ item.text }}
+                                    </v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </template>
+                    </v-list>
+                </v-navigation-drawer>
+                <v-toolbar class="blue darken-3 toolbar--fixed" dark>
+                    <v-toolbar-side-icon @click.native.stop="mini = !mini"></v-toolbar-side-icon>
+                    <v-toolbar-title>Facturacion Electronica</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn icon>
+                        <v-icon>search</v-icon>
+                    </v-btn>
+                    <v-btn icon>
+                        <v-icon>apps</v-icon>
+                    </v-btn>
+                    <v-btn icon>
+                        <v-icon>refresh</v-icon>
+                    </v-btn>
+                    <v-btn icon>
+                        <v-icon>more_vert</v-icon>
+                    </v-btn>
+                </v-toolbar>
+                <main>
+                    <v-container fluid>
+                        <v-card>
 
-	
-    
-	<!-- Add this after vue.js -->
-	<script src="https://unpkg.com/vue@2.4.2/dist/vue.js"></script>
-	<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
-	<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-	
-</head>
-<body >
-	<div id="app">
-	<b-navbar type="dark" variant="primary" toggleable>
-    <b-nav-toggle target="nav_dropdown_collapse"></b-nav-toggle>
-    <b-collapse is-nav id="nav_dropdown_collapse">
-    <b-container>
-      <b-nav is-nav-bar>
-        <b-nav-item href="#">SURMOTRIZ S.R.L</b-nav-item>
-        <b-nav-item href="#">Link</b-nav-item>
-        <!-- Navbar dropdowns -->
-        <b-nav-item-dropdown text="Lang" right>
-          <b-dropdown-item href="#">EN</b-dropdown-item>
-          <b-dropdown-item href="#">ES</b-dropdown-item>
-          <b-dropdown-item href="#">RU</b-dropdown-item>
-          <b-dropdown-item href="#">FA</b-dropdown-item>
-        </b-nav-item-dropdown>
-        <b-nav-item-dropdown text="User" right>
-          <b-dropdown-item href="#">Account</b-dropdown-item>
-          <b-dropdown-item href="#">Settings</b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-nav>
-      </b-container>
-    </b-collapse>
-  </b-navbar>
-		<b-container>
-			<br>
-			<br>
-			<b-row>
-				<b-col>
-					
-						<template>
-<div>
-  <div class="my-1 row">
-    <div class="col-md-6">
-      <b-form-fieldset horizontal label="Rows per page" :label-cols="6">
-        <b-form-select :options="pageOptions" v-model="perPage" />
-      </b-form-fieldset>
-    </div>
-    <div class="col-md-6">
-      <b-form-fieldset horizontal label="Filter" :label-cols="3">
-        <b-form-input v-model="filter" placeholder="Type to Search" />
-      </b-form-fieldset>
-    </div>
-  </div>
+                            <v-card-title class="elevation-2">                                
+                                <h5>Documentos <small v-on:click="modal=true">14/09/2017</small></h5>
+                                <v-spacer></v-spacer>
+                                <v-text-field append-icon="search" label="Buscar" single-line hide-details v-model="search"></v-text-field>
+                            </v-card-title>
+                        
+                            <v-data-table v-bind:headers="headers" :items="items"  class="elevation-2">
+                                <template slot="items" scope="props">
+                                    <td style="width: 15%;" class="text-xs-left">
+                                        <v-chip>
+                                            <v-avatar class="primary">F</v-avatar>
+                                            {{ props.item.document }}
+                                        </v-chip>
+                                    </td>
+                                    <td>
+                                        <span>Neumaticos Del sur soc. Cosurmotriz y mas datos que se pueden agregar  -</span><span class="grey--text" ellipsis> Ref F-18974</span>
+                                    </td>
+                                    <td style="width: 15%;">
+                                        <strong>S/. 1,133.88</strong>
+                                    </td>
+                                    <td>
+                                        <v-chip outline class="green ">0001</v-chip>
+                                    </td>
+                                    <td>
+                                        <v-btn icon dark class="blue darken-2" slot="activator" v-on:click="dialog=true">
+                                            <v-icon dark>description</v-icon>
+                                        </v-btn>
+                                    </td>
+                                </template>
+                                <template slot="footer">
+                                    <td colspan="100%">
+                                        <strong>Facturas</strong> 1256.00 | 
+                                        <strong>Boletas</strong> 1256.00 | 
+                                        <strong>Notas</strong> 1256.00 | 
+                                    </td>
+                                </template>
+                            </v-data-table>
+                        </v-card>
 
-  <div class="row my-1">
-    <div class="col-sm-8">
-      <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" />
-    </div>
-    <div class="col-sm-4 text-md-right">
-      <b-button :disabled="!sortBy" @click="sortBy = null">Clear Sort</b-button>
-    </div>
-  </div>
+                        <v-dialog v-model="dialog" width="600" persistent>
+                            <v-card>
+                                <v-card-title class="headline">F001-15789</v-card-title>
+                                <v-card-text>                        
+                                    Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Disagree</v-btn>
+                                    <v-btn class="green--text darken-1" flat="flat" @click.native="dialog = false">Agree</v-btn>
+                                </v-card-actions>                            
+                        </v-dialog>
 
-  <!-- Main table element -->
-  <b-table striped hover show-empty
-           :items="items"
-           :fields="fields"
-           :current-page="currentPage"
-           :per-page="perPage"
-           :filter="filter"
-           :sort-by.sync="sortBy"
-           :sort-desc.sync="sortDesc"
-           @filtered="onFiltered"
-  >
-    <template slot="name" scope="row">{{row.value.first}} {{row.value.last}}</template>
-    <template slot="isActive" scope="row">{{row.value?'Yes :)':'No :('}}</template>
-    <template slot="actions" scope="row">
-      <!-- We use click.stop here to prevent a 'row-clicked' event from also happening -->
-      <b-btn size="sm" @click.stop="details(row.item,row.index,$event.target)">Details</b-btn>
-    </template>
-  </b-table>
-
-  <p>
-    Sort By: {{ sortBy || 'n/a' }}, Direction: {{ sortDesc ? 'descending' : 'ascending' }}
-  </p>
-
-  <!-- Details modal -->
-  <b-modal id="modal1" @hide="resetModal" ok-only>
-    <h4 class="my-1 py-1" slot="modal-header">Index: {{ modalDetails.index }}</h4>
-    <pre>{{ modalDetails.data }}</pre>
-  </b-modal>
-
-</div>
-</template>
-					
-				</b-col>
-			</b-row>
-		</b-container>
-	</div>
-	
-	<script>
-	const items = [
-  { isActive: true,  age: 40, name: { first: 'Dickerson', last: 'Macdonald' } },
-  { isActive: false, age: 21, name: { first: 'Larsen', last: 'Shaw' } },
-  { _rowVariant: 'success',
-    isActive: false, age: 9,  name: { first: 'Mini', last: 'Navarro' } },
-  { isActive: false, age: 89, name: { first: 'Geneva', last: 'Wilson' } },
-  { isActive: true,  age: 38, name: { first: 'Jami', last: 'Carney' } },
-  { isActive: false, age: 27, name: { first: 'Essie', last: 'Dunlap' } },
-  { isActive: true,  age: 40, name: { first: 'Thor', last: 'Macdonald' } },
-  { _cellVariants: { age: 'danger', isActive: 'warning' },
-    isActive: true,  age: 87, name: { first: 'Larsen', last: 'Shaw' } },
-  { isActive: false, age: 26, name: { first: 'Mitzi', last: 'Navarro' } },
-  { isActive: false, age: 22, name: { first: 'Genevive', last: 'Wilson' } },
-  { isActive: true,  age: 38, name: { first: 'John', last: 'Carney' } },
-  { isActive: false, age: 29, name: { first: 'Dick', last: 'Dunlap' } }
-];
-
-var app = new Vue({
-   el: '#app',
-	data: {
-		items: items,
-		fields: {
-      name:     { label: 'Person Full name', sortable: true },
-      age:      { label: 'Person age', sortable: true, 'class': 'text-center'  },
-      isActive: { label: 'is Active' },
-      actions:  { label: 'Actions' }
-    },
-    currentPage: 1,
-    perPage: 5,
-    totalRows: items.length,
-    pageOptions: [{text:5,value:5},{text:10,value:10},{text:15,value:15}],
-    sortBy: null,
-    sortDesc: false,
-    filter: null,
-    modalDetails: { index:'', data:'' }
-	},
-	methods: {
-    details(item, index, button) {
-      this.modalDetails.data = JSON.stringify(item, null, 2);
-      this.modalDetails.index = index;
-      this.$root.$emit('show::modal','modal1', button);
-    },
-    resetModal() {
-      this.modalDetails.data = '';
-      this.modalDetails.index = '';
-    },
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
-    }
-  }
-})
-	</script>
-</body>
+                        <v-dialog persistent v-model="modal" lazy full-width>
+                          <v-date-picker v-model="e3" scrollable >
+                            <template scope="{ save, cancel }">
+                              <v-card-actions>
+                                <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
+                                <v-btn flat primary @click.native="save()">Save</v-btn>
+                              </v-card-actions>
+                            </template>
+                          </v-date-picker>
+                        </v-dialog>                        
+                    </v-container>
+                </main>
+            </v-app>
+        </div>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+        <script>
+            new Vue({            
+                el: '#app',            
+                data () {            
+                    return {            
+                        drawer: true,            
+                        mini: false,            
+                        right: null,
+                        modal: false,
+                        e3: null,
+                        items2: [
+            
+                            {heading: 'Principal'},
+            
+                            {icon: 'contacts', text: 'Documentos'},
+            
+                            {icon: 'history', text: 'Frequently contacted'},                    
+            
+                            {heading: 'Labels'},
+            
+                            {
+            
+                                icon: 'keyboard_arrow_up',
+            
+                                'icon-alt': 'keyboard_arrow_down',
+            
+                                text: 'Labels',
+            
+                                model: false,
+            
+                                children: [
+            
+                                    {icon: 'add', text: 'Create label'}
+            
+                                ]
+            
+                            },
+            
+                            {
+            
+                                icon: 'keyboard_arrow_up',
+            
+                                'icon-alt': 'keyboard_arrow_down',
+            
+                                text: 'More',
+            
+                                model: false,
+            
+                                children: [
+            
+                                    {text: 'Import'},
+            
+                                    {text: 'Export'},
+            
+                                    {text: 'Print'},
+            
+                                    {text: 'Undo changes'},
+            
+                                    {text: 'Other contacts'}
+            
+                                ]
+            
+                            },
+            
+                            {icon: 'settings', text: 'Settings'},
+            
+                            {icon: 'chat_bubble', text: 'Send feedback'},
+            
+                            {icon: 'help', text: 'Help'},                                
+                        ],
+                        search: '',
+                        picker: null,
+                        headers: [            
+                            {text: 'Documento', align: 'left', value: 'document'},
+                            {text: 'Descripcion', align: 'left', value: 'description'},
+                            {text: 'Total', align: 'left', value: 'total'},
+                            {text: 'Sunat', align: 'left', value: 'sunat'},
+                            {text: 'Acciones', align: 'left', value: 'accion', sortable:false}
+                        ],            
+                        items: [            
+                            { value: false, document: '13946'},
+                            { value: false, document: '13946'},
+                            { value: false, document: '13946'},
+                            { value: false, document: '13946'},
+                            { value: false, document: '13946'},
+                            { value: false, document: '13946'},
+                            { value: false, document: '13946'},
+                            { value: false, document: '13946'},
+                            { value: false, document: '13946'},
+                            { value: false, document: '13946'},
+                        ],
+            
+                        dialog: false
+            
+                    }
+            
+                }
+            
+            })
+            
+        </script>
+    </body>
 </html>
