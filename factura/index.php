@@ -68,7 +68,7 @@
                 
       <p>
         <table class="table table-md table-bordered">
-          <thead class="dark" style="background-color: #563d7c; color: #fff;">
+          <thead>
             <tr>
               <th>#</th>
               <th>Serie <i class="fa fa-caret-up"></i></th>
