@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <!-- FontAwesome CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style type="text/css" media="screen">
+      resumen {
+        background-color: #563d7c;
+      }
+      resumen a:hover {
+        background-color: #fff;
+      }
+    </style>
   </head>
   <body>
     <!-- Menu Navbar-->
@@ -30,11 +38,7 @@
             <li class="nav-item">
               <a class="nav-link disabled" href="#">Disabled</a>
             </li>
-          </ul>
-          <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-default my-2 my-sm-0" type="submit">Search</button>
-          </form>
+          </ul>          
         </div>
       </div>
     </nav>  
@@ -60,7 +64,7 @@
 
         </div>
         <div class="col-8 text-right">          
-          <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i> Resumen Mes</a>
+          <a href="#" class="btn btn-dark"  style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i> Resumen Mes</a>
           <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i> Resumen Dia</a>
         </div>        
       </div>
