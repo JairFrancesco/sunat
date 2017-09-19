@@ -7,7 +7,7 @@
     ***********************************/
     $gen = $_GET['gen'];
     $emp = $_GET['emp'];
-    $tip = $_GET['tip'];
+    $tip = $_GET['tip']; // F
     $num = $_GET['num'];
 
     /* CONSULTA CAB_DOC_GEN
@@ -314,12 +314,70 @@
             $doc_ref_tipo = '07';
         }
         
-    } elseif ($cab_doc_gen['CDG_EXI_FRA'] == 'S' && $cab_doc_gen['CDG_TIP_DOC'] != 'A') {
-        $reference = 2;
-    } elseif ($cab_doc_gen['CDG_EXI_ANT'] == 'AN' && $cab_doc_gen['CDG_TIP_DOC'] != 'A') {
-        $reference = 3;
+    } elseif ($cab_doc_gen['CDG_EXI_FRA'] == 'S' && $cab_doc_gen['CDG_TIP_DOC'] != 'A' && $cab_doc_gen['CDG_EXI_ANT']!='AN') {
+        $reference = 2; // franquicia
+    } elseif ($cab_doc_gen['CDG_EXI_ANT'] == 'AN' && $cab_doc_gen['CDG_TIP_DOC'] != 'A' && $cab_doc_gen['CDG_EXI_ANT']=='AN') {
+        $reference = 3; // anticipo
     } else {
         $reference = 0;
     }
+
+    /*Franquicias    
+    ******************/
+    if($reference == 2){
+        $sql_fra = "select * from cab_doc_gen where cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cla_doc='".$cab_doc_gen['CDG_TIP_FRA']."' and cdg_num_doc='".$cab_doc_gen['CDG_DOC_FRA']."'";
+        $sql_fra_parse = oci_parse($conn, $sql_fra);
+        oci_execute($sql_fra_parse);
+        oci_fetch_all($sql_fra_parse, $fra, null, null, OCI_FETCHSTATEMENT_BY_ROW); $fra = $fra[0];
+    }
+
+    /*Anticipos
+    *******************/
+    if($reference == 3){
+        $sql_fra = "select * from cab_doc_gen where cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cla_doc='".$cab_doc_gen['CDG_TIP_FRA']."' and cdg_num_doc='".$cab_doc_gen['CDG_DOC_FRA']."'";
+        $sql_fra_parse = oci_parse($conn, $sql_fra);
+        oci_execute($sql_fra_parse);
+        oci_fetch_all($sql_fra_parse, $anticipo, null, null, OCI_FETCHSTATEMENT_BY_ROW); $anticipo = $anticipo[0];
+
+        /*Variables anticipo tag
+        ********************************/
+        //tipo documento - catalogo 12
+        if($anticipo['CDG_TIP_DOC'] == 'F'){
+            $anticipo_tipo_doc = '03';
+        }elseif ($anticipo['CDG_TIP_DOC'] == 'B') {
+            $anticipo_tipo_doc = '02';
+        }       
+        $anticipo_serie_numero_doc = $anticipo['CDG_TIP_DOC'].'00'.$anticipo['CDG_SER_DOC'].'-'.$anticipo['CDG_NUM_DOC'];
+
+        $anticipo_documento = $anticipo['CDG_DOC_CLI'];
+        /*  RUC O DNI catalogo 6
+        *******************/
+        if (strlen(trim($anticipo['CDG_DOC_CLI'])) == 11) {            
+            $anticipo_tipo_documento = 6; // ruc
+        } elseif (strlen(trim($anticipo['CDG_DOC_CLI'])) == 8) {            
+            $anticipo_tipo_documento = 1; // dni
+        } else {            
+            $anticipo_tipo_documento = 4; //extranj
+        }
+        
+
+        /*  MONEDA
+        *********************************************/
+        if($anticipo['CDG_TIP_CAM'] != 0){
+            $anticipo_moneda = 'USD';
+            $anticipo_moneda_nombre = '$$ ';
+            $anticipo_moneda_leyenda = 'dolares';
+        }else{
+            $anticipo_moneda = 'PEN';
+            $anticipo_moneda_nombre = 'S/ ';
+            $anticipo_moneda_leyenda = 'soles';
+        }
+        
+        $anticipo_total = number_format($anticipo['CDG_IMP_NETO'], 2, '.', '');;
+
+        //echo 'Ref. '.$fra['CDG_TIP_DOC'].'00'.$fra['CDG_SER_DOC'].'-'.$fra['CDG_NUM_DOC'].' Fecha Ref. '.date("d-m-Y", strtotime($fra['CDG_FEC_GEN'])).'<br>';
+        //echo $anticipo_moneda_nombre;    
+    }
+    
     
 ?>

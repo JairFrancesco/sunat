@@ -173,9 +173,9 @@
             // anticipos
             if ($reference == 3){
             $PrepaidPayment = $xml->createElement('cac:PrepaidPayment'); $PrepaidPayment = $Invoice->appendChild($PrepaidPayment);
-                $cbc = $xml->createElement('cbc:ID',$anticipo_doc); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('schemeID', $anticipo_SchemaID);
-                $cbc = $xml->createElement('cbc:PaidAmount',($anticipo_tot/1.18)); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('currencyID', $anticipo_moneda);
-                $cbc = $xml->createElement('cbc:InstructionID',$anticipo_documento); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('schemeID', $anticipo_document_type);
+                $cbc = $xml->createElement('cbc:ID',$anticipo_serie_numero_doc); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('schemeID', $anticipo_tipo_doc);
+                $cbc = $xml->createElement('cbc:PaidAmount',$anticipo_total); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('currencyID', $anticipo_moneda);
+                $cbc = $xml->createElement('cbc:InstructionID',$anticipo_documento); $cbc = $PrepaidPayment->appendChild($cbc); $cbc->setAttribute('schemeID', $anticipo_tipo_documento);
             }
 
             // nombre o razon zocial
@@ -208,8 +208,8 @@
 
             // Importe total de venta
             $legal = $xml->createElement('cac:LegalMonetaryTotal'); $legal = $Invoice->appendChild($legal);
-            if ($reference == 3){ // anticipo
-                $cbc = $xml->createElement('cbc:PrepaidAmount', $anticipo_tot); $cbc = $legal->appendChild($cbc); $cbc->setAttribute('currencyID', "PEN");
+            if($reference == 3){ // anticipo
+                $cbc = $xml->createElement('cbc:PrepaidAmount', $anticipo_total); $cbc = $legal->appendChild($cbc); $cbc->setAttribute('currencyID', $anticipo_moneda);
             }
             $cbc = $xml->createElement('cbc:PayableAmount', $total); $cbc = $legal->appendChild($cbc); $cbc->setAttribute('currencyID', $moneda);
 
