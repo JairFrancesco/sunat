@@ -191,7 +191,7 @@
             $zip = new ZipArchive;
             $res = $zip->open($ruta.$nom.'.zip', ZipArchive::CREATE);
             $zip->addFromString($nom.'.xml', $strings_xml);
-            $zip->close();
+            $zip->close(); 
 
 
             //$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
