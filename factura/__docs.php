@@ -372,6 +372,10 @@
             $anticipo_moneda_nombre = 'S/ ';
             $anticipo_moneda_leyenda = 'soles';
         }
+
+        /*Anticipo Fecha
+        *********************/
+        $anticipo_fecha = date("d-m-Y", strtotime($anticipo['CDG_FEC_GEN']));
         
         $anticipo_total = number_format($anticipo['CDG_IMP_NETO'], 2, '.', '');;
 

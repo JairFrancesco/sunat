@@ -151,7 +151,7 @@
                             if($reference==2){                                
                                 echo 'Ref. '.$fra['CDG_TIP_DOC'].'00'.$fra['CDG_SER_DOC'].'-'.$fra['CDG_NUM_DOC'].' Fecha Ref. '.date("d-m-Y", strtotime($fra['CDG_FEC_GEN'])).'<br>';
                             }elseif ($reference==3) { // anticipo
-                                echo 'Anticipo '.$anticipo_serie_numero_doc.' Monto '.$anticipo_moneda_nombre.$anticipo_total.'<br>';
+                                echo 'Anticipo '.$anticipo_serie_numero_doc.' Fecha '.$anticipo_fecha.'<br>';
                             }
                         }
                     }elseif($cab_doc_gen['CDG_TIP_DOC']=='A'){
