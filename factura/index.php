@@ -17,6 +17,8 @@
         background-color: #fff;
       }
     </style>
+      <script src="https://unpkg.com/vue"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.2/vue-resource.min.js"></script>
   </head>
   <body>
     <!-- Menu Navbar-->
@@ -43,7 +45,7 @@
       </div>
     </nav>  
 
-    <div class="container">
+    <div class="container" id="app">
       <p><h2>Documentos <small>15/09/2017</small></h2></p> 
       <div class="row">
         <div class="col">
@@ -71,7 +73,7 @@
           
                 
       <p>
-        <table class="table table-md table-bordered">
+        <table class="table table-md table-bordered table-hover">
           <thead>
             <tr>
               <th>#</th>
@@ -87,16 +89,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th>1</th>
-              <td>B001</td>
-              <td>13979</td>
-              <td>Shaika Muhammad Farooq</td>
-              <td>D</td>
+            <tr v-for="document in documents">
+              <th>{{document.id}}</th>
+              <td>{{document.serie}}</td>
+              <td>{{document.numero}}</td>
+              <td>{{document.cliente}}</td>
+              <td>{{document.impresion}}</td>
               <td>N</td>
               <td class="text-center">--</td>
               <td>0001</td>
-              <td class="text-right">S/ 1,416.65</td>
+              <td class="text-right">{{document.moneda}} {{document.total}}</td>
               <td class="text-center">
                 <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm">PDF</a>
                 <a href="#" class="btn btn-sm btn-info">XML</a>
@@ -105,20 +107,44 @@
             </tr>            
           </tbody>
         </table>
+
       </p>
       <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
           <div class="modal-content">
-            
+              <div id="app">
+
+              </div>
           </div>
         </div>
       </div>
     </div>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            created: function () {
+                this.getDocuments();
+            },
+            data: {
+                message: 'Hello Vue!',
+                documents: []
+            },
+
+            methods: {
+                getDocuments: function(){
+                    this.$http.get('http://localhost/sunat/factura/apis/index.php').then(function (response) {
+                        this.documents = response.data;
+                    })
+                }
+            }
+        })
+    </script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
   </body>
 </html>

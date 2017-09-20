@@ -1,10 +1,49 @@
 <?php
-	header('Content-type: application/json');
+    header('Content-Type: application/json; charset=utf-8');
 	include('../conexion.php');
 	$sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='02' and cdg_cod_emp='01' and to_char(cdg_fec_gen,'dd-mm-yyyy')='19-09-2017'";
 	$sql_parse = oci_parse($conn,$sql_cab_doc_gen);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $documentos, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+    //print_r (json_encode($documentos));
+    //$docs = array();
+    $i=0;
+    foreach ($documentos as $documento){
 
-    print_r (json_encode($documentos));
+        $docs[$i]['id']=$i+1;
+        $docs[$i]['numero']=$documento['CDG_NUM_DOC'];
+
+        /* DOC Y SERIE 01-F001
+        **********************/
+        if($documento['CDG_TIP_DOC'] == 'F'){
+            $serie = 'F00'.$documento['CDG_SER_DOC'];
+        }elseif($documento['CDG_TIP_DOC'] == 'B'){
+            $serie = 'B00'.$documento['CDG_SER_DOC'];
+        }elseif($documento['CDG_TIP_DOC'] == 'A'){
+            if($documento['CDG_TIP_REF'] == 'BR' || $documento['CDG_TIP_REF'] == 'BS'){
+                $serie = 'BN0'.$documento['CDG_SER_DOC'];
+            }elseif($documento['CDG_TIP_REF'] == 'FR' || $documento['CDG_TIP_REF'] == 'FS' || $documento['CDG_TIP_REF'] == 'FC'){
+                $serie = 'FN0'.$documento['CDG_SER_DOC'];
+            }
+        }
+        $docs[$i]['serie']=$serie;
+        $docs[$i]['cliente']=$documento['CDG_NOM_CLI'];
+        $docs[$i]['impresion']=$documento['CDG_TIP_IMP'];
+        $docs[$i]['ot']=$documento['CDG_ORD_TRA'];
+        $docs[$i]['sunat_codigo']=$documento['CDG_COD_SNT'];
+        $docs[$i]['sunat_envio']=$documento['CDG_SUN_ENV'];
+        $docs[$i]['total']=$documento['CDG_IMP_NETO'];
+
+        /*  MONEDA
+        *********************************************/
+        if($documento['CDG_TIP_CAM'] != 0){
+            $moneda = '$$ ';
+        }else{
+            $moneda = 'S/ ';
+        }
+        $docs[$i]['moneda']=$moneda;
+        $i++;
+
+    }
+    print_r(json_encode($docs,JSON_UNESCAPED_UNICODE));
 ?>
