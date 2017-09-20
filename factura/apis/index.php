@@ -29,10 +29,23 @@
         $docs[$i]['serie']=$serie;
         $docs[$i]['cliente']=$documento['CDG_NOM_CLI'];
         $docs[$i]['impresion']=$documento['CDG_TIP_IMP'];
-        $docs[$i]['ot']=$documento['CDG_ORD_TRA'];
+
+        /*OT
+        *******/
+        ($documento['CDG_ORD_TRA'] == 0)? $docs[$i]['ot']='' : $docs[$i]['ot']=$documento['CDG_ORD_TRA'];
+
+        /*ANULADO
+        *************/
+        ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']='S' )?  $docs[$i]['anulado']='Si' : $docs[$i]['anulado']='';
+
+        /*SUNAT CODIGO
+        ****************/
+        ($documento['CDG_COD_SNT']=='0001' || $documento['CDG_COD_SNT']=='0003')? $docs[$i]['sunat_codigo']=$documento['CDG_COD_SNT'] : $docs[$i]['sunat_codigo']='';
+
         $docs[$i]['sunat_codigo']=$documento['CDG_COD_SNT'];
         $docs[$i]['sunat_envio']=$documento['CDG_SUN_ENV'];
-        $docs[$i]['total']=$documento['CDG_IMP_NETO'];
+
+        $docs[$i]['total']=number_format($documento['CDG_IMP_NETO'],0,'.',',');
 
         /*  MONEDA
         *********************************************/
@@ -42,6 +55,12 @@
             $moneda = 'S/ ';
         }
         $docs[$i]['moneda']=$moneda;
+
+        /*PDF LINK
+        *****************/
+        $pdf_link = 'pdf.php?gen='.$documento['CDG_COD_GEN'].'&emp='.$documento['CDG_COD_EMP'].'&tip='.$documento['CDG_TIP_DOC'].'&num='.$documento['CDG_NUM_DOC'];
+        $docs[$i]['pdf_link']=$pdf_link;
+
         $i++;
 
     }
