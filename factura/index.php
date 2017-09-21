@@ -111,7 +111,7 @@
             <td>{{document.sunat_codigo}}</td>
             <td class="text-right">{{document.moneda}} {{document.total}}</td>
             <td class="text-center">
-                <a href="" target="_blank" @click="showModal(document.numero)" class="btn btn-sm btn-primary"
+                <a href="" target="_blank" class="btn btn-sm btn-primary"
                    data-toggle="modal" data-target=".bd-example-modal-lg">PDF</a>
                 <a href="#" class="btn btn-sm btn-info">XML</a>
                 <a href="#" class="btn btn-sm btn-secondary">COM</a>
@@ -120,60 +120,59 @@
         </tbody>
     </table>
     </p>
+</div>
 
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Factura F001-17456</h5>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Factura F001-17456</h5>
 
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                    <table class="table table-striped table-sm">
-                        <tr>
-                            <td colspan="4">
-                                <div>Fecha : 19-09-2017</div>
-                                <div>Cliente : EPS TACNA S.A</div>
-                                <div>RUC : 20134052989</div>
-                                <div>Dirección : AV. DOS DE MAYO 372</div>
-                                <div>Forma de Pago : CREDITO</div>
-                                <div>Ubigeo : Tacna-Tacna-Tacna</div>
-                            </td>
-                            <td colspan="4">
-                                <div>Ord. Trab : 23563</div>
-                                <div>Placa/Serie : Z4O711</div>
-                                <div>Modelo/Año : HILUX - 2007</div>
-                                <div>Motor/Chasis : 8AJFX22G976002363</div>
-                                <div>Color : BLANCO</div>
-                                <div>Km : 234592</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center">#</th>
-                            <th class="text-left">Código</th>
-                            <th class="text-left">Descripción</th>
-                            <th class="text-center">Cant</th>
-                            <th class="text-right">P. Unit</th>
-                            <th class="text-right">Import</th>
-                            <th class="text-right">Descto</th>
-                            <th class="text-right">V. Venta</th>
-                        </tr>
-                    </table>
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                <table class="table table-striped table-sm">
+                    <tr>
+                        <td colspan="4">
+                            <div>Fecha : 19-09-2017</div>
+                            <div>Cliente : EPS TACNA S.A</div>
+                            <div>RUC : 20134052989</div>
+                            <div>Dirección : AV. DOS DE MAYO 372</div>
+                            <div>Forma de Pago : CREDITO</div>
+                            <div>Ubigeo : Tacna-Tacna-Tacna</div>
+                        </td>
+                        <td colspan="4">
+                            <div>Ord. Trab : 23563</div>
+                            <div>Placa/Serie : Z4O711</div>
+                            <div>Modelo/Año : HILUX - 2007</div>
+                            <div>Motor/Chasis : 8AJFX22G976002363</div>
+                            <div>Color : BLANCO</div>
+                            <div>Km : 234592</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-left">Código</th>
+                        <th class="text-left">Descripción</th>
+                        <th class="text-center">Cant</th>
+                        <th class="text-right">P. Unit</th>
+                        <th class="text-right">Import</th>
+                        <th class="text-right">Descto</th>
+                        <th class="text-right">V. Venta</th>
+                    </tr>
+                </table>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-
 
     <script>
         var app = new Vue({
