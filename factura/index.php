@@ -220,6 +220,9 @@
 
     </div>
     <script>
+        Vue.component('modal',{
+            template: '#modal-template'
+        })
         var app = new Vue({
             el: '#app',
             created: function () {
