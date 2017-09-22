@@ -404,5 +404,4 @@
         $mensajes = $mensajes."<span style='font-style: italic;'>Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco. Nación no. 00-151-084257</span>";
     }
 
-    
 ?>

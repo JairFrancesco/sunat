@@ -241,7 +241,7 @@
         methods: {
             getDocuments: function () {
                 this.loading = true;
-                this.$http.get('http://localhost/sunat/factura/apis/index.php').then(function (response) {
+                this.$http.get('./apis/index.php').then(function (response) {
                     this.loading = false;
                     this.documents = response.data;
                 })
@@ -250,7 +250,7 @@
                 this.documento = '',
                 this.document = document;
                 this.loadingFactura = true;
-                this.$http.get('http://localhost/sunat/factura/apis/documento.php'+document.pdf_link).then(function (response) {
+                this.$http.get('./apis/documento.php'+document.pdf_link).then(function (response) {
                     this.loadingFactura = false;
                     this.documento = response.data;
                 });
