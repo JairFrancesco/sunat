@@ -16,16 +16,20 @@
         /* DOC Y SERIE 01-F001
         **********************/
         if($documento['CDG_TIP_DOC'] == 'F'){
+            $tipoDoc = 'Factura';
             $serie = 'F00'.$documento['CDG_SER_DOC'];
         }elseif($documento['CDG_TIP_DOC'] == 'B'){
+            $tipoDoc = 'Boleta';
             $serie = 'B00'.$documento['CDG_SER_DOC'];
         }elseif($documento['CDG_TIP_DOC'] == 'A'){
+            $tipoDoc = 'Nota Credito';
             if($documento['CDG_TIP_REF'] == 'BR' || $documento['CDG_TIP_REF'] == 'BS'){
                 $serie = 'BN0'.$documento['CDG_SER_DOC'];
             }elseif($documento['CDG_TIP_REF'] == 'FR' || $documento['CDG_TIP_REF'] == 'FS' || $documento['CDG_TIP_REF'] == 'FC'){
                 $serie = 'FN0'.$documento['CDG_SER_DOC'];
             }
         }
+        $docs[$i]['tipo_doc']=$tipoDoc;
         $docs[$i]['serie']=$serie;
         $docs[$i]['cliente']=$documento['CDG_NOM_CLI'];
         $docs[$i]['impresion']=$documento['CDG_TIP_IMP'];
@@ -58,7 +62,7 @@
 
         /*PDF LINK
         *****************/
-        $pdf_link = 'pdf.php?gen='.$documento['CDG_COD_GEN'].'&emp='.$documento['CDG_COD_EMP'].'&tip='.$documento['CDG_TIP_DOC'].'&num='.$documento['CDG_NUM_DOC'];
+        $pdf_link = '?gen='.$documento['CDG_COD_GEN'].'&emp='.$documento['CDG_COD_EMP'].'&tip='.$documento['CDG_TIP_DOC'].'&num='.$documento['CDG_NUM_DOC'];
         $docs[$i]['pdf_link']=$pdf_link;
 
         $i++;

@@ -95,87 +95,122 @@
 
 
     <p>
-        <div class="text-center"><i v-show="loading" style="margin-top: 100px;" class="fa fa-spinner fa-3x fa-spin"></i></div>
-
-
-    <table class="table table-md table-bordered" v-show="!loading">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Serie <i class="fa fa-caret-up"></i></th>
-            <th>Numero</th>
-            <th>Cliente</th>
-            <th>Imp</th>
-            <th>Anu</th>
-            <th class="text-center">OT</th>
-            <th>Sunat</th>
-            <th class="text-right">Total</th>
-            <th class="text-center">Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="document in documents">
-            <th>{{document.id}}</th>
-            <td>{{document.serie}}</td>
-            <td>{{document.numero}}</td>
-            <td>{{document.cliente}}</td>
-            <td>{{document.impresion}}</td>
-            <td>{{document.anulado}}</td>
-            <td class="text-center">{{document.ot}}</td>
-            <td>{{document.sunat_codigo}}</td>
-            <td class="text-right">{{document.total}}</td>
-            <td class="text-center">
-                <a href="#" class="btn btn-sm btn-primary" @click="itemClicked(document)">PDF</a>
-                <a href="#" class="btn btn-sm btn-info">XML</a>
-                <a href="#" class="btn btn-sm btn-secondary">COM</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+        <div class="text-center" v-show="loading">
+            <i v-show="loading" style="margin-top: 100px;" class="fa fa-spinner fa-3x fa-spin"></i>
+        </div>
+        <table class="table table-md table-bordered" v-show="!loading">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Serie <i class="fa fa-caret-up"></i></th>
+                <th>Numero</th>
+                <th>Cliente</th>
+                <th>Imp</th>
+                <th>Anu</th>
+                <th class="text-center">OT</th>
+                <th>Sunat</th>
+                <th class="text-right">Total</th>
+                <th class="text-center">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="document in documents">
+                <th>{{document.id}}</th>
+                <td>{{document.serie}}</td>
+                <td>{{document.numero}}</td>
+                <td>{{document.cliente}}</td>
+                <td>{{document.impresion}}</td>
+                <td>{{document.anulado}}</td>
+                <td class="text-center">{{document.ot}}</td>
+                <td>{{document.sunat_codigo}}</td>
+                <td class="text-right">{{document.total}}</td>
+                <td class="text-center">
+                    <a href="#" class="btn btn-sm btn-primary" @click="itemClicked(document)">PDF</a>
+                    <a href="#" class="btn btn-sm btn-info">XML</a>
+                    <a href="#" class="btn btn-sm btn-secondary">COM</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </p>
     <div class="modal fade">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Factura F001 - {{ document.numero }}</h5>
-
+                    <h5 class="modal-title">
+                        <i class="fa fa-file-text-o"></i>
+                        {{document.tipo_doc}} F001 - {{ document.numero }}
+                    </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-center"><i v-show="loadingFactura" style="margin-top: 80px;" class="fa fa-spinner fa-3x fa-spin"></i></div>
+                    <div class="text-center">
+                        <i v-show="loadingFactura" style="margin-top: 80px;" class="fa fa-spinner fa-3x fa-spin"></i>
+                    </div>
                     <p>
-                        <table class="table table-striped table-sm" v-show="!loadingFactura">
-                            <tr>
-                                <td colspan="4">
-                                    <div>Fecha : 19-09-2017</div>
-                                    <div>Cliente : EPS TACNA S.A</div>
-                                    <div>RUC : 20134052989</div>
-                                    <div>Dirección : AV. DOS DE MAYO 372</div>
-                                    <div>Forma de Pago : CREDITO</div>
-                                    <div>Ubigeo : Tacna-Tacna-Tacna</div>
-                                </td>
-                                <td colspan="4">
-                                    <div>Ord. Trab : 23563</div>
-                                    <div>Placa/Serie : Z4O711</div>
-                                    <div>Modelo/Año : HILUX - 2007</div>
-                                    <div>Motor/Chasis : 8AJFX22G976002363</div>
-                                    <div>Color : BLANCO</div>
-                                    <div>Km : 234592</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="text-center">#</th>
-                                <th class="text-left">Código</th>
-                                <th class="text-left">Descripción</th>
-                                <th class="text-center">Cant</th>
-                                <th class="text-right">P. Unit</th>
-                                <th class="text-right">Import</th>
-                                <th class="text-right">Descto</th>
-                                <th class="text-right">V. Venta</th>
-                            </tr>
-                        </table>
+
+                    <table class="table table-striped table-sm" v-show="!loadingFactura">
+                        <tr>
+                            <td colspan="3">
+                                <div>{{documento.fecha}}</div>
+                                <div>{{documento.cliente}}</div>
+                                <div>{{documento.doc_cliente}}</div>
+                                <div>{{documento.direccion}}</div>
+                                <div>{{documento.pago}}</div>
+                                <div>{{documento.ubigeo}}</div>
+                            </td>
+                            <td colspan="5">
+                                <div>{{documento.ord_tra}}</div>
+                                <div>{{documento.placa}}</div>
+                                <div>{{documento.modelo}}</div>
+                                <div>{{documento.chasis}}</div>
+                                <div>{{documento.color}}</div>
+                                <div>{{documento.km}}</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-left">Código</th>
+                            <th class="text-left">Descripción</th>
+                            <th class="text-center">Cant</th>
+                            <th class="text-right">P.Unit</th>
+                            <th class="text-right">Import</th>
+                            <th class="text-right">Descto</th>
+                            <th class="text-right">V.Venta</th>
+                        </tr>
+                        <tr v-for="item in documento.items">
+                            <td class="text-center">{{item.id}}</td>
+                            <td class="text-left">{{item.codigo}}</td>
+                            <td class="text-left">{{item.descripcion}}</td>
+                            <td class="text-center">{{item.cantidad}}</td>
+                            <td class="text-right">{{item.unitario}}</td>
+                            <td class="text-right">{{item.importe}}</td>
+                            <td class="text-right">{{item.descuento}}</td>
+                            <td class="text-right">{{item.venta}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <strong>Totales {{documento.moneda}}</strong>
+                            </td>
+                            <td class="text-right" colspan="6">
+                                Subtotal {{documento.total_sub}} |
+                                Descuentos {{documento.total_descuentos}} |
+                                Gravadas {{documento.total_gravadas}} |
+                                I.G.V {{documento.total_igv}} |
+                                Total {{documento.total_total}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <strong>Mensajes :</strong>
+                            </td>
+                            <td class="text-right" colspan="6">
+                                {{documento.mensajes}}
+                            </td>
+                        </tr>
+                    </table>
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -188,43 +223,42 @@
 </div>
 
 
+<script>
 
-    <script>
+    var app = new Vue({
+        el: '#app',
+        created: function () {
+            this.getDocuments();
+        },
+        data: {
+            documento: [],
+            document: [],
+            documents: [],
+            loading: false,
+            loadingFactura: false
+        },
 
-        var app = new Vue({
-            el: '#app',
-            created: function () {
-                this.getDocuments();
+        methods: {
+            getDocuments: function () {
+                this.loading = true;
+                this.$http.get('http://localhost/sunat/factura/apis/index.php').then(function (response) {
+                    this.loading = false;
+                    this.documents = response.data;
+                })
             },
-            data: {
-                documento: [],
-                document: [],
-                documents: [],
-                loading: false,
-                loadingFactura: false
-            },
-
-            methods: {
-                getDocuments: function () {
-                    this.loading = true;
-                    this.$http.get('http://localhost/sunat/factura/apis/index.php').then(function (response) {
-                        this.loading = false;
-                        this.documents = response.data;
-                    })
-                },
-                itemClicked: function(document) {
-                    this.loadingFactura = true;
-                    this.$http.get('http://localhost/sunat/factura/apis/documento.php?gen=02&emp=01&tip=F&num=17717').then(function (response) {
-                        this.loadingFactura = false;
-                        this.documento = response.data;
-                    });
-                    this.document = document;
-                    $(".modal").modal('show');
-                }
+            itemClicked: function (document) {
+                this.documento = '',
+                this.document = document;
+                this.loadingFactura = true;
+                this.$http.get('http://localhost/sunat/factura/apis/documento.php'+document.pdf_link).then(function (response) {
+                    this.loadingFactura = false;
+                    this.documento = response.data;
+                });
+                $(".modal").modal('show');
             }
-        })
-    </script>
-
+        }
+    })
+</script>
 
 
 </body>
