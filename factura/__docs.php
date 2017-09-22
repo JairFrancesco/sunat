@@ -376,12 +376,33 @@
         /*Anticipo Fecha
         *********************/
         $anticipo_fecha = date("d-m-Y", strtotime($anticipo['CDG_FEC_GEN']));
-        
-        $anticipo_total = number_format($anticipo['CDG_IMP_NETO'], 2, '.', '');;
-
-        //echo 'Ref. '.$fra['CDG_TIP_DOC'].'00'.$fra['CDG_SER_DOC'].'-'.$fra['CDG_NUM_DOC'].' Fecha Ref. '.date("d-m-Y", strtotime($fra['CDG_FEC_GEN'])).'<br>';
-        //echo $anticipo_moneda_nombre;    
+        $anticipo_total = number_format($anticipo['CDG_IMP_NETO'], 2, '.', '');
     }
-    
+
+    /*Mensajes
+    *********************/
+    $mensajes = '';
+    if($cab_doc_gen['CDG_TIP_DOC']=='F' || $cab_doc_gen['CDG_TIP_DOC']=='B'){
+        if($cab_doc_gen['CDG_CO_CR'] != 'AN'){
+            $mensajes = $mensajes.$cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'];
+            // si es franquisia anticipo
+            if($reference==2){
+                $mensajes = $mensajes.'Ref. '.$fra['CDG_TIP_DOC'].'00'.$fra['CDG_SER_DOC'].'-'.$fra['CDG_NUM_DOC'].' Fecha Ref. '.date("d-m-Y", strtotime($fra['CDG_FEC_GEN']));
+            }elseif ($reference==3) { // anticipo
+                $mensajes = $mensajes.'Anticipo '.$anticipo_serie_numero_doc.' Fecha '.$anticipo_fecha;
+            }
+        }
+    }elseif($cab_doc_gen['CDG_TIP_DOC']=='A'){
+        $mensajes = $mensajes.'MOTIVO : '.$cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'];
+    }
+    // referencia
+    if($reference == 1){
+        $mensajes = $mensajes.'<strong>Ref Doc: '.$ref_doc.' Ref Fecha: '.$ref_fecha.'</strong>';
+    }
+    // facturas por servicios mayores a 700
+    if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $cab_doc_gen['CDG_IMP_NETO'] > 700 ){
+        $mensajes = $mensajes."<span style='font-style: italic;'>Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco. Nación no. 00-151-084257</span>";
+    }
+
     
 ?>

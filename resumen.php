@@ -199,10 +199,7 @@ if (isset($nots)) {
     <br>
     <div class="row">
         <div class="col-lg-12">
-
-
                 <?php
-
                     $i = 1;
                     if($check==2 || $check==1){ // enviado pero esta en 98 o 0
                         if($check==2){
