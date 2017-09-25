@@ -69,25 +69,35 @@
 
 <div class="container" id="app">
     <p>
-    <h2 id="titulo_doc">Documentos
-        <small>15/09/2017</small>
-    </h2>
+        <h2 id="titulo_doc">Documentos
+            <small>{{fecha}}</small>
+        </h2>
     </p>
     <div class="row" id="form_doc">
         <div class="col">
+            <?php
+                date_default_timezone_set('America/Lima');
+                $fecha = date('Y-m-d');
+                if (isset($_GET['fecha'])){ // la primera entrada
+                    if ($fecha != $_GET['fecha']){
+                        $fecha = $_GET['fecha'];
+                    }
 
-            <form>
+                }
+            ?>
+            <form @submit.prevent="getDocuments">
                 <div class="form-row">
                     <div class="col">
                         <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                             <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                            <input type="date" class="form-control" id="inlineFormInputGroupUsername2"
-                                   placeholder="15-09-2017" value="15-09-2017">
+                            <input type="date" name="fecha" v-model="fecha" class="form-control">
                         </div>
                     </div>
                     <div class="col">
-                        <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-search"></i>
-                            Buscar</a>
+                        <button type="submit" class="btn btn-dark" style="background-color: #563d7c;">
+                            <i class="fa fa-search"></i>
+                            Buscar
+                        </button>
                     </div>
                 </div>
             </form>
@@ -350,6 +360,8 @@
                 <td style="border-top: solid 1px #000; border-bottom: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;"><strong>{{documento.total_total}}</strong></td>
             </tr>
         </table>
+        <hr style="border: none; height: 1px; background-color: #414141; margin-top: 30px;">
+        <span style="text-align: center; font-size: 11px; line-height: 15px;">Representación Impresa de la Factura Electrónica. SURMOTRIZ S.R.L. Autorizado para ser Emisor electrónico mediante Resolución de Intendencia N° 112-005-0000143/SUNAT Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php</span>
     </div>
 </div>
 
@@ -357,7 +369,15 @@
 
 
 <script>
-
+    // funcion para agregar cero al mes
+    function pad (n, length) {
+        var  n = n.toString();
+        while(n.length < length)
+            n = "0" + n;
+        return n;
+    }
+    var f = new Date();
+    var ff = f.getFullYear() + "-" + pad((f.getMonth() +1),2) + "-" + pad(f.getDate(),2);
     var app = new Vue({
         el: '#app',
         created: function () {
@@ -368,16 +388,17 @@
             document: [],
             documents: [],
             loading: false,
-            loadingFactura: false
+            loadingFactura: false,
+            fecha: this.ff
         },
 
         methods: {
             getDocuments: function () {
                 this.loading = true;
-                this.$http.get('./apis/index.php').then(function (response) {
+                this.$http.get('./apis/index.php?fecha='+this.fecha).then(function (response) {
                     this.loading = false;
                     this.documents = response.data;
-                })
+                });
             },
             itemClicked: function (document) {
                 this.documento = '',
