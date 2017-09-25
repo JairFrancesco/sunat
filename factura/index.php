@@ -368,6 +368,7 @@
             document: [],
             documents: [],
             loading: false,
+            loadingFactura: false
         },
 
         methods: {
