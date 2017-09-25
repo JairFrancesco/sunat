@@ -125,6 +125,19 @@
         $cabezera_tipo = 0;
     }
 
+
+    /*REFERENCIA 0:sin  1:nota  2:franquisia 3:anticipo
+    *****************************************************/
+    if ($cab_doc_gen['CDG_TIP_DOC'] == 'A') {
+        $reference = 1; //nota
+    }elseif ($cab_doc_gen['CDG_EXI_FRA'] == 'S'  && $cab_doc_gen['CDG_EXI_ANT']!='AN' && $cab_doc_gen['CDG_TIP_DOC'] != 'A') {
+        $reference = 2; // franquisia
+    }elseif ($cab_doc_gen['CDG_EXI_ANT'] == 'AN' && $cab_doc_gen['CDG_TIP_DOC'] != 'A') {
+        $reference = 3; // anticipo
+    }else {
+        $reference = 0;
+    }
+
     /* ITEMS
     ***********************************/
     $i = 0;
@@ -255,12 +268,12 @@
 
     /* TOTALES
     ***********************************************/
-    if ($cab_doc_gen['CDG_EXI_FRA'] == 'S') {
+    if ($reference == 2 || $reference == 3 ) { // franquisia o anticipo
         $subtotal = number_format(round((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2),2,'.','');
         $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
         $gravadas = number_format((round((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2) - $cab_doc_gen['CDG_DES_TOT']),2,'.','');
         $igv = number_format(round(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2),2,'.','');        
-    } else {
+    } else { // si es normal calcula la moneda
         if($moneda == 'PEN'){
             $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
             $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
@@ -285,14 +298,16 @@
     }
 
 
-    /*REFERENCIA 0:sin  1:nota  2:franquisia 3:anticipo
+
+    /*Nota refrencia
     *****************************************************/
-    if ($cab_doc_gen['CDG_TIP_DOC'] == 'A') {
-        $reference = 1;
+    if ($reference == 1) {
+
         $sql_ref = "select * from cab_doc_gen where cdg_cod_gen='" . $cab_doc_gen['CDG_COD_GEN'] . "' and cdg_cod_emp='" . $cab_doc_gen['CDG_COD_EMP'] . "' and cdg_cla_doc='" . $cab_doc_gen['CDG_TIP_REF'] . "' and cdg_num_doc='" . $cab_doc_gen['CDG_DOC_REF'] . "'";
         $sql_ref_parse = oci_parse($conn, $sql_ref);
         oci_execute($sql_ref_parse);
-        oci_fetch_all($sql_ref_parse, $ref, null, null, OCI_FETCHSTATEMENT_BY_ROW);        
+        oci_fetch_all($sql_ref_parse, $ref, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
         $ref_fecha = date("d-m-Y", strtotime($ref[0]['CDG_FEC_GEN']));
         $fecha_actual = strtotime(date("d-m-Y", strtotime($ref_fecha)));
         $fecha_fija = strtotime('13-07-2017');
@@ -314,13 +329,8 @@
             $doc_ref_tipo = '07';
         }
         
-    } elseif ($cab_doc_gen['CDG_EXI_FRA'] == 'S' && $cab_doc_gen['CDG_TIP_DOC'] != 'A' && $cab_doc_gen['CDG_EXI_ANT']!='AN') {
-        $reference = 2; // franquicia
-    } elseif ($cab_doc_gen['CDG_EXI_ANT'] == 'AN' && $cab_doc_gen['CDG_TIP_DOC'] != 'A' && $cab_doc_gen['CDG_EXI_ANT']=='AN') {
-        $reference = 3; // anticipo
-    } else {
-        $reference = 0;
     }
+
 
     /*Franquicias    
     ******************/
@@ -350,8 +360,9 @@
         $anticipo_serie_numero_doc = $anticipo['CDG_TIP_DOC'].'00'.$anticipo['CDG_SER_DOC'].'-'.$anticipo['CDG_NUM_DOC'];
 
         $anticipo_documento = $anticipo['CDG_DOC_CLI'];
+
         /*  RUC O DNI catalogo 6
-        *******************/
+        **************************/
         if (strlen(trim($anticipo['CDG_DOC_CLI'])) == 11) {            
             $anticipo_tipo_documento = 6; // ruc
         } elseif (strlen(trim($anticipo['CDG_DOC_CLI'])) == 8) {            
@@ -373,6 +384,11 @@
             $anticipo_moneda_leyenda = 'soles';
         }
 
+        /*Monto anticipo
+        *****************************/
+        $anticipo_monto = $anticipo['CDG_IMP_NETO'];
+
+
         /*Anticipo Fecha
         *********************/
         $anticipo_fecha = date("d-m-Y", strtotime($anticipo['CDG_FEC_GEN']));
@@ -385,11 +401,11 @@
     if($cab_doc_gen['CDG_TIP_DOC']=='F' || $cab_doc_gen['CDG_TIP_DOC']=='B'){
         if($cab_doc_gen['CDG_CO_CR'] != 'AN'){
             $mensajes = $mensajes.$cab_doc_gen['CDG_NOT_001'].' '.$cab_doc_gen['CDG_NOT_002'].' '.$cab_doc_gen['CDG_NOT_003'];
-            // si es franquisia anticipo
-            if($reference==2){
+
+            if($reference==2){//franquisia
                 $mensajes = $mensajes.'Ref. '.$fra['CDG_TIP_DOC'].'00'.$fra['CDG_SER_DOC'].'-'.$fra['CDG_NUM_DOC'].' Fecha Ref. '.date("d-m-Y", strtotime($fra['CDG_FEC_GEN']));
             }elseif ($reference==3) { // anticipo
-                $mensajes = $mensajes.'Anticipo '.$anticipo_serie_numero_doc.' Fecha '.$anticipo_fecha;
+                $mensajes = $mensajes.'Anticipo '.$anticipo_serie_numero_doc.' Fecha '.$anticipo_fecha.' Monto <strong>'.$anticipo_monto.'</strong>';
             }
         }
     }elseif($cab_doc_gen['CDG_TIP_DOC']=='A'){
@@ -403,5 +419,8 @@
     if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $cab_doc_gen['CDG_IMP_NETO'] > 700 ){
         $mensajes = $mensajes."<span style='font-style: italic;'>Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco. Nación no. 00-151-084257</span>";
     }
+
+
+    //print_r($items);
 
 ?>

@@ -6,26 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <!-- FontAwesome CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style type="text/css" media="screen">
+    <style media="print">
+        *{ background: transparent !important; }
+        #table_home{display: none;}
+        #imprimedoc{display:block !important;}
+        #titulo_doc{display:none !important;}
+        #form_doc{display:none !important;}
+        #table_modal{display: none !important;}
+        body nav {display: none !important;}
+        #app p h2 {display: none !important;}
+    </style>
+    <style type="text/css">
         resumen {
             background-color: #563d7c;
         }
-
         resumen a:hover {
             background-color: #fff;
         }
     </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <script src="https://unpkg.com/vue"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.2/vue-resource.min.js"></script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
             integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
             crossorigin="anonymous"></script>
@@ -61,11 +69,11 @@
 
 <div class="container" id="app">
     <p>
-    <h2>Documentos
+    <h2 id="titulo_doc">Documentos
         <small>15/09/2017</small>
     </h2>
     </p>
-    <div class="row">
+    <div class="row" id="form_doc">
         <div class="col">
 
             <form>
@@ -73,7 +81,7 @@
                     <div class="col">
                         <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                             <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                            <input type="text" class="form-control" id="inlineFormInputGroupUsername2"
+                            <input type="date" class="form-control" id="inlineFormInputGroupUsername2"
                                    placeholder="15-09-2017" value="15-09-2017">
                         </div>
                     </div>
@@ -98,7 +106,7 @@
         <div class="text-center" v-show="loading">
             <i v-show="loading" style="margin-top: 100px;" class="fa fa-spinner fa-3x fa-spin"></i>
         </div>
-        <table class="table table-md table-bordered" v-show="!loading">
+        <table class="table table-sm table-bordered" v-show="!loading" id="table_home">
             <thead>
             <tr>
                 <th>#</th>
@@ -106,7 +114,7 @@
                 <th>Numero</th>
                 <th>Cliente</th>
                 <th>Imp</th>
-                <th>Anu</th>
+                <th>AFN</th>
                 <th class="text-center">OT</th>
                 <th>Sunat</th>
                 <th class="text-right">Total</th>
@@ -120,7 +128,7 @@
                 <td>{{document.numero}}</td>
                 <td>{{document.cliente}}</td>
                 <td>{{document.impresion}}</td>
-                <td>{{document.anulado}}</td>
+                <td>{{document.anulado}} {{document.franquicia}} {{document.anticipo}}</td>
                 <td class="text-center">{{document.ot}}</td>
                 <td>{{document.sunat_codigo}}</td>
                 <td class="text-right">{{document.total}}</td>
@@ -133,13 +141,13 @@
             </tbody>
         </table>
     </p>
-    <div class="modal fade">
+    <div class="modal fade" id="table_modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="fa fa-file-text-o"></i>
-                        {{document.tipo_doc}} F001 - {{ document.numero }}
+                        {{document.tipo_doc}} {{document.serie}} - {{ document.numero }}
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -147,11 +155,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="text-center">
-                        <i v-show="loadingFactura" style="margin-top: 80px;" class="fa fa-spinner fa-3x fa-spin"></i>
+                        <i v-show="loadingFactura"  class="fa fa-spinner fa-3x fa-spin"></i>
                     </div>
-                    <p>
 
-                    <table class="table table-striped table-sm" v-show="!loadingFactura">
+
+                    <table class="table table-sm" v-show="!loadingFactura">
                         <tr>
                             <td colspan="3">
                                 <div>{{documento.fecha}}</div>
@@ -170,7 +178,7 @@
                                 <div>{{documento.km}}</div>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="thead-inverse" >
                             <th class="text-center">#</th>
                             <th class="text-left">Código</th>
                             <th class="text-left">Descripción</th>
@@ -180,7 +188,7 @@
                             <th class="text-right">Descto</th>
                             <th class="text-right">V.Venta</th>
                         </tr>
-                        <tr v-for="item in documento.items">
+                        <tr v-for="item in documento.items" class="table-active">
                             <td class="text-center">{{item.id}}</td>
                             <td class="text-left">{{item.codigo}}</td>
                             <td class="text-left">{{item.descripcion}}</td>
@@ -189,6 +197,14 @@
                             <td class="text-right">{{item.importe}}</td>
                             <td class="text-right">{{item.descuento}}</td>
                             <td class="text-right">{{item.venta}}</td>
+                        </tr>
+                        <tr v-show="documento.suma_active">
+                            <td colspan="3"><strong>Sumatoria</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right">{{documento.suma_import}}</td>
+                            <td class="text-right">{{documento.suma_descuento}}</td>
+                            <td class="text-right">{{documento.suma_venta}}</td>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -199,28 +215,145 @@
                                 Descuentos {{documento.total_descuentos}} |
                                 Gravadas {{documento.total_gravadas}} |
                                 I.G.V {{documento.total_igv}} |
-                                Total {{documento.total_total}}
+                                Total <strong>{{documento.total_total}}</strong>
                             </td>
                         </tr>
-                        <tr>
-                            <td colspan="2">
-                                <strong>Mensajes :</strong>
+                        <tr v-show="documento.mensaje_active">
+                            <td colspan="2" >
+                                <strong>Mensajes </strong>
                             </td>
-                            <td class="text-right" colspan="6">
-                                {{documento.mensajes}}
+                            <td class="text-right" colspan="6"  v-html="documento.mensajes">
                             </td>
                         </tr>
+
                     </table>
-                    </p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="#" class="btn btn-primary" @click="printPDF('a')"><i class="fa fa-print"></i> Imprimir</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-windows-close"></i>Close</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!--Impresion-->
+    <div id="imprimedoc" style="display: none;">
+        <!--Cabezera de direcciones-->
+        <table style="width: 100%;  margin-bottom: 20px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width: 15%; border-left: solid 1px #000; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                    <img src="images/logo.jpg" style="height: 100px;">
+                </td>
+                <td style="width: 41%; border-top: solid 1px #000; border-right: solid 1px #000; border-bottom: solid 1px #000; font-size: 9px; line-height: 13px;">
+                    TACNA: Av. Leguia 1870 Tacna. Telef.: (052) 426368 - 244015
+                    cel.:952869639 (repuestos) cel.: 992566630 (servicios)
+                    email: tacna@surmotriz.com y repuestos@surmotriz.com
+                    MOQUEGUA: Sector Yaracachi Mz.D Lte.09 Mariscal Nieto/Moquegua
+                    Telef:(53) 479365 Cel: #953922105 email: moquegua@surmotriz.com
+                    Venta de vehiculos-repuestos y accesorios legitimos Toyota
+                    Reparacion y mantenimiento de automoviles y camionetas.
+                </td>
+                <td style="width: 4%;"></td>
+                <td style="width: 40%; border: solid 1px #000;">
+                    <div style="text-align: center; color: red; font-size: 18px; line-height: 25px;">RUC: 20532710066</div>
+                    <div style="text-align: center; font-weight: bold; font-size: 18px; line-height: 25px; ">
+                        {{documento.documento_noombre}}
+                    </div>
+                    <div style="text-align: center; color: blue; font-size: 19px; line-height: 25px;">
+                        {{documento.serie}} - {{documento.numero}}
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!--Cabezera de informacion de documento-->
+        <table style="width: 100%; font-size: 12px; border: solid 1px #000; margin-bottom: 20px; padding: 5px;" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.fecha}}</span></td>
+                <td style="width: 40%;">{{documento.ord_tra}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.cliente}}</span></td>
+                <td style="width: 40%;">{{documento.placa}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.doc_cliente}}</span></td>
+                <td style="width: 40%;">{{documento.modelo}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.direccion}}</span></td>
+                <td style="width: 40%;">{{documento.chasis}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.pago}}</span></td>
+                <td style="width: 40%;">{{documento.color}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.ubigeo}}</span></td>
+                <td style="width: 40%;">{{documento.km}}</td>
+            </tr>
+        </table>
+        <!--items-->
+        <table style="width: 100%; font-size: 12px;" cellspacing="0" cellpadding="0">
+            <tr style="font-weight: bold;">
+                <td style="border-bottom: solid 1px #000; border-left: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; text-align: center;">Nro</td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">Codigo</td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">Descripcion</td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: center;">Cant</td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">P. Unit</td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">Importe</td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">Desct</td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000;  border-right: solid 1px #000; text-align: right; padding-right: 3px;">Valor Venta</td>
+            </tr>
+            <tr v-for="item in documento.items">
+                <td style="width: 4%; border-left: solid 1px #000; border-right: solid 1px #000; border-bottom: solid 1px #000; text-align: center;">{{item.id}}</td>
+                <td style="width: 12%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">{{item.codigo}}</td>
+                <td style="width: 41%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">{{item.descripcion}}</td>
+                <td style="width: 5%; text-align: center; border-right: solid 1px #000; border-bottom: solid 1px #000;">{{item.cantidad}}</td>
+                <td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">{{item.unitario}}</td>
+                <td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">{{item.importe}}</td>
+                <td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">{{item.descuento}}</td>
+                <td style="width: 11%; border-right: solid 1px #000; text-align: right; border-bottom: solid 1px #000; padding-right: 3px;">{{item.venta}}</td>
+            </tr>
+
+            <tr>
+                <td colspan="4" rowspan="8" style="width: 60%;border-right: solid 1px #000; line-height: 14px;" v-html="`${documento.mensajes} <br> Son : ${documento.leyenda} <br><img src='images/20532710066-07-FN03-2917.png' style='height: 55px; width: 300px; text-align: center;'>`"></td>
+                <td colspan="3" style="text-align: right; border-right: solid 1px #000; padding-right: 3px;">Sub Total {{documento.moneda}}</td>
+                <td style="border-right: solid 1px #000; text-align: right; padding-right: 3px;">{{documento.total_sub}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;" >Total Descuentos {{documento.moneda}}</td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">{{documento.total_descuentos}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">Operaciones Gravadas {{documento.moneda}}</td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">{{documento.total_gravadas}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">Operaciones Inafectas {{documento.moneda}}</td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">0.00</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">Operaciones Exoneradas {{documento.moneda}}</td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">0.00</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">Operaciones Gratuitas {{documento.moneda}}</td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">0.00</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">I.G.V. 18% {{documento.moneda}}</td>
+                <td style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">{{documento.total_igv}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="border-top: solid 1px #000; border-bottom: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
+                    <strong>IMPORTE TOTAL {{documento.moneda}}</strong></td>
+                <td style="border-top: solid 1px #000; border-bottom: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;"><strong>{{documento.total_total}}</strong></td>
+            </tr>
+        </table>
+    </div>
 </div>
+
+
 
 
 <script>
@@ -235,7 +368,6 @@
             document: [],
             documents: [],
             loading: false,
-            loadingFactura: false
         },
 
         methods: {
@@ -250,11 +382,15 @@
                 this.documento = '',
                 this.document = document;
                 this.loadingFactura = true;
+                $(".modal").modal('show');
                 this.$http.get('./apis/documento.php'+document.pdf_link).then(function (response) {
                     this.loadingFactura = false;
                     this.documento = response.data;
                 });
-                $(".modal").modal('show');
+
+            },
+            printPDF: function (doc){
+                window.print();
             }
         }
     })

@@ -1,7 +1,7 @@
 <?php
     header('Content-Type: application/json; charset=utf-8');
 	include('../conexion.php');
-	$sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='02' and cdg_cod_emp='01' and to_char(cdg_fec_gen,'dd-mm-yyyy')='22-09-2017'";
+	$sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='02' and cdg_cod_emp='01' and to_char(cdg_fec_gen,'dd-mm-yyyy')='21-09-2017'";
 	$sql_parse = oci_parse($conn,$sql_cab_doc_gen);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $documentos, null, null, OCI_FETCHSTATEMENT_BY_ROW);
@@ -64,6 +64,20 @@
         *****************/
         $pdf_link = '?gen='.$documento['CDG_COD_GEN'].'&emp='.$documento['CDG_COD_EMP'].'&tip='.$documento['CDG_TIP_DOC'].'&num='.$documento['CDG_NUM_DOC'];
         $docs[$i]['pdf_link']=$pdf_link;
+
+        /*Anticipo
+        ******************/
+        if($documento['CDG_EXI_ANT']=='AN'){
+            $docs[$i]['anticipo']='ANT';
+            $docs[$i]['franquicia'] = '';
+        }
+
+        /*Franquicia
+        *****************/
+        if($documento['CDG_EXI_FRA']=='S' && $documento['CDG_EXI_ANT']!='AN'){
+            $docs[$i]['anticipo']='';
+            $docs[$i]['franquicia'] = 'FRA';
+        }
 
         $i++;
 
