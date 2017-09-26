@@ -74,7 +74,7 @@
         </h2>
     </p>
     <div class="row" id="form_doc">
-        <div class="col">
+        <div class="col-10">
             <?php
                 date_default_timezone_set('America/Lima');
                 $fecha = date('Y-m-d');
@@ -87,27 +87,33 @@
             ?>
             <form @submit.prevent="getDocuments">
                 <div class="form-row">
-                    <div class="col">
-                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                            <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                            <input type="date" name="fecha" v-model="fecha" class="form-control">
-                        </div>
+                    <div class="form-group col-md-3 input-group">
+                        <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                        <input type="date" class="form-control" name="fecha" v-model="fecha">
                     </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-dark" style="background-color: #563d7c;">
-                            <i class="fa fa-search"></i>
-                            Buscar
-                        </button>
+                    <div class="form-group col-md-1">
+                        <button type="submit" class="btn btn-dark " style="background-color: #563d7c;"><i class="fa fa-search"></i> Bus</button>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <input type="text" class="form-control" placeholder="Nro">
+                    </div>
+                    <div class="form-group col-md-1">
+                        <input type="text" class="form-control" placeholder="Serie">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control" placeholder="Cliente">
+                    </div>
+                    <div class="form-group col-md-1">
+                        <input type="text" class="form-control" placeholder="OT">
                     </div>
                 </div>
             </form>
-
         </div>
-        <div class="col-8 text-right">
+        <div class="col-2 text-right">
             <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i>
-                Resumen Mes</a>
+                Mes</a>
             <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i>
-                Resumen Dia</a>
+                Dia</a>
         </div>
     </div>
 
