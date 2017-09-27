@@ -409,7 +409,7 @@
         computed: {
             filteredDocuments: function () {
                 return this.documents.filter((document)=>{
-                        return document.cliente.match(this.search);
+                    return document.cliente.match(this.search);
             });
             }
         }
