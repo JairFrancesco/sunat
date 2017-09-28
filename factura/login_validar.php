@@ -1,4 +1,6 @@
 <?php
+    ini_set("session.cookie_lifetime","31536000");
+    ini_set("session.gc_maxlifetime","31536000");
     if (isset($_POST['user']) && isset($_POST['password'])){
         include "conexion.php";
         $user = $_POST['user'];
@@ -14,7 +16,9 @@
             $_SESSION['user']=$user;
             $_SESSION['password']=$password;
             $_SESSION['valido']=true;
-            echo '<script type="text/javascript">window.location="../index.php";</script>';
+            $_SESSION['gen'] = $usuario[0]['USER_COD_GEN'];
+            $_SESSION['emp'] = $usuario[0]['USER_COD_EMP'];
+            echo '<script type="text/javascript">window.location="../index.php?emp='.$_SESSION['emp'].'";</script>';
         }else{
             echo '<script type="text/javascript">window.location="login.php";</script>';
         }

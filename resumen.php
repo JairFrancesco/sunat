@@ -44,8 +44,14 @@
 <body>
 
 <?php
+    /*Auth
+    ***************/
+    include "factura/layout/__auth.php";
 
-$hace = $_GET['h'];
+    /*Nav Bar
+    **************/
+    include "factura/layout/__nav_bar.php";
+
 $gen = $_GET['gen'];
 $emp = $_GET['emp'];
 date_default_timezone_set('America/Lima');

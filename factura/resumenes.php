@@ -38,6 +38,8 @@
 
 <?php
     require("conexion.php");
+    include "layout/__auth.php";
+    include "layout/__nav_bar.php";
     date_default_timezone_set('America/Lima');
     
     $emp = $_GET['emp'];
