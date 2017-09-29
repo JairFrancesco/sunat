@@ -22,7 +22,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/sunat/index.php?emp=<?php echo $_SESSION['emp'] ?>">Inicio</a></li>
+                <li><a href="/sunat/index.php?emp=<?php echo $_SESSION['emp'] ?>"><i class="glyphicon glyphicon-home"></i> Inicio</a></li>
                 <li><a href="/sunat/resumen.php?gen=<?php echo $_SESSION['gen'] ?>&emp=<?php echo $_SESSION['emp'] ?>&fecha=<?php echo date("Y-m-d")?>"><i class="glyphicon glyphicon-calendar"></i> Resumen Dia (<?php echo date("d-m-Y")?>)</a></li>
                 <li><a href="/sunat/factura/resumenes.php?mes=<?php echo date("Y-m") ?>&emp=<?php echo $_SESSION['emp'] ?>"><i class="glyphicon glyphicon-calendar"></i> Resumen Mensual (<?php echo date("m-Y") ?>)</a></li>
                 <!--
