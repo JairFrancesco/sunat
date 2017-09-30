@@ -24,8 +24,7 @@
             background-color: #fff;
         }
     </style>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <!-- FontAwesome CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -34,12 +33,8 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-            integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
-            integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1"
-            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 </head>
 <body>
 <!-- Menu Navbar-->
@@ -69,35 +64,41 @@
 
 <div class="container" id="app">
     <p>
-    <h2 id="titulo_doc">Documentos
-        <small>15/09/2017</small>
-    </h2>
+        <h2 id="titulo_doc">Documentos
+            <small>{{fecha}}</small>
+        </h2>
     </p>
     <div class="row" id="form_doc">
-        <div class="col">
-
-            <form>
+        <div class="col-10">
+            <form @submit.prevent="getDocuments">
                 <div class="form-row">
-                    <div class="col">
-                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                            <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                            <input type="date" class="form-control" id="inlineFormInputGroupUsername2"
-                                   placeholder="15-09-2017" value="15-09-2017">
-                        </div>
+                    <div class="form-group col-md-3 input-group">
+                        <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                        <input type="date" class="form-control" name="fecha" v-model="fecha">
                     </div>
-                    <div class="col">
-                        <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-search"></i>
-                            Buscar</a>
+                    <div class="form-group col-md-1">
+                        <button type="submit" class="btn btn-dark " style="background-color: #563d7c;"><i class="fa fa-search"></i> Bus</button>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <input type="text" class="form-control" placeholder="Nro">
+                    </div>
+                    <div class="form-group col-md-1">
+                        <input type="text" class="form-control" placeholder="Serie">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" v-model="search" class="form-control" placeholder="Cliente">
+                    </div>
+                    <div class="form-group col-md-1">
+                        <input type="text" class="form-control" placeholder="OT">
                     </div>
                 </div>
             </form>
-
         </div>
-        <div class="col-8 text-right">
+        <div class="col-2 text-right">
             <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i>
-                Resumen Mes</a>
+                Mes</a>
             <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i>
-                Resumen Dia</a>
+                Dia</a>
         </div>
     </div>
 
@@ -122,7 +123,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="document in documents">
+            <tr v-for="document in filteredDocuments">
                 <th>{{document.id}}</th>
                 <td>{{document.serie}}</td>
                 <td>{{document.numero}}</td>
@@ -350,6 +351,8 @@
                 <td style="border-top: solid 1px #000; border-bottom: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;"><strong>{{documento.total_total}}</strong></td>
             </tr>
         </table>
+        <hr style="border: none; height: 1px; background-color: #414141; margin-top: 30px;">
+        <span style="text-align: center; font-size: 11px; line-height: 15px;">Representación Impresa de la Factura Electrónica. SURMOTRIZ S.R.L. Autorizado para ser Emisor electrónico mediante Resolución de Intendencia N° 112-005-0000143/SUNAT Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php</span>
     </div>
 </div>
 
@@ -357,7 +360,15 @@
 
 
 <script>
-
+    // funcion para agregar cero al mes
+    function pad (n, length) {
+        var  n = n.toString();
+        while(n.length < length)
+            n = "0" + n;
+        return n;
+    }
+    var f = new Date();
+    var ff = f.getFullYear() + "-" + pad((f.getMonth() +1),2) + "-" + pad(f.getDate(),2);
     var app = new Vue({
         el: '#app',
         created: function () {
@@ -368,16 +379,17 @@
             document: [],
             documents: [],
             loading: false,
-            loadingFactura: false
+            loadingFactura: false,
+            fecha: this.ff,
+            search: ''
         },
-
         methods: {
             getDocuments: function () {
                 this.loading = true;
-                this.$http.get('./apis/index.php').then(function (response) {
+                this.$http.get('./apis/index.php?fecha='+this.fecha).then(function (response) {
                     this.loading = false;
                     this.documents = response.data;
-                })
+                });
             },
             itemClicked: function (document) {
                 this.documento = '',
@@ -393,7 +405,15 @@
             printPDF: function (doc){
                 window.print();
             }
+        },
+        computed: {
+            filteredDocuments: function () {
+                return this.documents.filter((document)=>{
+                    return document.cliente.match(this.search);
+            });
+            }
         }
+
     })
 </script>
 

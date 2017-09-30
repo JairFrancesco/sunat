@@ -79,7 +79,20 @@
                 while($res_rboletas = oci_fetch_array($sql_rboletas))
                 {
 
-                    if($res_rboletas['CDG_EXI_FRA']=='S'){
+                    /*REFERENCIA 0:sin  1:nota  2:franquisia 3:anticipo
+                    *****************************************************/
+                    if ($res_rboletas['CDG_TIP_DOC'] == 'A') {
+                        $reference = 1; //nota
+                    }elseif ($res_rboletas['CDG_EXI_FRA'] == 'S'  && $res_rboletas['CDG_EXI_ANT']!='AN' && $res_rboletas['CDG_TIP_DOC'] != 'A') {
+                        $reference = 2; // franquisia
+                    }elseif ($res_rboletas['CDG_EXI_ANT'] == 'AN' && $res_rboletas['CDG_TIP_DOC'] != 'A') {
+                        $reference = 3; // anticipo
+                    }else {
+                        $reference = 0;
+                    }
+
+                    if ($reference == 2 || $reference == 3 ) { //franquisia o anticipo
+
                         $bols[$i]['subtotal'] = $sub = $sub +  number_format($res_rboletas['CDG_VVP_TOT']-($res_rboletas['CDG_TOT_FRA']/(1+$res_rboletas['CDG_POR_IGV']/100)),2,'.','');
                         $bols[$i]['descuento'] = $desc = $desc + $res_rboletas['CDG_DES_TOT'];
                         $bols[$i]['gravada'] = $grabadas = $grabadas + number_format($res_rboletas['CDG_VVP_TOT']-($res_rboletas['CDG_TOT_FRA']/(1+$res_rboletas['CDG_POR_IGV']/100)) - $res_rboletas['CDG_DES_TOT'],2,'.','');

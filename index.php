@@ -18,10 +18,7 @@
         });
     </script>
 	<style>
-		body {
-			padding-top: 10px;
-			padding-bottom: 30px;
-			}
+
 
 		.theme-dropdown .dropdown-menu {
 			position: static;
@@ -43,25 +40,28 @@
 </head>
 <body>
 <?php
+
+    /*Auth
+    ***************/
+    include "factura/layout/__auth.php";
+
     date_default_timezone_set('America/Lima');
 	if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_final']) && isset($_GET['pagina'])) {
 		$fecha_inicio = $_GET['fecha_inicio'];
 		$fecha_final = $_GET['fecha_final'];    	
 		$pagina = $_GET['pagina'];
-
-
-		
 	}else{
 		$fecha_inicio = 'N';
 		$fecha_final = 'N';
 		$pagina = 1;
-
 	}
-
 	if (isset($_GET['emp'])) {
 	    $emp = $_GET['emp'];
 	}
 
+	/*Nav Bar
+	**************/
+	include "factura/layout/__nav_bar.php";
 ?>
 
 
