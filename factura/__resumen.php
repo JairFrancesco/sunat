@@ -3,10 +3,6 @@
         $fecha  =   $_GET['fecha'];
         $gen    =   $_GET['gen'];
         $emp    =   $_GET['emp'];
-    }else {
-        $fecha  =   '24-08-2017';
-        $gen    =   '02';
-        $emp    =   '02';
     }
 
     /*conexion
@@ -57,14 +53,16 @@
         /*Totales
         ****************/
         if ($reference == 2 || $reference == 3 ) { //franquisia o anticipo
-
+            $resumens[$i]['sub'] +=  $boleta['CDG_VVP_TOT'] - round(($boleta['CDG_TOT_FRA']/1.18),2);
+            $resumens[$i]['gravadas'] += (($boleta['CDG_VVP_TOT'] - round(($boleta['CDG_TOT_FRA']/1.18),2)) - $boleta['CDG_DES_TOT']);
+            $resumens[$i]['igv'] += $boleta['CDG_IGV_TOT'] - round(($boleta['CDG_TOT_FRA']/1.18)*0.18,2);
         }else {
-            $resumens[$i]['sub'] = $resumens[$i]['sub'] +  $boleta['CDG_VVP_TOT'];
-            $resumens[$i]['descuentos'] = $resumens[$i]['descuentos'] + $boleta['CDG_DES_TOT'];
-            $resumens[$i]['gravadas'] = $resumens[$i]['gravadas'] + ($boleta['CDG_VVP_TOT'] - $boleta['CDG_DES_TOT']);
-            $resumens[$i]['igv'] = $resumens[$i]['igv'] + $boleta['CDG_IGV_TOT'];
+            $resumens[$i]['sub'] += $boleta['CDG_VVP_TOT'];
+            $resumens[$i]['gravadas'] += ($boleta['CDG_VVP_TOT'] - $boleta['CDG_DES_TOT']);
+            $resumens[$i]['igv'] += $boleta['CDG_IGV_TOT'];
         }
-        $resumens[$i]['total'] = $resumens[$i]['total'] + $boleta['CDG_IMP_NETO'];
+        $resumens[$i]['descuentos'] += $boleta['CDG_DES_TOT'];
+        $resumens[$i]['total'] += $boleta['CDG_IMP_NETO'];
 
         if (isset($boletas[$index+1])){ //siguiente index existe
             if (($boleta['CDG_NUM_DOC']+1) != $boletas[$index+1]['CDG_NUM_DOC']){//siguiente en valores es igual al anterior
@@ -74,9 +72,6 @@
         }
 
     }
-
-    print_r($resumens);
-
-
+    //print_r($resumens);
 
 ?>
