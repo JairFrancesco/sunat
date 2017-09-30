@@ -3,6 +3,10 @@
         $fecha  =   $_GET['fecha'];
         $gen    =   $_GET['gen'];
         $emp    =   $_GET['emp'];
+    }else {
+        $fecha  =   '22-09-2017';
+        $gen    =   '02';
+        $emp    =   '01';
     }
 
     /*conexion
@@ -72,6 +76,6 @@
         }
 
     }
-    //print_r($resumens);
+    print_r($resumens);
 
 ?>

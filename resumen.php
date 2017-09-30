@@ -91,7 +91,19 @@ include "factura/__resumen_boleta_notas.php";
             $sql_rboletas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_num_doc between ".$bol[0]." and ".$bol[1]." and cdg_tip_doc='B' order by cdg_fec_gen ASC"); oci_execute($sql_rboletas);
             while($res_rboletas = oci_fetch_array($sql_rboletas))
             {
-                if($res_rboletas['CDG_EXI_FRA']=='S'){
+                /*REFERENCIA 0:sin  1:nota  2:franquisia 3:anticipo
+                *****************************************************/
+                if ($res_rboletas['CDG_TIP_DOC'] == 'A') {
+                    $reference = 1; //nota
+                }elseif ($res_rboletas['CDG_EXI_FRA'] == 'S'  && $res_rboletas['CDG_EXI_ANT']!='AN' && $res_rboletas['CDG_TIP_DOC'] != 'A') {
+                    $reference = 2; // franquisia
+                }elseif ($res_rboletas['CDG_EXI_ANT'] == 'AN' && $res_rboletas['CDG_TIP_DOC'] != 'A') {
+                    $reference = 3; // anticipo
+                }else {
+                    $reference = 0;
+                }
+
+                if ($reference == 2 || $reference == 3 ) { //franquisia o anticipo
                     $sub = $sub +  number_format($res_rboletas['CDG_VVP_TOT']-($res_rboletas['CDG_TOT_FRA']/(1+$res_rboletas['CDG_POR_IGV']/100)),2,'.','');
                     $desc = $desc + $res_rboletas['CDG_DES_TOT'];
                     $grabadas = $grabadas + number_format($res_rboletas['CDG_VVP_TOT']-($res_rboletas['CDG_TOT_FRA']/(1+$res_rboletas['CDG_POR_IGV']/100)) - $res_rboletas['CDG_DES_TOT'],2,'.','');
