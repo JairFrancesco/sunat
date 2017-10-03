@@ -1,13 +1,12 @@
 <?php
+
     if (isset($_GET['fecha']) && isset($_GET['gen']) && isset($_GET['emp']) ){
-        $fecha  =   $_GET['fecha'];
+        $fecha  =   date("d-m-Y", strtotime($_GET['fecha']));
         $gen    =   $_GET['gen'];
         $emp    =   $_GET['emp'];
-    }else {
-        $fecha  =   '10-08-2017';
-        $gen    =   '02';
-        $emp    =   '01';
     }
+
+    //echo $fecha;
 
     /*conexion
     ****************/
@@ -15,18 +14,22 @@
 
 
     /*Consulta Boletas
-    **************/
+    **********************/
     $sql_boletas_dia = "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$fecha."' and (cdg_anu_sn, cdg_doc_anu) in (('S','N'),('N','N')) and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_num_doc Asc";
     $sql_parse = oci_parse($conn,$sql_boletas_dia);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $boletas, null, null, OCI_FETCHSTATEMENT_BY_ROW); //sin array numeros
 
+    //print_r($boletas);
+
     /*Consulta Boletas Notas
-    **************************/
+    ***************************/
     $sql_notas_dia = "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$fecha."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_num_doc ASC";
     $sql_parse_notas = oci_parse($conn,$sql_notas_dia);
     oci_execute($sql_parse_notas);
     oci_fetch_all($sql_parse_notas, $notas, null, null, OCI_FETCHSTATEMENT_BY_ROW); //sin array numeros
+
+    //print_r($notas);
 
 
 
@@ -58,8 +61,10 @@
                 ***********/
                 if ($boleta['CDG_TIP_DOC'] == 'A'){
                     $resumens[$i]['serie'] = $boleta['CDG_TIP_REF'][0].'N0'.$boleta['CDG_SER_DOC'];
+                    $resumens[$i]['serie_tipo'] = '07';
                 }else {
                     $resumens[$i]['serie'] = $boleta['CDG_TIP_DOC'].'00'.$boleta['CDG_SER_DOC'];
+                    $resumens[$i]['serie_tipo'] = '03';
                 }
 
 
@@ -114,7 +119,18 @@
 
 
     }
-    $resultados = array_merge($salida1, $salida2);
-    print_r($resultados);
+
+    //boletas y notas
+    if (count($boletas) != 0 && count($notas) != 0){
+        $boletas = array_merge($salida1, $salida2);
+    // boletas
+    }elseif (count($boletas) != 0 && count($notas) == 0){
+        $boletas = array_merge($salida1);
+    //notas
+    }elseif (count($boletas) == 0 && count($notas) != 0){
+        $boletas = array_merge($salida2);
+    }
+
+    //print_r($boletas);
 
 ?>
