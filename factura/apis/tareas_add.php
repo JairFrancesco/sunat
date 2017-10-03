@@ -3,8 +3,9 @@
     $descripcion = $_POST['descripcion'];
 
     include "../conexion.php";
+    $fecha = date('Y-m-d');
 
-    $sql_insert = "insert into tareas (NOMBRE,DESCRIPCION,FECHA) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$not[2]."','".$not[0]."','".$not[1]."','".$not['subtotal']."','".$not['descuento']."','".$not['gravada']."','".$not['igv']."','".$not['total']."','".$codigo."','".$emp."')";
+    $sql_insert = "insert into tareas (NOMBRE,DESCRIPCION,FECHA) values ('".$nombre."','".$descripcion."',to_date('".$fecha."','yyyy-mm-dd'))";
     $stmt_insert = oci_parse($conn, $sql_insert);
     oci_execute($stmt_insert);
 ?>

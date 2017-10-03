@@ -24,54 +24,76 @@
         <div class="text-center" v-show="loading_tareas">
             <i v-show="loading_tareas"  class="fa fa-spinner fa-3x fa-spin"></i>
         </div>
-        <table class="table table-striped" v-show="!loading_tareas">
+        <table class="table" v-show="!loading_tareas">
             <tr class="well">
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Descripcion</th>
+                <th>Fecha</th>
                 <th>Acciones</th>
             </tr>
             <tr v-for="(tarea,index) in tareas">
                 <td>{{index+1}}</td>
                 <td>{{tarea.NOMBRE}}</td>
                 <td>{{tarea.DESCRIPCION}}</td>
+                <td>{{tarea.FECHA}}</td>
                 <td>
-                    <a href="#">Detalle</a>                    
+                    <a href="#" @click="getDetalle(tarea)">Detalle</a>
                 </td>
             </tr>
         </table>      
 
-        <!-- Modal -->
+        <!-- Modal Nuevo -->
         <div class="modal fade" id="nuevo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Agregar Nuevo</h4>
-            </div>
-            <div class="modal-body">
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">Nombre</label>
-                    <div class="col-sm-10">
-                    <input type="text" v-model="addTarea.nombre" class="form-control" placeholder="Nombre">
-                    </div>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Agregar Nuevo</h4>
                 </div>
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">Descripcion</label>
-                    <div class="col-sm-10">
-                    <textarea name="" class="form-control" v-model="addTarea.descripcion" cols="30" rows="5" placeholder="Descripcion"></textarea>                    
+                <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Nombre</label>
+                        <div class="col-sm-10">
+                        <input type="text" v-model="addTarea.nombre" class="form-control" placeholder="Nombre">
+                        </div>
                     </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Descripcion</label>
+                        <div class="col-sm-10">
+                        <textarea name="" class="form-control" v-model="addTarea.descripcion" cols="30" rows="5" placeholder="Descripcion"></textarea>
+                        </div>
+                    </div>
+                </form>
                 </div>
-            </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" data-dismiss="modal" v-on:click.prevent="agregarTarea(addTarea)" >Guardar</button>
-            </div>
-            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal" v-on:click.prevent="agregarTarea(addTarea)" >Guardar</button>
+                </div>
+
+                </div>
             </div>
         </div>
+
+        <!-- Modal Detalle -->
+        <div class="modal fade" id="detalle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Tarea Detalle {{tareaDetalle.FECHA}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h3>{{tareaDetalle.NOMBRE}}</h3>
+                        <p>{{tareaDetalle.DESCRIPCION}}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 
@@ -81,7 +103,8 @@
             data: {
                 tareas: [],
                 loading_tareas: false,
-                addTarea: []
+                addTarea: [],
+                tareaDetalle: []
             },
             methods: {
                 getTareas: function () {
@@ -92,13 +115,15 @@
                     });
                 },
                 agregarTarea: function(addTarea){
-                    //./apis/tareas_add.php
-                    var data={a:1,b:2,c:3}
                     axios.post('./apis/tareas_add.php',`nombre=${addTarea.nombre}&descripcion=${addTarea.descripcion}`)
                     .then(response => {
                         console.log(response.data);
                     });
                     this.addTarea = [];
+                },
+                getDetalle: function (tareaDetalle) {
+                    $("#detalle").modal('show');
+                    this.tareaDetalle = tareaDetalle;
                 }
             },
             created: function () {
