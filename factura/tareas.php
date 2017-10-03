@@ -27,9 +27,9 @@
         <table class="table" v-show="!loading_tareas">
             <tr class="well">
                 <th>#</th>
-                <th>Nombre</th>
+                <th width="35%">Nombre</th>
                 <th>Descripcion</th>
-                <th>Fecha</th>
+                <th width="10%">Fecha</th>
                 <th>Acciones</th>
             </tr>
             <tr v-for="(tarea,index) in tareas">
