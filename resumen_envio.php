@@ -1,170 +1,27 @@
 <?php
 
+    /*soap client
+    ******************/
+    include "./factura/__soap.php";
 
-# Procedimiento para enviar comprobante a la SUNAT
-class feedSoap extends SoapClient{
-    public $XMLStr = "";
-    public function setXMLStr($value){
-        $this->XMLStr = $value;
-    }
-    public function getXMLStr(){
-        return $this->XMLStr;
-    }
-    public function __doRequest($request, $location, $action, $version, $one_way = 0){
-        $request = $this->XMLStr;
-        $dom = new DOMDocument('1.0');
-        try{
-            $dom->loadXML($request);
-        } catch (DOMException $e) {
-            die($e->code);
-        }
-        $request = $dom->saveXML();
-        //Solicitud
-        return parent::__doRequest($request, $location, $action, $version, $one_way = 0);
-    }
-    public function SoapClientCall($SOAPXML){
-        return $this->setXMLStr($SOAPXML);
-    }
-}
-function soapCall($wsdlURL, $callFunction = "", $XMLString){
-    $client = new feedSoap($wsdlURL, array('trace' => true));
-    $reply  = $client->SoapClientCall($XMLString);
-    //echo "REQUEST:\n" . $client->__getFunctions() . "\n";
-    $client->__call("$callFunction", array(), array());
-    //$request = prettyXml($client->__getLastRequest());
-    //echo highlight_string($request, true) . "<br/>\n";
-    return $client->__getLastResponse();
-    //print_r($client);
-}
-
-
+    /*Recoger datos
+    **********************/
     date_default_timezone_set('America/Lima');
     $gen = $_GET['gen'];
     $emp = $_GET['emp'];
-    $dia = date("d-m-Y", strtotime($_GET['fecha']));
+    $fecha = date("d-m-Y", strtotime($_GET['fecha']));
 
+    /*Conexion BD
+    ************************/
     require("app/coneccion.php");
 
-$sql_boletas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and (cdg_anu_sn, cdg_doc_anu) in (('S','N'),('N','N')) and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_num_doc Asc"); oci_execute($sql_boletas);
-while($res_boletas = oci_fetch_array($sql_boletas)){
-    //echo $res_boletas['CDG_NUM_DOC'].' '.$res_boletas['CDG_FEC_GEN'].'<br>';
-    $boletas[] = $res_boletas;
-}
+    /*resumen algoritmo
+    ***********************/
+    include "./factura/__resumen.php";
 
-
-$sql_notas = oci_parse($conn, "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$dia."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_num_doc ASC"); oci_execute($sql_notas);
-while($res_notas = oci_fetch_array($sql_notas)){ $notas[] = $res_notas; }
-
-
-if ($emp == '01')
-{
-    $serie_boleta = 'B001';
-    $serie_nota = 'BN03';
-} else
-{
-    $serie_boleta = 'B004';
-    $serie_nota = 'BN04';
-}
-
-$ant = 0;
-$i = 0;
-$h = 0;
-
-if (isset($boletas)){
-    foreach ( $boletas as $boleta ){
-        if ($i==0){
-            $bols[$h][0] = $boleta['CDG_NUM_DOC'];
-            $ant = $boleta['CDG_NUM_DOC'];
-            $i++;
-            if (count($boletas)==1){
-                $bols[$h][1] = $boleta['CDG_NUM_DOC'];
-                $bols[$h][2] = $serie_boleta;
-            }
-        }else {
-            if (($ant+1) == $boleta['CDG_NUM_DOC']){
-                if ($boleta['CDG_NUM_DOC'] == $boletas[count($boletas)-1]['CDG_NUM_DOC']){
-                    if (($ant+2) == $boleta['CDG_NUM_DOC']){
-                        $bols[$h][1] = $ant;
-                        $bols[$h][2] = $serie_boleta;
-                        $h++;
-                        $bols[$h][0] = $boleta['CDG_NUM_DOC'];
-                        $bols[$h][1] = $boleta['CDG_NUM_DOC'];
-                        $bols[$h][2] = $serie_boleta;
-                    }else {
-                        $bols[$h][1] = $boleta['CDG_NUM_DOC'];
-                        $bols[$h][2] = $serie_boleta;
-                    }
-                    $h++;
-                    $i=0;
-                }else {
-                    $ant = $boleta['CDG_NUM_DOC'];
-                }
-            }else {
-                $bols[$h][1] = $ant;
-                $bols[$h][2] = $serie_boleta;
-                $h++;
-                $bols[$h][0] = $boleta['CDG_NUM_DOC'];
-                $ant = $boleta['CDG_NUM_DOC'];
-                if ($boleta['CDG_NUM_DOC'] == $boletas[count($boletas)-1]['CDG_NUM_DOC']){
-                    $bols[$h][1] = $boleta['CDG_NUM_DOC'];
-                    $bols[$h][2] = $serie_boleta;
-                }
-
-            }
-        }
-    }
-}
-
-$ant = 0;
-$i = 0;
-$h = 0;
-if (isset($notas)){
-    foreach ( $notas as $nota ){
-        if ($i==0){
-            $nots[$h][0] = $nota['CDG_NUM_DOC'];
-            $ant = $nota['CDG_NUM_DOC'];
-            $i++;
-            if (count($notas)==1){
-                $nots[$h][1] = $nota['CDG_NUM_DOC'];
-                $nots[$h][2] = $serie_nota;
-            }
-        }else {
-            if (($ant+1) == $nota['CDG_NUM_DOC']){
-                if ($nota['CDG_NUM_DOC'] == $notas[count($notas)-1]['CDG_NUM_DOC']){
-                    if (($ant+2) == $nota['CDG_NUM_DOC']){
-                        $nots[$h][1] = $ant;
-                        $nots[$h][2] = $serie_nota;
-                        $h++;
-                        $nots[$h][0] = $nota['CDG_NUM_DOC'];
-                        $nots[$h][1] = $nota['CDG_NUM_DOC'];
-                        $nots[$h][2] = $serie_nota;
-                    }else {
-                        $nots[$h][1] = $nota['CDG_NUM_DOC'];
-                        $nots[$h][2] = $serie_nota;
-                    }
-                    $h++;
-                    $i=0;
-                }else {
-                    $ant = $nota['CDG_NUM_DOC'];
-                }
-            }else {
-                $nots[$h][1] = $ant;
-                $nots[$h][2] = $serie_nota;
-                $h++;
-                $nots[$h][0] = $nota['CDG_NUM_DOC'];
-                $ant = $nota['CDG_NUM_DOC'];
-                if ($nota['CDG_NUM_DOC'] == $notas[count($notas)-1]['CDG_NUM_DOC']){
-                    $nots[$h][1] = $nota['CDG_NUM_DOC'];
-                    $nots[$h][2] = $serie_nota;
-                }
-
-            }
-        }
-    }
-}
-
-$ruta = './app/resumenes/'.date('Y').'/'.date('m').'/'.date('d').'/';
-
+    /*ruta
+    ***********************/
+    $ruta = './app/resumenes/'.date('Y').'/'.date('m').'/'.date('d').'/';
     if (!file_exists($ruta)) { mkdir($ruta, 0777, true); }
     $j=1;
     while(file_exists($ruta.'20532710066-RC-'.date('Ymd').'-'.$j.'.xml')){
@@ -221,39 +78,19 @@ $cac_accounting = $xml->createElement('cac:AccountingSupplierParty'); $cac_accou
             $cbc = $xml->createElement('cbc:RegistrationName', 'SURMOTRIZ S.R.L.'); $cbc = $legal->appendChild($cbc);
 
 
-$line = 1;
-// Boletas
-if (isset($bols))
-{
-    $i = 0;
-    foreach ($bols as $bol)
-    {
-        $sub = 0;
-        $desc = 0;
-        $grabadas = 0;
-        $igv = 0;
-        $total = 0;
-        $sql_rboletas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' and cdg_num_doc between ".$bol[0]." and ".$bol[1]." and cdg_tip_doc='B' order by cdg_fec_gen ASC"); oci_execute($sql_rboletas);
-        while($res_rboletas = oci_fetch_array($sql_rboletas))
-        {
-            $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
-            $desc = $desc + $res_rboletas['CDG_DES_TOT'];
-            $grabadas = $grabadas + ($res_rboletas['CDG_VVP_TOT'] - $res_rboletas['CDG_DES_TOT']);
-            $igv = $igv + $res_rboletas['CDG_IGV_TOT'];
-            $total = $total + $res_rboletas['CDG_IMP_NETO'];
-        }
+    foreach ($boletas as $index => $bol){
 
         $SummaryDocumentsLine = $xml->createElement('sac:SummaryDocumentsLine'); $SummaryDocumentsLine = $Invoice->appendChild($SummaryDocumentsLine);
-            $cbc = $xml->createElement('cbc:LineID',$line); $cbc = $SummaryDocumentsLine->appendChild($cbc);
-            $cbc = $xml->createElement('cbc:DocumentTypeCode','03'); $cbc = $SummaryDocumentsLine->appendChild($cbc);
-            $sac = $xml->createElement('sac:DocumentSerialID',$serie_boleta); $sac = $SummaryDocumentsLine->appendChild($sac);
-            $sac = $xml->createElement('sac:StartDocumentNumberID',$bol[0]); $sac = $SummaryDocumentsLine->appendChild($sac);
-            $sac = $xml->createElement('sac:EndDocumentNumberID',$bol[1]); $sac = $SummaryDocumentsLine->appendChild($sac);
-            $sac = $xml->createElement('sac:TotalAmount', number_format($total, 2, '.', '')); $sac = $SummaryDocumentsLine->appendChild($sac); $sac->setAttribute('currencyID',"PEN");
+            $cbc = $xml->createElement('cbc:LineID',$index+1); $cbc = $SummaryDocumentsLine->appendChild($cbc);
+            $cbc = $xml->createElement('cbc:DocumentTypeCode',$bol['serie_tipo']); $cbc = $SummaryDocumentsLine->appendChild($cbc);
+            $sac = $xml->createElement('sac:DocumentSerialID',$bol['serie']); $sac = $SummaryDocumentsLine->appendChild($sac);
+            $sac = $xml->createElement('sac:StartDocumentNumberID',$bol['first']); $sac = $SummaryDocumentsLine->appendChild($sac);
+            $sac = $xml->createElement('sac:EndDocumentNumberID',$bol['last']); $sac = $SummaryDocumentsLine->appendChild($sac);
+            $sac = $xml->createElement('sac:TotalAmount', number_format($bol['total'], 2, '.', '')); $sac = $SummaryDocumentsLine->appendChild($sac); $sac->setAttribute('currencyID',"PEN");
 
             // Gravado
             $sac = $xml->createElement('sac:BillingPayment'); $sac = $SummaryDocumentsLine->appendChild($sac);
-                $cbc = $xml->createElement('cbc:PaidAmount', number_format($grabadas, 2, '.', '')); $cbc = $sac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
+                $cbc = $xml->createElement('cbc:PaidAmount', number_format($bol['gravadas'], 2, '.', '')); $cbc = $sac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
                 $cbc = $xml->createElement('cbc:InstructionID','01'); $cbc = $sac->appendChild($cbc);
             // Exonerado
             $sac = $xml->createElement('sac:BillingPayment'); $sac = $SummaryDocumentsLine->appendChild($sac);
@@ -279,9 +116,9 @@ if (isset($bols))
                             $cbc = $xml->createElement('cbc:TaxTypeCode','EXC'); $cbc = $TaxScheme->appendChild($cbc);
             // Total IGV
             $TaxTotal = $xml->createElement('cac:TaxTotal'); $TaxTotal =  $SummaryDocumentsLine->appendChild($TaxTotal);
-                $cbc = $xml->createElement('cbc:TaxAmount', number_format($igv, 2, '.', '')); $cbc = $TaxTotal->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
+                $cbc = $xml->createElement('cbc:TaxAmount', number_format($bol['igv'], 2, '.', '')); $cbc = $TaxTotal->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
                 $cac = $xml->createElement('cac:TaxSubtotal'); $cac = $TaxTotal->appendChild($cac);
-                    $cbc = $xml->createElement('cbc:TaxAmount', number_format($igv, 2, '.', '')); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
+                    $cbc = $xml->createElement('cbc:TaxAmount', number_format($bol['igv'], 2, '.', '')); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
                     $TaxCategory = $xml->createElement('cac:TaxCategory'); $TaxCategory = $cac->appendChild($TaxCategory);
                         $TaxScheme = $xml->createElement('cac:TaxScheme'); $TaxScheme = $TaxCategory->appendChild($TaxScheme);
                             $cbc = $xml->createElement('cbc:ID','1000'); $cbc = $TaxScheme->appendChild($cbc);
@@ -297,85 +134,8 @@ if (isset($bols))
                             $cbc = $xml->createElement('cbc:ID','9999'); $cbc = $TaxScheme->appendChild($cbc);
                             $cbc = $xml->createElement('cbc:Name','OTROS'); $cbc = $TaxScheme->appendChild($cbc);
                             $cbc = $xml->createElement('cbc:TaxTypeCode','OTH'); $cbc = $TaxScheme->appendChild($cbc);
-        $line++;
+
     }
-}
-
-// Notas
-if (isset($nots)) {
-    foreach ($nots as $not){
-        $sub = 0;
-        $grabadas = 0;
-        $igv = 0;
-        $total = 0;
-        $desc = 0;
-        $sql_rnotas = oci_parse($conn, "select * from cab_doc_gen where cdg_cod_gen='" . $gen . "' and cdg_cod_emp='" . $emp . "' and cdg_num_doc between " . $not[0] . " and " . $not[1] . " and cdg_tip_doc='A' order by cdg_fec_gen ASC");
-        oci_execute($sql_rnotas);
-        while ($res_rnotas = oci_fetch_array($sql_rnotas)) {
-            $sub = $sub +  $res_rboletas['CDG_VVP_TOT'];
-            $desc = $desc + $res_rboletas['CDG_DES_TOT'];
-            $grabadas = $grabadas + ($res_rnotas['CDG_VVP_TOT'] - $res_rnotas['CDG_DES_TOT']);
-            $igv = $igv + $res_rnotas['CDG_IGV_TOT'];
-            $total = $total + $res_rnotas['CDG_IMP_NETO'];
-        }
-
-        $SummaryDocumentsLine = $xml->createElement('sac:SummaryDocumentsLine'); $SummaryDocumentsLine = $Invoice->appendChild($SummaryDocumentsLine);
-            $cbc = $xml->createElement('cbc:LineID',$line); $cbc = $SummaryDocumentsLine->appendChild($cbc);
-            $cbc = $xml->createElement('cbc:DocumentTypeCode','07'); $cbc = $SummaryDocumentsLine->appendChild($cbc);
-            $sac = $xml->createElement('sac:DocumentSerialID',$serie_nota); $sac = $SummaryDocumentsLine->appendChild($sac);
-            $sac = $xml->createElement('sac:StartDocumentNumberID',$not[0]); $sac = $SummaryDocumentsLine->appendChild($sac);
-            $sac = $xml->createElement('sac:EndDocumentNumberID',$not[1]); $sac = $SummaryDocumentsLine->appendChild($sac);
-            $sac = $xml->createElement('sac:TotalAmount', number_format($total, 2, '.', '')); $sac = $SummaryDocumentsLine->appendChild($sac); $sac->setAttribute('currencyID',"PEN");
-
-            // Gravado
-            $sac = $xml->createElement('sac:BillingPayment'); $sac = $SummaryDocumentsLine->appendChild($sac);
-                $cbc = $xml->createElement('cbc:PaidAmount', number_format($grabadas, 2, '.', '')); $cbc = $sac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-                $cbc = $xml->createElement('cbc:InstructionID','01'); $cbc = $sac->appendChild($cbc);
-            // Exonerado
-            $sac = $xml->createElement('sac:BillingPayment'); $sac = $SummaryDocumentsLine->appendChild($sac);
-                $cbc = $xml->createElement('cbc:PaidAmount','0.00'); $cbc = $sac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-                $cbc = $xml->createElement('cbc:InstructionID','02'); $cbc = $sac->appendChild($cbc);
-            // Inafecto
-            $sac = $xml->createElement('sac:BillingPayment'); $sac = $SummaryDocumentsLine->appendChild($sac);
-                $cbc = $xml->createElement('cbc:PaidAmount','0.00'); $cbc = $sac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-                $cbc = $xml->createElement('cbc:InstructionID','03'); $cbc = $sac->appendChild($cbc);
-            // otros cargos
-            $cac = $xml->createElement('cac:AllowanceCharge'); $cac = $SummaryDocumentsLine->appendChild($cac);
-                $cbc = $xml->createElement('cbc:ChargeIndicator','true'); $cbc = $cac->appendChild($cbc);
-                $cbc = $xml->createElement('cbc:Amount','0.00'); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-            // Total ISC
-            $TaxTotal = $xml->createElement('cac:TaxTotal'); $TaxTotal =  $SummaryDocumentsLine->appendChild($TaxTotal);
-                $cbc = $xml->createElement('cbc:TaxAmount','0.00'); $cbc = $TaxTotal->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-                $cac = $xml->createElement('cac:TaxSubtotal'); $cac = $TaxTotal->appendChild($cac);
-                    $cbc = $xml->createElement('cbc:TaxAmount','0.00'); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-                    $TaxCategory = $xml->createElement('cac:TaxCategory'); $TaxCategory = $cac->appendChild($TaxCategory);
-                        $TaxScheme = $xml->createElement('cac:TaxScheme'); $TaxScheme = $TaxCategory->appendChild($TaxScheme);
-                            $cbc = $xml->createElement('cbc:ID','2000'); $cbc = $TaxScheme->appendChild($cbc);
-                            $cbc = $xml->createElement('cbc:Name','ISC'); $cbc = $TaxScheme->appendChild($cbc);
-                            $cbc = $xml->createElement('cbc:TaxTypeCode','EXC'); $cbc = $TaxScheme->appendChild($cbc);
-            // Total IGV
-            $TaxTotal = $xml->createElement('cac:TaxTotal'); $TaxTotal =  $SummaryDocumentsLine->appendChild($TaxTotal);
-                $cbc = $xml->createElement('cbc:TaxAmount', number_format($igv, 2, '.', '')); $cbc = $TaxTotal->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-                $cac = $xml->createElement('cac:TaxSubtotal'); $cac = $TaxTotal->appendChild($cac);
-                    $cbc = $xml->createElement('cbc:TaxAmount', number_format($igv, 2, '.', '')); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-                    $TaxCategory = $xml->createElement('cac:TaxCategory'); $TaxCategory = $cac->appendChild($TaxCategory);
-                        $TaxScheme = $xml->createElement('cac:TaxScheme'); $TaxScheme = $TaxCategory->appendChild($TaxScheme);
-                            $cbc = $xml->createElement('cbc:ID','1000'); $cbc = $TaxScheme->appendChild($cbc);
-                            $cbc = $xml->createElement('cbc:Name','IGV'); $cbc = $TaxScheme->appendChild($cbc);
-                            $cbc = $xml->createElement('cbc:TaxTypeCode','VAT'); $cbc = $TaxScheme->appendChild($cbc);
-            // Total Otros tributos
-            $TaxTotal = $xml->createElement('cac:TaxTotal'); $TaxTotal =  $SummaryDocumentsLine->appendChild($TaxTotal);
-                $cbc = $xml->createElement('cbc:TaxAmount','0.00'); $cbc = $TaxTotal->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-                $cac = $xml->createElement('cac:TaxSubtotal'); $cac = $TaxTotal->appendChild($cac);
-                    $cbc = $xml->createElement('cbc:TaxAmount','0.00'); $cbc = $cac->appendChild($cbc); $cbc->setAttribute('currencyID',"PEN");
-                    $TaxCategory = $xml->createElement('cac:TaxCategory'); $TaxCategory = $cac->appendChild($TaxCategory);
-                        $TaxScheme = $xml->createElement('cac:TaxScheme'); $TaxScheme = $TaxCategory->appendChild($TaxScheme);
-                            $cbc = $xml->createElement('cbc:ID','9999'); $cbc = $TaxScheme->appendChild($cbc);
-                            $cbc = $xml->createElement('cbc:Name','OTROS'); $cbc = $TaxScheme->appendChild($cbc);
-                            $cbc = $xml->createElement('cbc:TaxTypeCode','OTH'); $cbc = $TaxScheme->appendChild($cbc);
-        $line++;
-    }
-}
 
 $xml->formatOutput = true;
 $strings_xml = $xml->saveXML();
@@ -425,62 +185,6 @@ chmod($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.zip', 0777);
 
 
 
-//URL para enviar las solicitudes a SUNAT
-//$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
-$wsdlURL = "billService.wsdl";
-//Estructura del XML para la conexión
-
-$XMLString = '<?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope 
-xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
- xmlns:ser="http://service.sunat.gob.pe" 
- xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-<soapenv:Header>
-<wsse:Security>
-<wsse:UsernameToken>
-<wsse:Username>20532710066SURMOTR1</wsse:Username>
-<wsse:Password>TOYOTA2051</wsse:Password>
-</wsse:UsernameToken>
-</wsse:Security>
-</soapenv:Header>
-<soapenv:Body>
-<ser:sendSummary>
-<fileName>'.'20532710066-RC-'.date('Ymd').'-'.($j).'.zip</fileName>
-<contentFile>' . base64_encode(file_get_contents($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.zip')) . '</contentFile>
-</ser:sendSummary>
-</soapenv:Body>
-</soapenv:Envelope>';
-
-//Realizamos la llamada a nuestra función
-$result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
-$resultado = trim($result);
-$update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='".$resultado."' WHERE cdg_num_doc='13833' and cdg_cla_doc='BR' and cdg_cod_emp='01' and cdg_cod_gen='01'";
-$stmt = oci_parse($conn, $update);
-oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
-oci_free_statement($stmt);
-/*
-    // Boletas
-    if (isset($boletas))
-    {
-        foreach ($boletas as $cab_doc_gen){
-            $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='123456' WHERE cdg_num_doc='".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab_doc_gen['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."'";
-            $stmt = oci_parse($conn, $update);
-            oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
-            oci_free_statement($stmt);
-        }
-    }
-    // Notas
-    if (isset($notas)){
-        foreach ($notas as $cab_doc_gen){
-            $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='123456' WHERE cdg_num_doc='".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab_doc_gen['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."'";
-            $stmt = oci_parse($conn, $update);
-            oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
-            oci_free_statement($stmt);
-        }
-    }
-*/
-echo $resultado;
-    //print_r($codigo);
 
 
 ?>

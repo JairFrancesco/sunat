@@ -62,6 +62,11 @@
 	/*Nav Bar
 	**************/
 	include "factura/layout/__nav_bar.php";
+
+	/*Conexion BD
+	*****************/
+    require("app/coneccion.php");
+
 ?>
 
 
@@ -78,6 +83,18 @@
             }
             echo '</div>';
             echo '<div class="col-lg-6 text-right">';
+            echo '<br><br>';
+
+
+            /*Boton Resumen Facturas
+            *************************/
+            include "factura/__crfacturas.php";
+            if ($rfacturas == 1){
+                echo '<a href="factura/rfacturas.php" target="_blank" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Resumen Factura</a> ';
+            }else {
+                echo '<a target="_blank" class="btn btn-success" disabled="disabled"><i class="glyphicon glyphicon-refresh"></i> Resumen Factura</a> ';
+            }
+
 
             if (isset($_GET['fecha_inicio']) && isset($_GET['fecha_final'])) {
                 if ($_GET['fecha_inicio'] == $_GET['fecha_final']) {
@@ -99,7 +116,7 @@
 
 
             if ($fecha != 'N'){
-                echo '<br><br><a class="btn btn-primary" href="resumen.php?h=0&gen=02&emp=' . $emp . '&fecha=' . $fecha . '" target="_blank"><span class="glyphicon glyphicon-download-alt"></span> Resumen Diario</a>';
+                echo '<a class="btn btn-primary" href="resumen.php?h=0&gen=02&emp=' . $emp . '&fecha=' . $fecha . '" target="_blank"><span class="glyphicon glyphicon-refresh"></span> Resumen Boletas</a>';
             }
 
             echo '</div>';
@@ -148,7 +165,7 @@
 			</thead>
 			<tbody>
 				<?php
-                    require("app/coneccion.php");
+
                     if(isset($_GET['fecha_inicio']) && isset($_GET['fecha_final'])){
                         if ($_GET['fecha_inicio'] == $_GET['fecha_final']) {
                             $fecha_documentos = $_GET['fecha_inicio'];
