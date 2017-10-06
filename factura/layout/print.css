@@ -2,6 +2,7 @@
     background: transparent !important;
 }
 
+
 #table_home {
     display: none;
 }
@@ -38,4 +39,9 @@ body header {
 }
 #row_principal, .bd-title, .bd-title {
     display: none !important;
+}
+@page {
+    margin: 1cm 0cm 0cm 0cm;
+    size: A4;
+
 }

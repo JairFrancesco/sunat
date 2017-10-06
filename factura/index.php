@@ -93,7 +93,8 @@
 </header>
 
 <!-- contenido -->
-<div class="container-fluid" id="app">
+<div id="app">
+<div class="container-fluid" >
     <div class="row flex-xl-nowrap" id="row_principal">
         <!-- sidebar -->
         <div class="col-xl-2 bd-sidebar" id="sidebar">
@@ -323,9 +324,21 @@
 
         </main>
     </div>
+
+</div>
     <!--Impresion-->
     <div id="imprimedoc" style="display: none;">
         <!--Cabezera de direcciones-->
+
+        <div style="border: solid 1px #000; width: 100%">dasd</div>
+
+        <table style="width: 1010px;">
+            <tr>
+                <td style="border: solid 1px #000;">Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo</td>
+
+            </tr>
+        </table>
+
         <table style="width: 100%;  margin-bottom: 20px;" cellpadding="0" cellspacing="0">
             <tr>
                 <td style="width: 15%; border-left: solid 1px #000; border-top: solid 1px #000; border-bottom: solid 1px #000;">
