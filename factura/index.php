@@ -142,39 +142,26 @@
                                     <i class="fa fa-search"></i> Buscar
                                 </button>
                             </div>
-                            <div class="form-group col-md-2">
-                                <input type="text" class="form-control" placeholder="Nro">
-                            </div>
-                            <div class="form-group col-md-1">
-                                <input type="text" class="form-control" placeholder="Serie">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <input type="text" v-model="search" class="form-control" placeholder="Cliente">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <input type="text" class="form-control" placeholder="OT">
-                            </div>
                         </div>
                     </form>
                 </div>
                 <div class="col-3 text-right">
-                    <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i
-                                class="fa fa-envelope-open-o"></i>
-                        Mes</a>
-                    <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i
-                                class="fa fa-envelope-open-o"></i>
-                        Dia</a>
+                    <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i> Fact</a>
+                    <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i> Bols</a>
                 </div>
             </div>
 
             <div class="text-center" v-show="loading">
                 <i v-show="loading" style="margin-top: 100px;" class="fa fa-spinner fa-3x fa-spin"></i>
             </div>
+
+            <h1 class="bd-title">Facturas</h1>
+
             <table class="table table-sm table-hover" v-show="!loading" id="table_home">
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Serie <i class="fa fa-caret-up"></i></th>
+                    <th>Serie</th>
                     <th>Numero</th>
                     <th>Cliente</th>
                     <th>Imp</th>
@@ -186,9 +173,42 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="document in documents">
+                <tr v-for="(document,index) in documents" v-if="document.orden_index==1">
                     <th>{{document.id}}</th>
-                    <td>{{document.serie}}</td>
+                    <td>{{document.tipo_doc}}</td>
+                    <td>{{document.numero}}</td>
+                    <td>{{document.cliente}}</td>
+                    <td>{{document.impresion}}</td>
+                    <td>{{document.anulado}} {{document.franquicia}} {{document.anticipo}}</td>
+                    <td class="text-center">{{document.ot}}</td>
+                    <td>{{document.sunat_codigo}}</td>
+                    <td class="text-right">{{document.total}}</td>
+                    <td class="text-center">
+                        <a href="#" @click="itemClicked(document)">PDF</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <h1 class="bd-title">Boletas</h1>
+            <table class="table table-sm table-hover" v-show="!loading" id="table_home">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Serie</th>
+                    <th>Numero</th>
+                    <th>Cliente</th>
+                    <th>Imp</th>
+                    <th>AFN</th>
+                    <th class="text-center">OT</th>
+                    <th>Sunat</th>
+                    <th class="text-right">Total</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="document in documents" v-if="document.orden_index==2">
+                    <th>{{document.id}}</th>
+                    <td>{{document.tipo_doc}}</td>
                     <td>{{document.numero}}</td>
                     <td>{{document.cliente}}</td>
                     <td>{{document.impresion}}</td>
@@ -517,7 +537,11 @@
             loading: false,
             loadingFactura: false,
             fecha: this.ff,
-            search: ''
+            search: '',
+            numero: '',
+            serie: '',
+            cliente: '',
+            ot: ''
         },
         methods: {
             getDocuments: function () {
@@ -525,7 +549,6 @@
                 this.$http.get('./apis/index.php?fecha=' + this.fecha).then(function (response) {
                     this.loading = false;
                     this.documents = response.data;
-                    console.log(response.data);
                 });
             },
             itemClicked: function (document) {

@@ -10,9 +10,11 @@
     //print_r (json_encode($documentos));
     $docs = array(); // cuando no hay ninguno es necesario
     $i=0;
+    $count_index_factura=1;
+    $count_index_boleta=1;
     foreach ($documentos as $documento){
 
-        $docs[$i]['id']=$i+1;
+
         $docs[$i]['numero']=$documento['CDG_NUM_DOC'];
 
         /* DOC Y SERIE 01-F001
@@ -20,17 +22,27 @@
         if($documento['CDG_TIP_DOC'] == 'F'){
             $tipoDoc = 'Factura';
             $serie = 'F00'.$documento['CDG_SER_DOC'];
+            $orden_index = 1;
+            $count_index_doc =  $count_index_factura++;
         }elseif($documento['CDG_TIP_DOC'] == 'B'){
             $tipoDoc = 'Boleta';
             $serie = 'B00'.$documento['CDG_SER_DOC'];
+            $orden_index = 2;
+            $count_index_doc =  $count_index_boleta++;
         }elseif($documento['CDG_TIP_DOC'] == 'A'){
             $tipoDoc = 'Nota Credito';
             if($documento['CDG_TIP_REF'] == 'BR' || $documento['CDG_TIP_REF'] == 'BS'){
                 $serie = 'BN0'.$documento['CDG_SER_DOC'];
+                $orden_index = 2;
+                $count_index_doc =  $count_index_boleta++;
             }elseif($documento['CDG_TIP_REF'] == 'FR' || $documento['CDG_TIP_REF'] == 'FS' || $documento['CDG_TIP_REF'] == 'FC'){
                 $serie = 'FN0'.$documento['CDG_SER_DOC'];
+                $orden_index = 1;
+                $count_index_doc =  $count_index_factura++;
             }
         }
+        $docs[$i]['id']=$count_index_doc;
+        $docs[$i]['orden_index']=$orden_index;
         $docs[$i]['tipo_doc']=$tipoDoc;
         $docs[$i]['serie']=$serie;
         $docs[$i]['cliente']=$documento['CDG_NOM_CLI'];
