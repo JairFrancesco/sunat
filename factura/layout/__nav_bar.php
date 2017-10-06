@@ -18,11 +18,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Surmotriz S.R.L</a>
+            <a class="navbar-brand" href="/sunat/index.php?emp=<?php echo $_SESSION['emp'] ?>">Surmotriz S.R.L</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/sunat/index.php?emp=<?php echo $_SESSION['emp'] ?>">Inicio</a></li>
+                <li><a href="/sunat/factura/index.php" target="_blank">Nuevo</a></li>
                 <li><a href="/sunat/resumen.php?gen=<?php echo $_SESSION['gen'] ?>&emp=<?php echo $_SESSION['emp'] ?>&fecha=<?php echo date("Y-m-d")?>">Resumen Dia (<?php echo date("d-m-Y")?>)</a></li>
                 <li><a href="/sunat/factura/resumenes.php?mes=<?php echo date("Y-m") ?>&emp=<?php echo $_SESSION['emp'] ?>">Resumen Mensual (<?php echo date("m-Y") ?>)</a></li>
                 <li><a href="/sunat/factura/tareas.php">Tareas</a></li>

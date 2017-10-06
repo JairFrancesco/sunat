@@ -186,7 +186,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="document in filteredDocuments">
+                <tr v-for="document in documents">
                     <th>{{document.id}}</th>
                     <td>{{document.serie}}</td>
                     <td>{{document.numero}}</td>
@@ -216,10 +216,11 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body" style="margin: 0px 0px 0px 0px; padding: 0px 17px 0px 17px;">
-                            <div class="text-center">
-                                <i v-show="loadingFactura" class="fa fa-spinner fa-3x fa-spin"></i>
-                            </div>
+                        <div class="text-center">
+                            <i v-show="loadingFactura" class="fa fa-spinner fa-3x fa-spin"></i>
+                        </div>
+                        <div class="modal-body" style="margin: 0px 0px 0px 0px; padding: 0px 17px 0px 17px;" v-show="!loadingFactura">
+
 
                             <div class="bd-callout bd-callout-info" style="margin-top: 0; padding-top: 0px; margin-bottom: 3px; padding-bottom: 4px;">
                                 <div class="row">
@@ -524,6 +525,7 @@
                 this.$http.get('./apis/index.php?fecha=' + this.fecha).then(function (response) {
                     this.loading = false;
                     this.documents = response.data;
+                    console.log(response.data);
                 });
             },
             itemClicked: function (document) {

@@ -6,8 +6,9 @@
 	$sql_parse = oci_parse($conn,$sql_cab_doc_gen);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $documentos, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
     //print_r (json_encode($documentos));
-    //$docs = array();
+    $docs = array(); // cuando no hay ninguno es necesario
     $i=0;
     foreach ($documentos as $documento){
 
