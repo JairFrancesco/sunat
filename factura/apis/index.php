@@ -2,7 +2,7 @@
     header('Content-Type: application/json; charset=utf-8');
 	include('../conexion.php');
 	$fecha = date("d-m-Y", strtotime($_GET['fecha']));
-	$sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='02' and cdg_cod_emp='01' and to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."'";
+	$sql_cab_doc_gen = "select * from cab_doc_gen where cdg_cod_gen='02' and cdg_cod_emp='01' and to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' order by cdg_num_doc Desc";
 	$sql_parse = oci_parse($conn,$sql_cab_doc_gen);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $documentos, null, null, OCI_FETCHSTATEMENT_BY_ROW);

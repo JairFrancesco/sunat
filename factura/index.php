@@ -93,10 +93,10 @@
 </header>
 
 <!-- contenido -->
-<div class="container-fluid">
-    <div class="row flex-xl-nowrap" id="app">
+<div class="container-fluid" id="app">
+    <div class="row flex-xl-nowrap" id="row_principal">
         <!-- sidebar -->
-        <div class="col-xl-2 bd-sidebar">
+        <div class="col-xl-2 bd-sidebar" id="sidebar">
             <div class="bd-search d-flex align-items-center">
                 Menu
             </div>
@@ -173,7 +173,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(document,index) in documents" v-if="document.orden_index==1">
+                <tr v-for="document in documents" v-if="document.orden_index==1">
                     <th>{{document.id}}</th>
                     <td>{{document.tipo_doc}}</td>
                     <td>{{document.numero}}</td>
@@ -321,196 +321,196 @@
                 </div>
             </div>
 
-            <!--Impresion-->
-            <div id="imprimedoc" style="display: none;">
-                <!--Cabezera de direcciones-->
-                <table style="width: 100%;  margin-bottom: 20px;" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td style="width: 15%; border-left: solid 1px #000; border-top: solid 1px #000; border-bottom: solid 1px #000;">
-                            <img src="images/logo.jpg" style="height: 100px;">
-                        </td>
-                        <td style="width: 41%; border-top: solid 1px #000; border-right: solid 1px #000; border-bottom: solid 1px #000; font-size: 9px; line-height: 13px;">
-                            TACNA: Av. Leguia 1870 Tacna. Telef.: (052) 426368 - 244015
-                            cel.:952869639 (repuestos) cel.: 992566630 (servicios)
-                            email: tacna@surmotriz.com y repuestos@surmotriz.com
-                            MOQUEGUA: Sector Yaracachi Mz.D Lte.09 Mariscal Nieto/Moquegua
-                            Telef:(53) 479365 Cel: #953922105 email: moquegua@surmotriz.com
-                            Venta de vehiculos-repuestos y accesorios legitimos Toyota
-                            Reparacion y mantenimiento de automoviles y camionetas.
-                        </td>
-                        <td style="width: 4%;"></td>
-                        <td style="width: 40%; border: solid 1px #000;">
-                            <div style="text-align: center; color: red; font-size: 18px; line-height: 25px;">RUC:
-                                20532710066
-                            </div>
-                            <div style="text-align: center; font-weight: bold; font-size: 18px; line-height: 25px; ">
-                                {{documento.documento_noombre}}
-                            </div>
-                            <div style="text-align: center; color: blue; font-size: 19px; line-height: 25px;">
-                                {{documento.serie}} - {{documento.numero}}
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <!--Cabezera de informacion de documento-->
-                <table style="width: 100%; font-size: 12px; border: solid 1px #000; margin-bottom: 20px; padding: 5px;"
-                       cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.fecha}}</span></td>
-                        <td style="width: 40%;">{{documento.ord_tra}}</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.cliente}}</span></td>
-                        <td style="width: 40%;">{{documento.placa}}</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.doc_cliente}}</span></td>
-                        <td style="width: 40%;">{{documento.modelo}}</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.direccion}}</span></td>
-                        <td style="width: 40%;">{{documento.chasis}}</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.pago}}</span></td>
-                        <td style="width: 40%;">{{documento.color}}</td>
-                    </tr>
-                    <tr>
-                        <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.ubigeo}}</span></td>
-                        <td style="width: 40%;">{{documento.km}}</td>
-                    </tr>
-                </table>
-                <!--items-->
-                <table style="width: 100%; font-size: 12px;" cellspacing="0" cellpadding="0">
-                    <tr style="font-weight: bold;">
-                        <td style="border-bottom: solid 1px #000; border-left: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; text-align: center;">
-                            Nro
-                        </td>
-                        <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">
-                            Codigo
-                        </td>
-                        <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">
-                            Descripcion
-                        </td>
-                        <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: center;">
-                            Cant
-                        </td>
-                        <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">
-                            P. Unit
-                        </td>
-                        <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">
-                            Importe
-                        </td>
-                        <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">
-                            Desct
-                        </td>
-                        <td style="border-bottom: solid 1px #000; border-top: solid 1px #000;  border-right: solid 1px #000; text-align: right; padding-right: 3px;">
-                            Valor Venta
-                        </td>
-                    </tr>
-                    <tr v-for="item in documento.items">
-                        <td style="width: 4%; border-left: solid 1px #000; border-right: solid 1px #000; border-bottom: solid 1px #000; text-align: center;">
-                            {{item.id}}
-                        </td>
-                        <td style="width: 12%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">
-                            {{item.codigo}}
-                        </td>
-                        <td style="width: 41%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">
-                            {{item.descripcion}}
-                        </td>
-                        <td style="width: 5%; text-align: center; border-right: solid 1px #000; border-bottom: solid 1px #000;">
-                            {{item.cantidad}}
-                        </td>
-                        <td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">
-                            {{item.unitario}}
-                        </td>
-                        <td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">
-                            {{item.importe}}
-                        </td>
-                        <td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">
-                            {{item.descuento}}
-                        </td>
-                        <td style="width: 11%; border-right: solid 1px #000; text-align: right; border-bottom: solid 1px #000; padding-right: 3px;">
-                            {{item.venta}}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="4" rowspan="8" style="width: 60%;border-right: solid 1px #000; line-height: 14px;"
-                            v-html="`${documento.mensajes} <br> Son : ${documento.leyenda} <br><img src='images/20532710066-07-FN03-2917.png' style='height: 55px; width: 300px; text-align: center;'>`"></td>
-                        <td colspan="3" style="text-align: right; border-right: solid 1px #000; padding-right: 3px;">Sub
-                            Total {{documento.moneda}}
-                        </td>
-                        <td style="border-right: solid 1px #000; text-align: right; padding-right: 3px;">
-                            {{documento.total_sub}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"
-                            style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
-                            Total Descuentos {{documento.moneda}}
-                        </td>
-                        <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
-                            {{documento.total_descuentos}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"
-                            style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
-                            Operaciones Gravadas {{documento.moneda}}
-                        </td>
-                        <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
-                            {{documento.total_gravadas}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"
-                            style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
-                            Operaciones Inafectas {{documento.moneda}}
-                        </td>
-                        <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
-                            0.00
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"
-                            style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
-                            Operaciones Exoneradas {{documento.moneda}}
-                        </td>
-                        <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
-                            0.00
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"
-                            style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
-                            Operaciones Gratuitas {{documento.moneda}}
-                        </td>
-                        <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
-                            0.00
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"
-                            style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
-                            I.G.V. 18% {{documento.moneda}}
-                        </td>
-                        <td style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
-                            {{documento.total_igv}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3"
-                            style="border-top: solid 1px #000; border-bottom: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
-                            <strong>IMPORTE TOTAL {{documento.moneda}}</strong></td>
-                        <td style="border-top: solid 1px #000; border-bottom: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
-                            <strong>{{documento.total_total}}</strong></td>
-                    </tr>
-                </table>
-                <hr style="border: none; height: 1px; background-color: #414141; margin-top: 30px;">
-                <span style="text-align: center; font-size: 11px; line-height: 15px;">Representación Impresa de la Factura Electrónica. SURMOTRIZ S.R.L. Autorizado para ser Emisor electrónico mediante Resolución de Intendencia N° 112-005-0000143/SUNAT Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php</span>
-            </div>
         </main>
+    </div>
+    <!--Impresion-->
+    <div id="imprimedoc" style="display: none;">
+        <!--Cabezera de direcciones-->
+        <table style="width: 100%;  margin-bottom: 20px;" cellpadding="0" cellspacing="0">
+            <tr>
+                <td style="width: 15%; border-left: solid 1px #000; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                    <img src="images/logo.jpg" style="height: 100px;">
+                </td>
+                <td style="width: 41%; border-top: solid 1px #000; border-right: solid 1px #000; border-bottom: solid 1px #000; font-size: 9px; line-height: 13px;">
+                    TACNA: Av. Leguia 1870 Tacna. Telef.: (052) 426368 - 244015
+                    cel.:952869639 (repuestos) cel.: 992566630 (servicios)
+                    email: tacna@surmotriz.com y repuestos@surmotriz.com
+                    MOQUEGUA: Sector Yaracachi Mz.D Lte.09 Mariscal Nieto/Moquegua
+                    Telef:(53) 479365 Cel: #953922105 email: moquegua@surmotriz.com
+                    Venta de vehiculos-repuestos y accesorios legitimos Toyota
+                    Reparacion y mantenimiento de automoviles y camionetas.
+                </td>
+                <td style="width: 4%;"></td>
+                <td style="width: 40%; border: solid 1px #000;">
+                    <div style="text-align: center; color: red; font-size: 18px; line-height: 25px;">RUC:
+                        20532710066
+                    </div>
+                    <div style="text-align: center; font-weight: bold; font-size: 18px; line-height: 25px; ">
+                        {{documento.documento_noombre}}
+                    </div>
+                    <div style="text-align: center; color: blue; font-size: 19px; line-height: 25px;">
+                        {{documento.serie}} - {{documento.numero}}
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!--Cabezera de informacion de documento-->
+        <table style="width: 100%; font-size: 12px; border: solid 1px #000; margin-bottom: 20px; padding: 5px;"
+               cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.fecha}}</span></td>
+                <td style="width: 40%;">{{documento.ord_tra}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.cliente}}</span></td>
+                <td style="width: 40%;">{{documento.placa}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.doc_cliente}}</span></td>
+                <td style="width: 40%;">{{documento.modelo}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.direccion}}</span></td>
+                <td style="width: 40%;">{{documento.chasis}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.pago}}</span></td>
+                <td style="width: 40%;">{{documento.color}}</td>
+            </tr>
+            <tr>
+                <td style="width: 60%;"><span style="padding-left: 5px;">{{documento.ubigeo}}</span></td>
+                <td style="width: 40%;">{{documento.km}}</td>
+            </tr>
+        </table>
+        <!--items-->
+        <table style="width: 100%; font-size: 12px;" cellspacing="0" cellpadding="0">
+            <tr style="font-weight: bold;">
+                <td style="border-bottom: solid 1px #000; border-left: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; text-align: center;">
+                    Nro
+                </td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">
+                    Codigo
+                </td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000; padding-left: 3px;">
+                    Descripcion
+                </td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: center;">
+                    Cant
+                </td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">
+                    P. Unit
+                </td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">
+                    Importe
+                </td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000; border-right: solid 1px #000;  text-align: right; padding-right: 3px;">
+                    Desct
+                </td>
+                <td style="border-bottom: solid 1px #000; border-top: solid 1px #000;  border-right: solid 1px #000; text-align: right; padding-right: 3px;">
+                    Valor Venta
+                </td>
+            </tr>
+            <tr v-for="item in documento.items">
+                <td style="width: 4%; border-left: solid 1px #000; border-right: solid 1px #000; border-bottom: solid 1px #000; text-align: center;">
+                    {{item.id}}
+                </td>
+                <td style="width: 12%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">
+                    {{item.codigo}}
+                </td>
+                <td style="width: 41%; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-left: 3px;">
+                    {{item.descripcion}}
+                </td>
+                <td style="width: 5%; text-align: center; border-right: solid 1px #000; border-bottom: solid 1px #000;">
+                    {{item.cantidad}}
+                </td>
+                <td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">
+                    {{item.unitario}}
+                </td>
+                <td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">
+                    {{item.importe}}
+                </td>
+                <td style="width: 9%; text-align: right; border-right: solid 1px #000; border-bottom: solid 1px #000; padding-right: 3px;">
+                    {{item.descuento}}
+                </td>
+                <td style="width: 11%; border-right: solid 1px #000; text-align: right; border-bottom: solid 1px #000; padding-right: 3px;">
+                    {{item.venta}}
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="4" rowspan="8" style="width: 60%;border-right: solid 1px #000; line-height: 14px;"
+                    v-html="`${documento.mensajes} <br> Son : ${documento.leyenda} <br><img src='images/20532710066-07-FN03-2917.png' style='height: 55px; width: 300px; text-align: center;'>`"></td>
+                <td colspan="3" style="text-align: right; border-right: solid 1px #000; padding-right: 3px;">Sub
+                    Total {{documento.moneda}}
+                </td>
+                <td style="border-right: solid 1px #000; text-align: right; padding-right: 3px;">
+                    {{documento.total_sub}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"
+                    style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
+                    Total Descuentos {{documento.moneda}}
+                </td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
+                    {{documento.total_descuentos}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"
+                    style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
+                    Operaciones Gravadas {{documento.moneda}}
+                </td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
+                    {{documento.total_gravadas}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"
+                    style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
+                    Operaciones Inafectas {{documento.moneda}}
+                </td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
+                    0.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"
+                    style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
+                    Operaciones Exoneradas {{documento.moneda}}
+                </td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
+                    0.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"
+                    style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
+                    Operaciones Gratuitas {{documento.moneda}}
+                </td>
+                <td style="border-top: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
+                    0.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"
+                    style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
+                    I.G.V. 18% {{documento.moneda}}
+                </td>
+                <td style="border-top: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
+                    {{documento.total_igv}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"
+                    style="border-top: solid 1px #000; border-bottom: solid 1px #000; text-align: right; border-right: solid 1px #000; padding-right: 3px;">
+                    <strong>IMPORTE TOTAL {{documento.moneda}}</strong></td>
+                <td style="border-top: solid 1px #000; border-bottom: solid 1px #000; border-right: solid 1px #000; text-align: right; padding-right: 3px;">
+                    <strong>{{documento.total_total}}</strong></td>
+            </tr>
+        </table>
+        <hr style="border: none; height: 1px; background-color: #414141; margin-top: 30px;">
+        <p style="text-align: center; font-size: 11px; line-height: 13px !important;" id="mensaje_final">Representación Impresa de la Factura Electrónica. SURMOTRIZ S.R.L. Autorizado para ser Emisor electrónico mediante Resolución de Intendencia N° 112-005-0000143/SUNAT Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php</p>
     </div>
 </div>
 
