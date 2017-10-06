@@ -21,7 +21,7 @@
         $documento['ord_tra'] = 'Ord. Trab : '.$ord_trab;
         $documento['placa'] = 'Placa/Serie : '.$placa;
         $documento['modelo'] = 'Modelo/Año : '.$modelo_anho;
-        $documento['chasis'] = 'Motor/Chasis : '.$motor_chasis;
+        $documento['chasis'] = 'Chasis : '.$motor_chasis;
         $documento['color'] = 'Color : '.$color;
         $documento['km'] = 'Km : '.$kilometraje;
     }
