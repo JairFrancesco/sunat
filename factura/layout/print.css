@@ -33,3 +33,9 @@ body header {
 #app p h2 {
     display: none !important;
 }
+#sidebar {
+    display: none !important;
+}
+#row_principal, .bd-title, .bd-title {
+    display: none !important;
+}
