@@ -94,238 +94,266 @@
 
 <!-- contenido -->
 <div id="app">
-<div class="container-fluid" >
-    <div class="row flex-xl-nowrap" id="row_principal">
-        <!-- sidebar -->
-        <div class="col-xl-2 bd-sidebar" id="sidebar">
-            <div class="bd-search d-flex align-items-center">
-                Menu
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap" id="row_principal">
+            <!-- sidebar -->
+            <div class="col-xl-2 bd-sidebar" id="sidebar">
+                <div class="bd-search d-flex align-items-center">
+                    Menu
+                </div>
+                <nav class="collapse bd-links" id="bd-docs-nav">
+                    <div class="bd-toc-item active">
+                        <a class="bd-toc-link" href="/docs/4.0/getting-started/introduction/">
+                            Documentos
+                        </a>
+                        <ul class="nav bd-sidenav">
+                            <li class="">
+                                <a href="/docs/4.0/getting-started/introduction/">
+                                    Resumen Diario
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="/docs/4.0/getting-started/download/">
+                                    Resumen por Mes
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bd-toc-item ">
+                        <a class="bd-toc-link" href="/docs/4.0/layout/overview/">
+                            Sunat link
+                        </a>
+                    </div>
+                    <div class="bd-toc-item ">
+                        <a class="bd-toc-link" href="/docs/4.0/extend/icons/">Manual</a>
+                    </div>
+                </nav>
             </div>
-            <nav class="collapse bd-links" id="bd-docs-nav">
-                <div class="bd-toc-item active">
-                    <a class="bd-toc-link" href="/docs/4.0/getting-started/introduction/">
-                        Documentos
-                    </a>
-                    <ul class="nav bd-sidenav">
-                        <li class="">
-                            <a href="/docs/4.0/getting-started/introduction/">
-                                Resumen Diario
-                            </a>
-                        </li>
-                        <li class="">
-                            <a href="/docs/4.0/getting-started/download/">
-                                Resumen por Mes
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="bd-toc-item ">
-                    <a class="bd-toc-link" href="/docs/4.0/layout/overview/">
-                        Sunat link
-                    </a>
-                </div>
-                <div class="bd-toc-item ">
-                    <a class="bd-toc-link" href="/docs/4.0/extend/icons/">Manual</a>
-                </div>
-            </nav>
-        </div>
-        <!-- main-->
-        <main class="col-10 py-md-3 pl-md-5">
-            <div class="row" id="form_doc">
-                <div class="col-9">
-                    <form @submit.prevent="getDocuments">
-                        <div class="form-row">
-                            <div class="form-group col-md-3 ">
-                                <input type="text" class="form-control" name="fecha" v-model="fecha">
+            <!-- main-->
+            <main class="col-10 py-md-3 pl-md-5">
+                <div class="row" id="form_doc">
+                    <div class="col-9">
+                        <form @submit.prevent="getDocuments">
+                            <div class="form-row">
+                                <div class="form-group col-md-3 ">
+                                    <input type="text" class="form-control" name="fecha" v-model="fecha">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button type="submit" class="form-control btn btn-dark "
+                                            style="background-color: #563d7c;">
+                                        <i class="fa fa-search"></i> Buscar
+                                    </button>
+                                </div>
                             </div>
-                            <div class="form-group col-md-2">
-                                <button type="submit" class="form-control btn btn-dark " style="background-color: #563d7c;">
-                                    <i class="fa fa-search"></i> Buscar
+                        </form>
+                    </div>
+                    <div class="col-3 text-right">
+                        <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i
+                                    class="fa fa-envelope-open-o"></i> Fact</a>
+                        <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i
+                                    class="fa fa-envelope-open-o"></i> Bols</a>
+                    </div>
+                </div>
+
+                <div class="text-center" v-show="loading">
+                    <i v-show="loading" style="margin-top: 100px;" class="fa fa-spinner fa-3x fa-spin"></i>
+                </div>
+
+
+
+                <table class="table table-sm" v-show="!loading" id="table_home">
+                    <tr>
+                        <td colspan="10"><h1 class="bd-title">Facturas</h1></td>
+                    </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Serie</th>
+                        <th>Numero</th>
+                        <th>Cliente</th>
+                        <th>Imp</th>
+                        <th>AFN</th>
+                        <th class="text-center">OT</th>
+                        <th>Sunat</th>
+                        <th class="text-right">Total</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+
+                    <tbody>
+                    <tr v-for="document in documents" v-if="document.orden_index==1">
+                        <th>{{document.id}}</th>
+                        <td>{{document.tipo_doc}}</td>
+                        <td>{{document.numero}}</td>
+                        <td>{{document.cliente}}</td>
+                        <td>{{document.impresion}}</td>
+                        <td>{{document.anulado}} {{document.franquicia}} {{document.anticipo}}</td>
+                        <td class="text-center">{{document.ot}}</td>
+                        <td>{{document.sunat_codigo}}</td>
+                        <td class="text-right">{{document.total}}</td>
+                        <td class="text-center">
+                            <a href="#" @click="itemClicked(document)">PDF</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h1 class="bd-title">Boletas</h1>
+                <table class="table table-sm table-hover" v-show="!loading" id="table_home">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Serie</th>
+                        <th>Numero</th>
+                        <th>Cliente</th>
+                        <th>Imp</th>
+                        <th>AFN</th>
+                        <th class="text-center">OT</th>
+                        <th>Sunat</th>
+                        <th class="text-right">Total</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="document in documents" v-if="document.orden_index==2">
+                        <th>{{document.id}}</th>
+                        <td>{{document.tipo_doc}}</td>
+                        <td>{{document.numero}}</td>
+                        <td>{{document.cliente}}</td>
+                        <td>{{document.impresion}}</td>
+                        <td>{{document.anulado}} {{document.franquicia}} {{document.anticipo}}</td>
+                        <td class="text-center">{{document.ot}}</td>
+                        <td>{{document.sunat_codigo}}</td>
+                        <td class="text-right">{{document.total}}</td>
+                        <td class="text-center">
+                            <a href="#" @click="itemClicked(document)">PDF</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!--Modal Factura-->
+                <div class="modal fade" id="table_modal">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header"
+                                 style="margin: 8px 0px 0px 0px; padding: 0px 17px 8px 17px; border: 0px;">
+                                <h5 class="modal-title">
+                                    <i class="fa fa-file-text-o"></i>
+                                    {{document.tipo_doc}} {{document.serie}} - {{ document.numero }}
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="text-center">
+                                <i v-show="loadingFactura" class="fa fa-spinner fa-3x fa-spin"></i>
+                            </div>
+                            <div class="modal-body" style="margin: 0px 0px 0px 0px; padding: 0px 17px 0px 17px;"
+                                 v-show="!loadingFactura">
+
+
+                                <div class="bd-callout bd-callout-info"
+                                     style="margin-top: 0; padding-top: 0px; margin-bottom: 3px; padding-bottom: 4px;">
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <div>{{documento.fecha}}</div>
+                                            <div>{{documento.cliente}}</div>
+                                            <div>{{documento.doc_cliente}}</div>
+                                            <div>{{documento.direccion}}</div>
+                                            <div>{{documento.pago}}</div>
+                                            <div>{{documento.ubigeo}}</div>
+                                        </div>
+                                        <div class="col">
+                                            <div>{{documento.ord_tra}}</div>
+                                            <div>{{documento.placa}}</div>
+                                            <div>{{documento.modelo}}</div>
+                                            <div>{{documento.chasis}}</div>
+                                            <div>{{documento.color}}</div>
+                                            <div>{{documento.km}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-sm table-striped" v-show="!loadingFactura">
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th class="text-left">Código</th>
+                                        <th class="text-left">Descripción</th>
+                                        <th class="text-center">Cant</th>
+                                        <th class="text-right">P.Unit</th>
+                                        <th class="text-right">Import</th>
+                                        <th class="text-right">Descto</th>
+                                        <th class="text-right">V.Venta</th>
+                                    </tr>
+                                    <tr v-for="item in documento.items">
+                                        <td class="text-center" style="padding-top: 0px; padding-bottom: 0px;">
+                                            {{item.id}}
+                                        </td>
+                                        <td class="text-left" style="padding-top: 0px; padding-bottom: 0px;">
+                                            {{item.codigo}}
+                                        </td>
+                                        <td class="text-left" style="padding-top: 0px; padding-bottom: 0px;">
+                                            {{item.descripcion}}
+                                        </td>
+                                        <td class="text-center" style="padding-top: 0px; padding-bottom: 0px;">
+                                            {{item.cantidad}}
+                                        </td>
+                                        <td class="text-right" style="padding-top: 0px; padding-bottom: 0px;">
+                                            {{item.unitario}}
+                                        </td>
+                                        <td class="text-right" style="padding-top: 0px; padding-bottom: 0px;">
+                                            {{item.importe}}
+                                        </td>
+                                        <td class="text-right" style="padding-top: 0px; padding-bottom: 0px;">
+                                            {{item.descuento}}
+                                        </td>
+                                        <td class="text-right" style="padding-top: 0px; padding-bottom: 0px;">
+                                            {{item.venta}}
+                                        </td>
+                                    </tr>
+                                    <tr v-show="documento.suma_active">
+                                        <td colspan="3"><strong>Sumatoria</strong></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right">{{documento.suma_import}}</td>
+                                        <td class="text-right">{{documento.suma_descuento}}</td>
+                                        <td class="text-right">{{documento.suma_venta}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <strong>Totales {{documento.moneda}}</strong>
+                                        </td>
+                                        <td class="text-right" colspan="6">
+                                            Subtotal {{documento.total_sub}} |
+                                            Descuentos {{documento.total_descuentos}} |
+                                            Gravadas {{documento.total_gravadas}} |
+                                            I.G.V {{documento.total_igv}} |
+                                            Total <strong>{{documento.total_total}}</strong>
+                                        </td>
+                                    </tr>
+                                    <tr v-show="documento.mensaje_active">
+                                        <td colspan="2">
+                                            <strong>Mensajes </strong>
+                                        </td>
+                                        <td class="text-right" colspan="6" v-html="documento.mensajes">
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            <div class="modal-footer"
+                                 style="margin: 0px 0px 0px 0px; padding: 0px 15px 20px 0px; border: 0px;">
+                                <a href="#" class="btn btn-info btn-sm" @click="printPDF('a')"><i
+                                            class="fa fa-print"></i> Imprimir</a>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i
+                                            class="fa fa-windows-close"></i> Close
                                 </button>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="col-3 text-right">
-                    <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i> Fact</a>
-                    <a href="#" class="btn btn-dark" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i> Bols</a>
-                </div>
-            </div>
-
-            <div class="text-center" v-show="loading">
-                <i v-show="loading" style="margin-top: 100px;" class="fa fa-spinner fa-3x fa-spin"></i>
-            </div>
-
-            <h1 class="bd-title">Facturas</h1>
-
-            <table class="table table-sm table-hover" v-show="!loading" id="table_home">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Serie</th>
-                    <th>Numero</th>
-                    <th>Cliente</th>
-                    <th>Imp</th>
-                    <th>AFN</th>
-                    <th class="text-center">OT</th>
-                    <th>Sunat</th>
-                    <th class="text-right">Total</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="document in documents" v-if="document.orden_index==1">
-                    <th>{{document.id}}</th>
-                    <td>{{document.tipo_doc}}</td>
-                    <td>{{document.numero}}</td>
-                    <td>{{document.cliente}}</td>
-                    <td>{{document.impresion}}</td>
-                    <td>{{document.anulado}} {{document.franquicia}} {{document.anticipo}}</td>
-                    <td class="text-center">{{document.ot}}</td>
-                    <td>{{document.sunat_codigo}}</td>
-                    <td class="text-right">{{document.total}}</td>
-                    <td class="text-center">
-                        <a href="#" @click="itemClicked(document)">PDF</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <h1 class="bd-title">Boletas</h1>
-            <table class="table table-sm table-hover" v-show="!loading" id="table_home">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Serie</th>
-                    <th>Numero</th>
-                    <th>Cliente</th>
-                    <th>Imp</th>
-                    <th>AFN</th>
-                    <th class="text-center">OT</th>
-                    <th>Sunat</th>
-                    <th class="text-right">Total</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="document in documents" v-if="document.orden_index==2">
-                    <th>{{document.id}}</th>
-                    <td>{{document.tipo_doc}}</td>
-                    <td>{{document.numero}}</td>
-                    <td>{{document.cliente}}</td>
-                    <td>{{document.impresion}}</td>
-                    <td>{{document.anulado}} {{document.franquicia}} {{document.anticipo}}</td>
-                    <td class="text-center">{{document.ot}}</td>
-                    <td>{{document.sunat_codigo}}</td>
-                    <td class="text-right">{{document.total}}</td>
-                    <td class="text-center">
-                        <a href="#" @click="itemClicked(document)">PDF</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <!--Modal Factura-->
-            <div class="modal fade" id="table_modal">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header" style="margin: 8px 0px 0px 0px; padding: 0px 17px 8px 17px; border: 0px;">
-                            <h5 class="modal-title">
-                                <i class="fa fa-file-text-o"></i>
-                                {{document.tipo_doc}} {{document.serie}} - {{ document.numero }}
-                            </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="text-center">
-                            <i v-show="loadingFactura" class="fa fa-spinner fa-3x fa-spin"></i>
-                        </div>
-                        <div class="modal-body" style="margin: 0px 0px 0px 0px; padding: 0px 17px 0px 17px;" v-show="!loadingFactura">
-
-
-                            <div class="bd-callout bd-callout-info" style="margin-top: 0; padding-top: 0px; margin-bottom: 3px; padding-bottom: 4px;">
-                                <div class="row">
-                                    <div class="col-7">
-                                        <div>{{documento.fecha}}</div>
-                                        <div>{{documento.cliente}}</div>
-                                        <div>{{documento.doc_cliente}}</div>
-                                        <div>{{documento.direccion}}</div>
-                                        <div>{{documento.pago}}</div>
-                                        <div>{{documento.ubigeo}}</div>
-                                    </div>
-                                    <div class="col">
-                                        <div>{{documento.ord_tra}}</div>
-                                        <div>{{documento.placa}}</div>
-                                        <div>{{documento.modelo}}</div>
-                                        <div>{{documento.chasis}}</div>
-                                        <div>{{documento.color}}</div>
-                                        <div>{{documento.km}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <table class="table table-sm table-striped" v-show="!loadingFactura">
-                                <tr>
-                                    <th class="text-center">#</th>
-                                    <th class="text-left">Código</th>
-                                    <th class="text-left">Descripción</th>
-                                    <th class="text-center">Cant</th>
-                                    <th class="text-right">P.Unit</th>
-                                    <th class="text-right">Import</th>
-                                    <th class="text-right">Descto</th>
-                                    <th class="text-right">V.Venta</th>
-                                </tr>
-                                <tr v-for="item in documento.items">
-                                    <td class="text-center" style="padding-top: 0px; padding-bottom: 0px;">{{item.id}}</td>
-                                    <td class="text-left" style="padding-top: 0px; padding-bottom: 0px;">{{item.codigo}}</td>
-                                    <td class="text-left" style="padding-top: 0px; padding-bottom: 0px;">{{item.descripcion}}</td>
-                                    <td class="text-center" style="padding-top: 0px; padding-bottom: 0px;">{{item.cantidad}}</td>
-                                    <td class="text-right" style="padding-top: 0px; padding-bottom: 0px;">{{item.unitario}}</td>
-                                    <td class="text-right" style="padding-top: 0px; padding-bottom: 0px;">{{item.importe}}</td>
-                                    <td class="text-right" style="padding-top: 0px; padding-bottom: 0px;">{{item.descuento}}</td>
-                                    <td class="text-right" style="padding-top: 0px; padding-bottom: 0px;">{{item.venta}}</td>
-                                </tr>
-                                <tr v-show="documento.suma_active">
-                                    <td colspan="3"><strong>Sumatoria</strong></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right">{{documento.suma_import}}</td>
-                                    <td class="text-right">{{documento.suma_descuento}}</td>
-                                    <td class="text-right">{{documento.suma_venta}}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <strong>Totales {{documento.moneda}}</strong>
-                                    </td>
-                                    <td class="text-right" colspan="6">
-                                        Subtotal {{documento.total_sub}} |
-                                        Descuentos {{documento.total_descuentos}} |
-                                        Gravadas {{documento.total_gravadas}} |
-                                        I.G.V {{documento.total_igv}} |
-                                        Total <strong>{{documento.total_total}}</strong>
-                                    </td>
-                                </tr>
-                                <tr v-show="documento.mensaje_active">
-                                    <td colspan="2">
-                                        <strong>Mensajes </strong>
-                                    </td>
-                                    <td class="text-right" colspan="6" v-html="documento.mensajes">
-                                    </td>
-                                </tr>
-
-                            </table>
-                        </div>
-                        <div class="modal-footer" style="margin: 0px 0px 0px 0px; padding: 0px 15px 20px 0px; border: 0px;">
-                            <a href="#" class="btn btn-info btn-sm" @click="printPDF('a')"><i class="fa fa-print"></i> Imprimir</a>
-                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-windows-close"></i> Close</button>
-                        </div>
                     </div>
                 </div>
-            </div>
 
-        </main>
+            </main>
+        </div>
+
     </div>
-
-</div>
     <!--Impresion-->
     <div id="imprimedoc" style="display: none;">
         <!--Cabezera de direcciones-->
@@ -334,7 +362,9 @@
 
         <table style="width: 1010px;">
             <tr>
-                <td style="border: solid 1px #000;">Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo</td>
+                <td style="border: solid 1px #000;">Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo
+                    Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo Hola mundo
+                </td>
 
             </tr>
         </table>
@@ -523,7 +553,10 @@
             </tr>
         </table>
         <hr style="border: none; height: 1px; background-color: #414141; margin-top: 30px;">
-        <p style="text-align: center; font-size: 11px; line-height: 13px !important;" id="mensaje_final">Representación Impresa de la Factura Electrónica. SURMOTRIZ S.R.L. Autorizado para ser Emisor electrónico mediante Resolución de Intendencia N° 112-005-0000143/SUNAT Para consultar el comprobante ingresar a : http://www.surmotriz.com/sunat/consulta.php</p>
+        <p style="text-align: center; font-size: 11px; line-height: 13px !important;" id="mensaje_final">Representación
+            Impresa de la Factura Electrónica. SURMOTRIZ S.R.L. Autorizado para ser Emisor electrónico mediante
+            Resolución de Intendencia N° 112-005-0000143/SUNAT Para consultar el comprobante ingresar a :
+            http://www.surmotriz.com/sunat/consulta.php</p>
     </div>
 </div>
 
