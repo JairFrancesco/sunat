@@ -3,6 +3,9 @@
     $documento['serie'] = $serie;
     $documento['numero'] = $cab_doc_gen['CDG_NUM_DOC'];
     $documento['documento_noombre'] = $doc_nombre;
+
+    /*Para el modal
+    ******************/
     $documento['fecha'] = 'Fecha : '.$fecha;
     $documento['cliente'] = 'Cliente  : '.$cab_doc_gen['CDG_NOM_CLI'];
     $documento['doc_cliente'] = $tipo_doc.' : '.trim($cab_doc_gen['CDG_DOC_CLI']);
@@ -10,20 +13,62 @@
     $documento['pago'] = 'Forma de Pago : '.$forma_pago;
     $documento['ubigeo'] = 'Ubigeo : '.$ubigeo;
 
+
+    /*Para el print
+    ******************/
+    $documento['fecha_print'] = $fecha;
+    $documento['cliente_print'] = $cab_doc_gen['CDG_NOM_CLI'];
+    $documento['tipo_doc_print'] = $tipo_doc;
+    $documento['doc_cliente_print'] = trim($cab_doc_gen['CDG_DOC_CLI']);
+    $documento['direccion_print'] = $cab_doc_gen['CDG_DIR_CLI'];
+    $documento['pago_print'] = $forma_pago;
+    $documento['ubigeo_print'] = $ubigeo;
+
+
     if ($cabezera_tipo == 0){
+
+        $documento['cabezera_tipo'] = 0;
+
+        /*Para el modal
+        ******************/
         $documento['ord_tra'] = '';
         $documento['placa'] = '';
         $documento['modelo'] = '';
         $documento['chasis'] = '';
         $documento['color'] = '';
         $documento['km'] = '';
+
+        /*Para el print
+        ******************/
+        $documento['ord_tra_print'] = '';
+        $documento['placa_print'] = '';
+        $documento['modelo_print'] = '';
+        $documento['chasis_print'] = '';
+        $documento['color_print'] = '';
+        $documento['km_print'] = '';
+
     }elseif ($cabezera_tipo == 1){
+
+        $documento['cabezera_tipo'] = 1;
+
+        /*Para el modal
+        ******************/
         $documento['ord_tra'] = 'Ord. Trab : '.$ord_trab;
         $documento['placa'] = 'Placa/Serie : '.$placa;
         $documento['modelo'] = 'Modelo/Año : '.$modelo_anho;
         $documento['chasis'] = 'Chasis : '.$motor_chasis;
         $documento['color'] = 'Color : '.$color;
         $documento['km'] = 'Km : '.$kilometraje;
+
+        /*Para el print
+        ******************/
+        $documento['ord_tra_print'] = $ord_trab;
+        $documento['placa_print'] = $placa;
+        $documento['modelo_print'] = $modelo_anho;
+        $documento['chasis_print'] = $motor_chasis;
+        $documento['color_print'] = $color;
+        $documento['km_print'] = $kilometraje;
+
     }
     $i = 0;
     $suma_import = 0.00;
