@@ -41,6 +41,7 @@ var app = new Vue({
 
         },
         printPDF: function (doc) {
+            document.title = "";
             window.print();
         }
     },
