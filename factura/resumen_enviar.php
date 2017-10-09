@@ -237,8 +237,14 @@
         // guarda las boletas y sus notas en cada uno de sus items
         if($codigo == '0'){
             if (isset($boletas)){
-                foreach ( $boletas as $boleta ){
-                    $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc >= '".$boleta['first']."' and cdg_num_doc <= '".$boleta['last']."' and cdg_ser_doc='".$boleta['serie'][3]."' and cdg_tip_doc='".$boleta['serie'][0]."' and cdg_cod_emp='".$emp."'";
+                foreach ( $boletas as $boleta )
+                    //para saber si es boleta o nota
+                    if ($boleta['serie']=='BN03' || $boleta['serie']=='BN04'){
+                        $tip_doc='A';
+                    }else{
+                        $tip_doc='B';
+                    }
+                    $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc >= '".$boleta['first']."' and cdg_num_doc <= '".$boleta['last']."' and cdg_ser_doc='".$boleta['serie'][3]."' and cdg_tip_doc='".$tip_doc."' and cdg_cod_emp='".$emp."'";
                     $stmt = oci_parse($conn, $update);
                     oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
                     oci_free_statement($stmt);
