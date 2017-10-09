@@ -237,7 +237,7 @@
         // guarda las boletas y sus notas en cada uno de sus items
         if($codigo == '0'){
             if (isset($boletas)){
-                foreach ( $boletas as $boleta )
+                foreach ( $boletas as $boleta ){
                     //para saber si es boleta o nota
                     if ($boleta['serie']=='BN03' || $boleta['serie']=='BN04'){
                         $tip_doc='A';

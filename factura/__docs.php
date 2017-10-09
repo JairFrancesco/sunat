@@ -17,6 +17,17 @@
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $cab_doc_gen, null, null, OCI_FETCHSTATEMENT_BY_ROW); $cab_doc_gen = $cab_doc_gen[0];
 
+    /*Actualiza la Boleta Anulada
+    *************************************/
+    if ($cab_doc_gen['CDG_TIP_DOC']=='B' && $cab_doc_gen['CDG_ANU_SN']=='S' &&  $cab_doc_gen['CDG_DOC_ANU']=='S'){
+        if ($cab_doc_gen['CDG_COD_SNT'] == ''){
+            $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0003' WHERE cdg_num_doc = '".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_ser_doc='".$cab_doc_gen['CDG_SER_DOC']."' and cdg_tip_doc='".$cab_doc_gen['CDG_TIP_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."'";
+            $stmt = oci_parse($conn, $update);
+            oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+            oci_free_statement($stmt);
+        }
+    }
+
 
     /*  MONEDA
     *********************************************/
