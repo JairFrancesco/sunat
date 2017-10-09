@@ -41,7 +41,7 @@
                     $emp = $_GET['emp'];
 
                     include "conexion.php";
-                    include "__resumen_boleta_notas.php";
+                    include "__resumen.php";
                     $update = "update resumenes SET CODIGO='".$codigo."' WHERE ticket='".$ticket."'";
                     $stmt = oci_parse($conn, $update);
                     oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
@@ -49,15 +49,13 @@
 
                     if (isset($boletas)){
                         foreach ( $boletas as $boleta ){
-                            $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc='".$boleta['CDG_NUM_DOC']."' and cdg_cla_doc='".$boleta['CDG_CLA_DOC']."' and cdg_cod_emp='".$boleta['CDG_COD_EMP']."' and cdg_cod_gen='".$boleta['CDG_COD_GEN']."'";
-                            $stmt = oci_parse($conn, $update);
-                            oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
-                            oci_free_statement($stmt);
-                        }
-                    }
-                    if (isset($notas)){
-                        foreach ($notas as $nota) {
-                            $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc='".$nota['CDG_NUM_DOC']."' and cdg_cla_doc='".$nota['CDG_CLA_DOC']."' and cdg_cod_emp='".$nota['CDG_COD_EMP']."' and cdg_cod_gen='".$nota['CDG_COD_GEN']."'";
+                            //para saber si es boleta o nota
+                            if ($boleta['serie']=='BN03' || $boleta['serie']=='BN04'){
+                                $tip_doc='A';
+                            }else{
+                                $tip_doc='B';
+                            }
+                            $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc >= '".$boleta['first']."' and cdg_num_doc <= '".$boleta['last']."' and cdg_ser_doc='".$boleta['serie'][3]."' and cdg_tip_doc='".$tip_doc."' and cdg_cod_emp='".$emp."'";
                             $stmt = oci_parse($conn, $update);
                             oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
                             oci_free_statement($stmt);
