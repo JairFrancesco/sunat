@@ -238,7 +238,7 @@
         if($codigo == '0'){
             if (isset($boletas)){
                 foreach ( $boletas as $boleta ){
-                    $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc >= '".$boleta['INICIO']."' and cdg_num_doc <= '".$boleta['FINAL']."' and cdg_ser_doc='".$boleta['SERIE'][3]."' and cdg_tip_doc='".$boleta['SERIE'][0]."' and cdg_cod_emp='".$emp."'";
+                    $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc >= '".$boleta['inicio']."' and cdg_num_doc <= '".$boleta['final']."' and cdg_ser_doc='".$boleta['serie'][3]."' and cdg_tip_doc='".$boleta['serie'][0]."' and cdg_cod_emp='".$emp."'";
                     $stmt = oci_parse($conn, $update);
                     oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
                     oci_free_statement($stmt);
@@ -248,10 +248,11 @@
         }
         // guarda en la tabla resumenes
         if (isset($boletas)){
+            
             foreach ($boletas as $bol){
-                
+
                 // consulta los anteriores para los ticket
-                $sql_anterior = "select * from resumenes where serie='".$bol['SERIE']."' and  inicio='".$bol['INICIO']."' and emp='".$emp."' ";
+                $sql_anterior = "select * from resumenes where serie='".$bol['serie']."' and  inicio='".$bol['inicio']."' and emp='".$emp."' ";
                 $sql_parse = oci_parse($conn,$sql_anterior);
                 oci_execute($sql_parse);
                 oci_fetch_all($sql_parse, $anteriores, null, null, OCI_FETCHSTATEMENT_BY_ROW);
@@ -262,7 +263,7 @@
                     oci_execute($stmt_delete);
                 }
 
-                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol['SERIE']."','".$bol['INICIO']."','".$bol['FINAL']."','".$bol['SUBTOTAL']."','".$bol['DESCUENTO']."','".$bol['GRAVADA']."','".$bol['IGV']."','".$bol['TOTAL']."','".$codigo."','".$emp."')";
+                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol['serie']."','".$bol['inicio']."','".$bol['final']."','".$bol['subtotal']."','".$bol['descuento']."','".$bol['gravada']."','".$bol['igv']."','".$bol['total']."','".$codigo."','".$emp."')";
                 $stmt_insert = oci_parse($conn, $sql_insert);
                 oci_execute($stmt_insert);
             }
