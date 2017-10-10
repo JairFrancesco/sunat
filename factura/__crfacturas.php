@@ -1,7 +1,8 @@
 <?php
 
     $gen = '02';
-    $fecha = date("d-m-Y");
+    $emp = '01';
+    $fecha = '09-10-2017';
 
     /*Consulta Facturas
     **********************/

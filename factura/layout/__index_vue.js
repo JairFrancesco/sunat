@@ -31,7 +31,7 @@ var app = new Vue({
         },
         itemClicked: function (document) {
             this.documento = '',
-                this.document = document;
+            this.document = document;
             this.loadingFactura = true;
             $(".modal").modal('show');
             this.$http.get('./apis/documento.php' + document.pdf_link).then(function (response) {
@@ -40,10 +40,17 @@ var app = new Vue({
             });
 
         },
+        enviarFacturas: function () {
+            $("#enviarFacturas").modal('show');
+        },
+        enviarBoletas: function () {
+            $("#enviarBoletas").modal('show');
+        },
         printPDF: function (doc) {
             document.title = "";
             window.print();
-        }
+        },
+
     },
     computed: {
         filteredDocuments: function () {
