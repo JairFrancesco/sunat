@@ -30,7 +30,7 @@
                     <!-- Navegacion Facturas-->
                     <div class="row" style="padding-right: 30px;">
                         <div class="col-9">
-                            <form @submit.prevent="getDocuments" class="bd-search">
+                            <form @submit.prevent="getDocuments" class="bd-buscar">
                                 <div class="form-row">
                                     <div class="form-group col-md-3 ">
                                         <input type="text" class="form-control" name="fecha" v-model="fecha">
