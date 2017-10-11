@@ -2,6 +2,7 @@ app/repo/*
 app/resumenes/*
 app/bajas/*
 .idea/*
+factura/almacen/*
 .git/*
 homo/*
 app/coneccion.php

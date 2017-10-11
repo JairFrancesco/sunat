@@ -1,16 +1,8 @@
-<?php 
-    // CONEXION ORACLE
-    // ***************
-    require ('conexion.php');
-    
-    /* PARAMETROS GET
-    ***********************************/
-    $gen = $_GET['gen'];
-    $emp = $_GET['emp'];
-    $tip = $_GET['tip']; // F
-    $num = $_GET['num'];
+<?php
 
-
+    /*Conexion
+    ******************/
+    include "../conexion.php";
 
     /* CONSULTA CAB_DOC_GEN
     *****************************************************************************/
@@ -70,11 +62,11 @@
     /* RUTA   ../app/repo/2017/08/08/
     ************************************************************/
     $ruta = explode('-', $fecha);
-    $ruta = '../app/repo/'.$ruta[2].'/'.$ruta[1].'/'.$ruta[0].'/';
+    $ruta = '../../app/repo/'.$ruta[2].'/'.$ruta[1].'/'.$ruta[0].'/';
     if (!file_exists($ruta)) {
         mkdir($ruta, 0777, true);
     }
-    
+
 
     /*  RUC O DNI
         *******************/
@@ -117,9 +109,9 @@
         if($cab_doc_gen['CDG_CO_CR'] != 'AN' && $cab_doc_gen['CDG_CO_CC'] != 'GR'){
             $cabezera_tipo = 1;
             $sql_extendido = "select * from cab_ord_ser 
-                    inner join det_ing_ser on dis_pla_veh=cab_ord_ser.cos_pla_veh and dis_cod_gen=cab_ord_ser.cos_cod_gen
-                    inner join cab_fam_veh on cfv_cod_gen=cab_ord_ser.cos_cod_gen and cfv_cod_mar=det_ing_ser.dis_mar_veh and cfv_cod_fam=det_ing_ser.dis_cod_fam
-                    where cos_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."' and cos_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cos_num_ot='".$cab_doc_gen['CDG_ORD_TRA']."'";
+                        inner join det_ing_ser on dis_pla_veh=cab_ord_ser.cos_pla_veh and dis_cod_gen=cab_ord_ser.cos_cod_gen
+                        inner join cab_fam_veh on cfv_cod_gen=cab_ord_ser.cos_cod_gen and cfv_cod_mar=det_ing_ser.dis_mar_veh and cfv_cod_fam=det_ing_ser.dis_cod_fam
+                        where cos_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."' and cos_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cos_num_ot='".$cab_doc_gen['CDG_ORD_TRA']."'";
             $sql_parse_extendido = oci_parse($conn,$sql_extendido);
             oci_execute($sql_parse_extendido);
             oci_fetch_all($sql_parse_extendido, $res_extendido, null, null, OCI_FETCHSTATEMENT_BY_ROW); $res_extendido = $res_extendido[0];
@@ -185,7 +177,7 @@
                 $sql_servicios = "select * from det_doc_ser where DDS_COD_GEN='" . $cab_doc_gen['CDG_COD_GEN'] . "' and DDS_COD_EMP='" . $cab_doc_gen['CDG_COD_EMP'] . "' and DDS_NUM_DOC='" . $cab_doc_gen['CDG_NUM_DOC'] . "' and DDS_CLA_DOC='" . $cab_doc_gen['CDG_CLA_DOC'] . "' ORDER BY rowid Desc";
             }
         }
-        
+
         $sql_servicios_parse = oci_parse($conn, $sql_servicios);
         oci_execute($sql_servicios_parse);
         oci_fetch_all($sql_servicios_parse, $servicios, null, null, OCI_FETCHSTATEMENT_BY_ROW);
@@ -194,7 +186,7 @@
                 $items[$i]['codigo'] = $servicio['COS_COD_SAP']; // codigo
             }else{
                 $items[$i]['codigo'] = $servicio['DDS_COD_PRO']; // codigo
-            }            
+            }
             $items[$i]['descripcion'] = $servicio['DDS_DES_001']; // descripcion
             $items[$i]['cantidad'] = $servicio['DDS_CAN_PRO']; // cantidad
             $items[$i]['unitario'] = number_format($servicio['DDS_VVP_SOL'], 2, '.', ''); // precio unitario
@@ -285,7 +277,7 @@
         $subtotal = number_format(round((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2),2,'.','');
         $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
         $gravadas = number_format((round((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2) - $cab_doc_gen['CDG_DES_TOT']),2,'.','');
-        $igv = number_format(round(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2),2,'.','');        
+        $igv = number_format(round(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2),2,'.','');
     } else { // si es normal calcula la moneda
         if($moneda == 'PEN'){
             $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
@@ -303,11 +295,10 @@
 
     /*LETRAS DEL TOTAL
     *******************************/
-    include ("convertir_a_letras.php");
     if($cab_doc_gen['CDG_IMP_NETO']==0 || $cab_doc_gen['CDG_IMP_NETO']=='0.00' || $cab_doc_gen['CDG_IMP_NETO']=='0'){
         $letras = 'cero con 0/00 '.$moneda_leyenda;
     }else{
-        $letras = convertir_a_letras(number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.','')).' '.$moneda_leyenda.'.';   
+        $letras = convertir_a_letras(number_format($cab_doc_gen['CDG_IMP_NETO'],2,'.','')).' '.$moneda_leyenda.'.';
     }
 
 
@@ -341,11 +332,11 @@
         }elseif($ref[0]['CDG_TIP_DOC'] == 'A'){
             $doc_ref_tipo = '07';
         }
-        
+
     }
 
 
-    /*Franquicias    
+    /*Franquicias
     ******************/
     if($reference == 2){
         $sql_fra = "select * from cab_doc_gen where cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cla_doc='".$cab_doc_gen['CDG_TIP_FRA']."' and cdg_num_doc='".$cab_doc_gen['CDG_DOC_FRA']."'";
@@ -369,21 +360,21 @@
             $anticipo_tipo_doc = '03';
         }elseif ($anticipo['CDG_TIP_DOC'] == 'B') {
             $anticipo_tipo_doc = '02';
-        }       
+        }
         $anticipo_serie_numero_doc = $anticipo['CDG_TIP_DOC'].'00'.$anticipo['CDG_SER_DOC'].'-'.$anticipo['CDG_NUM_DOC'];
 
         $anticipo_documento = $anticipo['CDG_DOC_CLI'];
 
         /*  RUC O DNI catalogo 6
         **************************/
-        if (strlen(trim($anticipo['CDG_DOC_CLI'])) == 11) {            
+        if (strlen(trim($anticipo['CDG_DOC_CLI'])) == 11) {
             $anticipo_tipo_documento = 6; // ruc
-        } elseif (strlen(trim($anticipo['CDG_DOC_CLI'])) == 8) {            
+        } elseif (strlen(trim($anticipo['CDG_DOC_CLI'])) == 8) {
             $anticipo_tipo_documento = 1; // dni
-        } else {            
+        } else {
             $anticipo_tipo_documento = 4; //extranj
         }
-        
+
 
         /*  MONEDA
         *********************************************/
@@ -432,8 +423,5 @@
     if ($cab_doc_gen['CDG_CLA_DOC'] == 'FS' && $cab_doc_gen['CDG_IMP_NETO'] > 700 ){
         $mensajes = $mensajes."<span style='font-style: italic;'>Operación sujeta al Sistema de pago de Oblig. trib. con el Gob. Central, R.S. 343-2014-SUNAT, Tasa 10%., Cta. Cte Bco. Nación no. 00-151-084257</span>";
     }
-
-
     //print_r($items);
-
 ?>
