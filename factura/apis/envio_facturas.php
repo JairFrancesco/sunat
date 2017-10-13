@@ -97,6 +97,8 @@
         //comprobar_facturas($crear_tip,$crear_ser,$crear_num,$crear_cod,$crear_cla,$crear_emp,$crear_gen,$crear_anu_sn,$crear_doc_anu);
     }
 
+    /*Bja de facturas
+    ************************/
     foreach ($documentos as $documento){
         if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_COD_SNT']=='0003'){
             $crear_num = $documento['CDG_NUM_DOC'];

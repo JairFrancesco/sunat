@@ -1,3 +1,3 @@
 <?php
-    echo $num;
+    echo $num.'<br>';
 ?>
