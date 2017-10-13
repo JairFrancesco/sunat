@@ -33,7 +33,7 @@ var app = new Vue({
             this.documento = '',
             this.document = document;
             this.loadingFactura = true;
-            $(".modal").modal('show');
+            $("#invoice").modal('show');
             this.$http.get('./apis/documento.php' + document.pdf_link).then(function (response) {
                 this.loadingFactura = false;
                 this.documento = response.data;
