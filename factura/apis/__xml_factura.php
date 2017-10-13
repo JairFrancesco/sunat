@@ -3,7 +3,7 @@
     use RobRichards\XMLSecLibs\XMLSecurityDSig;
     use RobRichards\XMLSecLibs\XMLSecurityKey;
 
-    if($cab_doc_gen['CDG_SUN_ENV']=='S') { //solo va crear los que no han sido enviados :D
+    if($cab_doc_gen['CDG_SUN_ENV']=='N') { //solo va crear los que no han sido enviados :D
         /******************************************** XML *********************************/
         //header('Content-Type: text/xml; charset=UTF-8');
         $xml = new DomDocument('1.0', 'ISO-8859-1');

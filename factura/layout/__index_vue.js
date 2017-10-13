@@ -19,7 +19,10 @@ var app = new Vue({
         loading: false,
         loadingFactura: false,
         fecha: this.ff,
-        search: ''
+        search: '',
+        allFacturas: [],
+        loadFacturas: false,
+        loadActivarFacturas: true
     },
     methods: {
         getDocuments: function () {
@@ -41,6 +44,14 @@ var app = new Vue({
 
         },
         enviarFacturas: function () {
+            this.loadFacturas = true;
+            this.loadActivarFacturas = false;
+            this.$http.get('./apis/envio_facturas.php').then(function (response) {
+                this.loadFacturas = false;
+                this.allFacturas = response.data;
+            })
+        },
+        activarEnvio: function () {
             $("#enviarFacturas").modal('show');
         },
         enviarBoletas: function () {
