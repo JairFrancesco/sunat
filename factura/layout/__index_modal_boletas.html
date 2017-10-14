@@ -8,13 +8,20 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="text-center">
-                <i class="fa fa-spinner fa-3x fa-spin"></i>
-            </div>
             <div class="modal-body">
+                <div class="text-center" v-show="loadBoletas">
+                    <i class="fa fa-spinner fa-3x fa-spin"></i>
+                </div>
+                <div class="text-center" v-show="!loadBoletas">
+                    <i class="fa fa-check-square-o fa-3x" v-show="allBoletas.completado=='ok'"></i>
+                    <p class="lead" v-show="allBoletas.completado=='ok'">{{allBoletas.mensaje}}</p>
+                </div>
+                <div class="text-center" v-show="loadActivarBoletas">
+                    <p class="lead">¿Estas Seguro de enviar el resumen de Boletas a SUNAT?</p>
+                    <p><button class="btn btn-primary btn-lg" @click="enviarBoletas"><i class="fa fa-lock"></i> Enviar Resumen Boletas</button></p>
+                </div>
             </div>
             <div class="modal-footer">
-                <a href="#" class="btn btn-info btn-sm"><i class="fa fa-print"></i> Imprimir</a>
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fa fa-windows-close"></i> Close</button>
             </div>
         </div>

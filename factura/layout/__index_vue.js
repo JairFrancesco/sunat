@@ -21,8 +21,11 @@ var app = new Vue({
         fecha: this.ff,
         search: '',
         allFacturas: [],
+        allBoletas: [],
         loadFacturas: false,
-        loadActivarFacturas: true
+        loadBoletas: false,
+        loadActivarFacturas: true,
+        loadActivarBoletas: true,
     },
     methods: {
         getDocuments: function () {
@@ -41,7 +44,6 @@ var app = new Vue({
                 this.loadingFactura = false;
                 this.documento = response.data;
             });
-
         },
         enviarFacturas: function () {
             this.loadFacturas = true;
@@ -51,10 +53,18 @@ var app = new Vue({
                 this.allFacturas = response.data;
             })
         },
+        enviarBoletas: function () {
+            this.loadBoletas = true;
+            this.loadActivarBoletas = false;
+            this.$http.get('./apis/envio_boletas.php').then(function (response) {
+                this.loadBoletas = false;
+                this.allBoletas = response.data;
+            })
+        },
         activarEnvio: function () {
             $("#enviarFacturas").modal('show');
         },
-        enviarBoletas: function () {
+        activarEnvioBoletas: function () {
             $("#enviarBoletas").modal('show');
         },
         printPDF: function (doc) {
