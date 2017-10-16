@@ -1,27 +1,40 @@
 <?php
+  /*Firmado Electronico*/
+  use RobRichards\XMLSecLibs\XMLSecurityDSig;
+  use RobRichards\XMLSecLibs\XMLSecurityKey;
 
-    /*soap client
-    ******************/
-    include "__soap.php";
+  /*Conexion BD
+  ************************/
+  include "../conexion.php";
 
-    /*Recoger datos
-    **********************/
-    date_default_timezone_set('America/Lima');
-    $gen = $_GET['gen'];
-    $emp = $_GET['emp'];
-    $fecha = date("d-m-Y", strtotime($_GET['fecha']));
+  include "../__resumen.php";
 
-    /*Conexion BD
-    ************************/
-    require("conexion.php");
+  /*Consulta a la BD
+  **********************************/
+  $sql_resumen = "select * from resumenes where emp='".$emp."' and to_char(fecha,'dd-mm-yyyy')='".$fecha."'";
+  $sql_parse = oci_parse($conn,$sql_resumen);
+  oci_execute($sql_parse);
+  oci_fetch_all($sql_parse, $resumenes, null, null, OCI_FETCHSTATEMENT_BY_ROW);
 
-    /*resumen algoritmo
-    ***********************/
-    include "__resumen.php";
+  //$chek:  0: no hay resumen, 1: resumen aceptado y comprobado, 2 : resumen hay pero esta en 0098
+  if(isset($resumenes[0]['CODIGO'])){
+      if($resumenes[0]['CODIGO'] == '0'){
+          $check = 1;
+      }elseif($resumenes[0]['CODIGO'] == '0098'){
+          $check = 2;
+      }
+  }else{
+      $check = 0;
+  }
 
+
+
+  if ($check == 0) {
+
+  }elseif ($check == 1) {
     /*ruta
     ***********************/
-    $ruta = '../app/resumenes/'.date('Y').'/'.date('m').'/'.date('d').'/';
+    $ruta = '../../app/resumenes/'.date('Y').'/'.date('m').'/'.date('d').'/';
     if (!file_exists($ruta)) {
         mkdir($ruta, 0777, true);
     }
@@ -30,10 +43,6 @@
         $j++;
         // el valor de i es el actual que se va crear
     }
-    //echo $ruta;
-
-
-
     // creacion del xml
     $xml = new DomDocument('1.0', 'ISO-8859-1');
     $xml->standalone         = false;
@@ -54,7 +63,7 @@
         $cbc = $xml->createElement('cbc:UBLVersionID', '2.0'); $cbc = $Invoice->appendChild($cbc);
         $cbc = $xml->createElement('cbc:CustomizationID', '1.0'); $cbc = $Invoice->appendChild($cbc);
         $cbc = $xml->createElement('cbc:ID', 'RC-'.date('Ymd').'-'.$j); $cbc = $Invoice->appendChild($cbc);
-        $cbc = $xml->createElement('cbc:ReferenceDate', $_GET['fecha']); $cbc = $Invoice->appendChild($cbc);
+        $cbc = $xml->createElement('cbc:ReferenceDate', date("Y-m-d", strtotime($fecha))); $cbc = $Invoice->appendChild($cbc);
         $cbc = $xml->createElement('cbc:IssueDate', date('Y-m-d')); $cbc = $Invoice->appendChild($cbc);
 
         // signature
@@ -141,22 +150,12 @@
         }
 
     $xml->formatOutput = true;
-    $strings_xml = $xml->saveXML();
-    $xml->save($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.xml');
-
-    // 2.- Firmar documento xml
-    // ========================
-    require '../robrichards/src/xmlseclibs.php';
-    use RobRichards\XMLSecLibs\XMLSecurityDSig;
-    use RobRichards\XMLSecLibs\XMLSecurityKey;
-    // Cargar el XML a firmar
+    //$strings_xml = $xml->saveXML();
+    $nom = '20532710066-RC-'.date('Ymd').'-'.($j);
     $doc = new DOMDocument();
-    $doc->load($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.xml');
-    // Crear un nuevo objeto de seguridad
+    $doc->loadXML($xml->saveXML());
     $objDSig = new XMLSecurityDSig();
-    // Utilizar la canonización exclusiva de c14n
     $objDSig->setCanonicalMethod(XMLSecurityDSig::EXC_C14N);
-    // Firmar con SHA-256
     $objDSig->addReference(
         $doc,
         XMLSecurityDSig::SHA1,
@@ -165,27 +164,25 @@
     );
     //Crear una nueva clave de seguridad (privada)
     $objKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
+
     //Cargamos la clave privada
-    $objKey->loadKey('../archivos_pem/private_key.pem', true);
+    $objKey->loadKey('../../archivos_pem/private_key.pem', true);
     $objDSig->sign($objKey);
+
     // Agregue la clave pública asociada a la firma
-    $objDSig->add509Cert(file_get_contents('../archivos_pem/public_key.pem'), true, false, array('subjectName' => true)); // array('issuerSerial' => true, 'subjectName' => true));
+    $objDSig->add509Cert(file_get_contents('../../archivos_pem/public_key.pem'), true, false, array('subjectName' => true)); // array('issuerSerial' => true, 'subjectName' => true));
+
     // Anexar la firma al XML
     $objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(0));
-    // Guardar el XML firmado
-    $doc->save($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.xml');
-    chmod($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.xml', 0777);
+    $strings_xml = $doc->saveXML();
 
-
-    // 3.- Enviar documento xml y obtener respuesta
-    // ============================================
-    require('../lib/pclzip.lib.php'); // Librería que comprime archivos en .ZIP
     ## Creación del archivo .ZIP
-    $zip = new PclZip($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.zip');
-    $zip->create($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.xml',PCLZIP_OPT_REMOVE_ALL_PATH);
-    chmod($ruta.'20532710066-RC-'.date('Ymd').'-'.($j).'.zip', 0777);
+    $zip = new ZipArchive;
+    $res = $zip->open($ruta.$nom.'.zip', ZipArchive::CREATE);
+    $zip->addFromString($nom.'.xml', $strings_xml);
+    $zip->close();
 
-    $wsdlURL = "billService.wsdl";
+    //$wsdlURL = "billService.wsdl";
     $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
         <soapenv:Envelope
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
@@ -211,81 +208,14 @@
 
 
     preg_match_all('/<ticket>(.*?)<\/ticket>/is', soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString), $ticket); $ticket= $ticket[1][0];
-    //echo $ticket;
+    //esperar 3 minutos
 
-    $XMLString2 = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-        <soapenv:Header>
-        <wsse:Security>
-        <wsse:UsernameToken>
-        <wsse:Username>20532710066SURMOTR1</wsse:Username>
-        <wsse:Password>TOYOTA2051</wsse:Password>
-        </wsse:UsernameToken>
-        </wsse:Security>
-        </soapenv:Header>
-        <soapenv:Body>
-        <ser:getStatus>
-        <ticket>'.$ticket.'</ticket>
-        </ser:getStatus>
-        </soapenv:Body>
-        </soapenv:Envelope>';
-    //echo $XMLString2;
+  }elseif ($check == 2) {
 
-    preg_match_all('/<statusCode>(.*?)<\/statusCode>/is',soapCall($wsdlURL, $callFunction = "getStatus", $XMLString2) , $codigo); $codigo = $codigo[1][0];
-    //echo $codigo;
+  }
+  //echo $check;
 
-    if($codigo == '0' || $codigo == '0098'){
-        // guarda las boletas y sus notas en cada uno de sus items
-        if($codigo == '0'){
-            if (isset($boletas)){
-                foreach ( $boletas as $boleta ){
-                    //para saber si es boleta o nota
-                    if ($boleta['serie']=='BN03' || $boleta['serie']=='BN04'){
-                        $tip_doc='A';
-                    }else{
-                        $tip_doc='B';
-                    }
-                    $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc >= '".$boleta['first']."' and cdg_num_doc <= '".$boleta['last']."' and cdg_ser_doc='".$boleta['serie'][3]."' and cdg_tip_doc='".$tip_doc."' and cdg_cod_emp='".$emp."'";
-                    $stmt = oci_parse($conn, $update);
-                    oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
-                    oci_free_statement($stmt);
-                }
-            }
-
-        }
-        // guarda en la tabla resumenes
-        if (isset($boletas)){
-
-            foreach ($boletas as $bol){
-
-                // consulta los anteriores para los ticket
-                $sql_anterior = "select * from resumenes where serie='".$bol['serie']."' and  inicio='".$bol['first']."' and emp='".$emp."' ";
-                $sql_parse = oci_parse($conn,$sql_anterior);
-                oci_execute($sql_parse);
-                oci_fetch_all($sql_parse, $anteriores, null, null, OCI_FETCHSTATEMENT_BY_ROW);
-                foreach ($anteriores as $anterior){
-                    // eliminar los anteriores
-                    $sql_delete = "DELETE FROM resumenes WHERE ticket= '".$anterior['TICKET']."' ";
-                    $stmt_delete = oci_parse($conn, $sql_delete);
-                    oci_execute($stmt_delete);
-                }
-
-                $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol['serie']."','".$bol['first']."','".$bol['last']."','".$bol['sub']."','".$bol['descuentos']."','".$bol['gravadas']."','".$bol['igv']."','".$bol['total']."','".$codigo."','".$emp."')";
-                $stmt_insert = oci_parse($conn, $sql_insert);
-                oci_execute($stmt_insert);
-            }
-        }
-
-        //print_r($bols);
-        echo '<div style="text-align: center;">';
-        echo '<img src="./images/ok.png"><br>';
-        echo 'El Resumen existe y fue procesado correctamente Nro '.$ticket;
-        echo '</div>';
-    }else{
-        echo '<div style="text-align: center;">';
-        echo '<img src="./images/error.png"><br>';
-        echo 'hubo un error al enviar el resumen intentelo mas tarde';
-        echo '</div>';
-    }
-
-
-?>
+  /*resumen algoritmo
+  ***********************/
+  //include "../__resumen.php";
+ ?>
