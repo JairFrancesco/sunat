@@ -13,7 +13,7 @@
 
     /*Parametros
     **********************/
-    $fecha = '30-09-2017';
+    $fecha = '13-10-2017';
     $emp = '01';
 
     /*Conexion
@@ -49,7 +49,7 @@
 
     /*Funcion Baja
     ************************/
-    function crear_baja_factura($num){
+    function crear_baja_factura($gen,$emp,$num,$cla){
         include "__baja_xml_factura.php";
     }
 
@@ -77,13 +77,13 @@
         $crear_tip = $documento['CDG_TIP_DOC'];
         $crear_num = $documento['CDG_NUM_DOC'];
         if ($documento['CDG_TIP_DOC']=='F'){
-            //crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }elseif ($documento['CDG_TIP_DOC']=='A'){
             //crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }
     }
 
-    /*Comprobacion sunat cdg_cod_env=001*/
+    /*Comprobacion sunat cdg_cod_env=0001*/
     foreach ($documentos as $documento){
         $crear_tip = $documento['CDG_TIP_DOC'];
         $crear_ser = $documento['CDG_SER_DOC'];
@@ -97,12 +97,34 @@
         //comprobar_facturas($crear_tip,$crear_ser,$crear_num,$crear_cod,$crear_cla,$crear_emp,$crear_gen,$crear_anu_sn,$crear_doc_anu);
     }
 
-    /*Bja de facturas
-    ************************/
+    /*Bja de facturas cdg_cod_env=0003
+    *************************************/
     foreach ($documentos as $documento){
-        if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_COD_SNT']=='0003'){
+        if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_TIP_DOC']=='F' && $documento['CDG_COD_SNT']!='0003'){ //solo si no fue enviado
+            $crear_gen = $documento['CDG_COD_GEN'];
+            $crear_emp = $documento['CDG_COD_EMP'];
             $crear_num = $documento['CDG_NUM_DOC'];
-            crear_baja_factura($crear_num);
+            $crear_cla = $documento['CDG_CLA_DOC'];
+            //crear_baja_factura($crear_gen,$crear_emp,$crear_num,$crear_cla);
         }
     }
+
+    /*Comprobacion sunat cdg_cod_env=0003*/
+    foreach ($documentos as $documento){
+        if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_TIP_DOC']=='F' && $documento['CDG_COD_SNT']!='0003') { //solo si no fue enviado
+            $crear_tip = $documento['CDG_TIP_DOC'];
+            $crear_ser = $documento['CDG_SER_DOC'];
+            $crear_num = $documento['CDG_NUM_DOC'];
+            $crear_cod = $documento['CDG_COD_SNT'];
+            $crear_cla = $documento['CDG_CLA_DOC'];
+            $crear_emp = $documento['CDG_COD_EMP'];
+            $crear_gen = $documento['CDG_COD_GEN'];
+            $crear_anu_sn = $documento['CDG_ANU_SN'];
+            $crear_doc_anu = $documento['CDG_DOC_ANU'];
+            //comprobar_facturas($crear_tip, $crear_ser, $crear_num, $crear_cod, $crear_cla, $crear_emp, $crear_gen, $crear_anu_sn, $crear_doc_anu);
+        }
+    }
+    $docs['completado'] = 'ok';
+    $docs['mensaje'] = 'El proceso se llevo correctamente';
+    print_r(json_encode($docs,JSON_UNESCAPED_UNICODE));
 ?>

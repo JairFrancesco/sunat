@@ -19,7 +19,13 @@ var app = new Vue({
         loading: false,
         loadingFactura: false,
         fecha: this.ff,
-        search: ''
+        search: '',
+        allFacturas: [],
+        allBoletas: [],
+        loadFacturas: false,
+        loadBoletas: false,
+        loadActivarFacturas: true,
+        loadActivarBoletas: true,
     },
     methods: {
         getDocuments: function () {
@@ -38,12 +44,27 @@ var app = new Vue({
                 this.loadingFactura = false;
                 this.documento = response.data;
             });
-
         },
         enviarFacturas: function () {
-            $("#enviarFacturas").modal('show');
+            this.loadFacturas = true;
+            this.loadActivarFacturas = false;
+            this.$http.get('./apis/envio_facturas.php').then(function (response) {
+                this.loadFacturas = false;
+                this.allFacturas = response.data;
+            })
         },
         enviarBoletas: function () {
+            this.loadBoletas = true;
+            this.loadActivarBoletas = false;
+            this.$http.get('./apis/envio_boletas.php').then(function (response) {
+                this.loadBoletas = false;
+                this.allBoletas = response.data;
+            })
+        },
+        activarEnvio: function () {
+            $("#enviarFacturas").modal('show');
+        },
+        activarEnvioBoletas: function () {
             $("#enviarBoletas").modal('show');
         },
         printPDF: function (doc) {

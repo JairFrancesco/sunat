@@ -44,8 +44,6 @@
                             </form>
                         </div>
                         <div class="col-3 text-right">
-                            <a href="#" class="btn btn-dark" @click="enviarFacturas" style="background-color: #563d7c;" >Fact</a>
-                            <a href="#" class="btn btn-dark" @click="enviarBoletas" style="background-color: #563d7c;"><i class="fa fa-envelope-open-o"></i> Bols</a>
                         </div>
                         <div class="col-12 text-center" v-show="loading">
                             <i v-show="loading" style="margin-top: 100px;" class="fa fa-spinner fa-3x fa-spin"></i>
