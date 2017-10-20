@@ -209,6 +209,9 @@
 
     preg_match_all('/<ticket>(.*?)<\/ticket>/is', soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString), $ticket); $ticket= $ticket[1][0];
     //esperar 3 minutos
+    sleep(3200);
+
+
 
   }elseif ($check == 2) {
 
