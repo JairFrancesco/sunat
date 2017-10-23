@@ -14,8 +14,8 @@
     /*Parametros
     **********************/
     $gen = '02';
-    $emp = '01';
-    $fecha = '13-10-2017';
+    $emp = '02';
+    $fecha = '21-10-2017';
 
 
     /*Conexion
@@ -85,9 +85,9 @@
         $crear_tip = $documento['CDG_TIP_DOC'];
         $crear_num = $documento['CDG_NUM_DOC'];
         if ($documento['CDG_TIP_DOC']=='F'){
-            //crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }elseif ($documento['CDG_TIP_DOC']=='A'){
-            //crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }
     }
 
@@ -102,7 +102,7 @@
         $crear_gen = $documento['CDG_COD_GEN'];
         $crear_anu_sn = $documento['CDG_ANU_SN'];
         $crear_doc_anu = $documento['CDG_DOC_ANU'];
-        //comprobar_facturas($crear_tip,$crear_ser,$crear_num,$crear_cod,$crear_cla,$crear_emp,$crear_gen,$crear_anu_sn,$crear_doc_anu);
+        comprobar_facturas($crear_tip,$crear_ser,$crear_num,$crear_cod,$crear_cla,$crear_emp,$crear_gen,$crear_anu_sn,$crear_doc_anu);
     }
 
     /*Baja de facturas cdg_cod_env=0003
@@ -133,11 +133,8 @@
         }
     }
 
-    enviar_resumen($gen,$emp,$fecha);
+    // Envio de resumenes
+    //enviar_resumen($gen,$emp,$fecha);
 
-    /*
-    $docs['completado'] = 'ok';
-    $docs['mensaje'] = 'El proceso se llevo correctamente';
-    print_r(json_encode($docs,JSON_UNESCAPED_UNICODE));
-    */
+
 ?>
