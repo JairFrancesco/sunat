@@ -3,7 +3,6 @@
     if (isset($_GET['fecha']) && isset($_GET['gen']) && isset($_GET['emp']) ){
         $fecha  =   date("d-m-Y", strtotime($_GET['fecha']));
         $gen    =   $_GET['gen'];
-        $emp    =   $_GET['emp'];
     }
 
     //echo $fecha;
@@ -15,7 +14,7 @@
 
     /*Consulta Boletas
     **********************/
-    $sql_boletas_dia = "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$fecha."' and (cdg_anu_sn, cdg_doc_anu) in (('S','N'),('N','N')) and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."'  order by cdg_num_doc Asc";
+    $sql_boletas_dia = "select * from cab_doc_gen where cdg_tip_doc ='B' and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$fecha."' and (cdg_anu_sn, cdg_doc_anu) in (('S','N'),('N','N')) and cdg_cod_gen='".$gen."'   order by cdg_num_doc Asc";
     $sql_parse = oci_parse($conn,$sql_boletas_dia);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $boletas, null, null, OCI_FETCHSTATEMENT_BY_ROW); //sin array numeros
@@ -24,7 +23,7 @@
 
     /*Consulta Boletas Notas
     ***************************/
-    $sql_notas_dia = "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$fecha."' and cdg_cod_gen='".$gen."' and cdg_cod_emp='".$emp."' order by cdg_num_doc ASC";
+    $sql_notas_dia = "select * from cab_doc_gen where cdg_tip_doc ='A' and cdg_tip_ref in ('BR','BS') and to_char(cdg_fec_gen,'dd-mm-yyyy') = '".$fecha."' and cdg_cod_gen='".$gen."'  order by cdg_num_doc ASC";
     $sql_parse_notas = oci_parse($conn,$sql_notas_dia);
     oci_execute($sql_parse_notas);
     oci_fetch_all($sql_parse_notas, $notas, null, null, OCI_FETCHSTATEMENT_BY_ROW); //sin array numeros
@@ -55,6 +54,7 @@
 
             if ($first == 0){ //es primero
                 $resumens[$i]['first'] = $boleta['CDG_NUM_DOC'];
+                $resumens[$i]['emp'] = $boleta['CDG_COD_EMP'];
                 $first = 1; // ya no es primero
 
                 /*serie

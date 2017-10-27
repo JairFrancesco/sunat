@@ -3,7 +3,7 @@
   /*Firmado Electronico*/
   use RobRichards\XMLSecLibs\XMLSecurityDSig;
   use RobRichards\XMLSecLibs\XMLSecurityKey;
-    if($cab_doc_gen['CDG_SUN_ENV']=='S') {
+    if($cab_doc_gen['CDG_SUN_ENV']=='N') {
       $xml = new DomDocument('1.0', 'UTF-8');
       $xml->preserveWhiteSpace = false;
       $CreditNote = $xml->createElement('CreditNote'); $CreditNote = $xml->appendChild($CreditNote);
@@ -180,16 +180,16 @@
       $zip->addFromString($nom.'.xml', $strings_xml);
       $zip->close();
 
-      $wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+      //$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
       // 20532710066SURMOTR1 TOYOTA2051
-      //$wsdlURL = "billService.wsdl";
+      $wsdlURL = "../billService.wsdl";
       $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
           <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
            <soapenv:Header>
                <wsse:Security>
                    <wsse:UsernameToken>
-                       <wsse:Username>20532710066MODDATOS</wsse:Username>
-                       <wsse:Password>MODDATOS</wsse:Password>
+                       <wsse:Username>20532710066SURMOTR1</wsse:Username>
+                       <wsse:Password>TOYOTA2051</wsse:Password>
                    </wsse:UsernameToken>
                </wsse:Security>
            </soapenv:Header>
@@ -207,5 +207,13 @@
       fputs($archivo, base64_decode($matches[1][0]));
       fclose($archivo);
       chmod($ruta.'R-'.$nom.'.zip', 0777);
+
+
+    /*Actualizar cdg_snt_env*/
+    $update = "update cab_doc_gen SET cdg_sun_env='S' WHERE cdg_num_doc='".$cab_doc_gen['CDG_NUM_DOC']."' and cdg_cla_doc='".$cab_doc_gen['CDG_CLA_DOC']."' and cdg_cod_emp='".$cab_doc_gen['CDG_COD_EMP']."' and cdg_cod_gen='".$cab_doc_gen['CDG_COD_GEN']."'";
+    $stmt = oci_parse($conn, $update);
+    oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
+    oci_free_statement($stmt);
+
     }
 ?>

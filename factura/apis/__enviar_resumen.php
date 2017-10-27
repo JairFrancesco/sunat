@@ -13,10 +13,11 @@
 
       /*Consulta a la BD
       **********************************/
-      $sql_resumen = "select * from resumenes where emp='".$emp."' and to_char(fecha,'dd-mm-yyyy')='".$fecha."'";
+      $sql_resumen = "select * from resumenes where to_char(fecha,'dd-mm-yyyy')='".$fecha."'";
       $sql_parse = oci_parse($conn,$sql_resumen);
       oci_execute($sql_parse);
       oci_fetch_all($sql_parse, $resumenes, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
 
 
       //$chek:  0: no hay resumen, 1: resumen aceptado y comprobado, 2 : resumen hay pero esta en 0098
@@ -33,17 +34,19 @@
 
 
       if ($check == 0 || $check == 2) {
+
           /*ruta
-        ***********************/
+          ***********************/
           $ruta = '../../app/resumenes/'.date('Y').'/'.date('m').'/'.date('d').'/';
           if (!file_exists($ruta)) {
               mkdir($ruta, 0777, true);
           }
           $j=1;
-          while(file_exists($ruta.'20532710066-RC-'.date('Ymd').'-'.$j.'.xml')){
+          while(file_exists($ruta.'20532710066-RC-'.date('Ymd').'-'.$j.'.zip')){
               $j++;
               // el valor de i es el actual que se va crear
           }
+
           // creacion del xml
           $xml = new DomDocument('1.0', 'ISO-8859-1');
           $xml->standalone         = false;
@@ -183,7 +186,8 @@
           $zip->addFromString($nom.'.xml', $strings_xml);
           $zip->close();
 
-          //$wsdlURL = "billService.wsdl";
+
+          $wsdlURL = "../billService.wsdl";
           $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
             <soapenv:Envelope
             xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
@@ -213,20 +217,20 @@
           sleep(180);
 
           $XMLString = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-        <soapenv:Header>
-        <wsse:Security>
-        <wsse:UsernameToken>
-        <wsse:Username>20532710066SURMOTR1</wsse:Username>
-        <wsse:Password>TOYOTA2051</wsse:Password>
-        </wsse:UsernameToken>
-        </wsse:Security>
-        </soapenv:Header>
-        <soapenv:Body>
-        <ser:getStatus>
-        <ticket>'.$ticket.'</ticket>
-        </ser:getStatus>
-        </soapenv:Body>
-        </soapenv:Envelope>';
+            <soapenv:Header>
+            <wsse:Security>
+            <wsse:UsernameToken>
+            <wsse:Username>20532710066SURMOTR1</wsse:Username>
+            <wsse:Password>TOYOTA2051</wsse:Password>
+            </wsse:UsernameToken>
+            </wsse:Security>
+            </soapenv:Header>
+            <soapenv:Body>
+            <ser:getStatus>
+            <ticket>'.$ticket.'</ticket>
+            </ser:getStatus>
+            </soapenv:Body>
+            </soapenv:Envelope>';
           //echo $XMLString;
 
           preg_match_all('/<statusCode>(.*?)<\/statusCode>/is',soapCall($wsdlURL, $callFunction = "getStatus", $XMLString) , $codigo); $codigo = $codigo[1][0];
@@ -242,11 +246,12 @@
                   //para saber si es boleta o nota
                   if ($bol['serie']=='BN03' || $bol['serie']=='BN04'){
                       $tip_doc='A';
+
                   }else{
                       $tip_doc='B';
                   }
                   //Actualiza cab_doc_gen por grupo boletas o notas
-                  $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc >= '".$bol['first']."' and cdg_num_doc <= '".$bol['last']."' and cdg_ser_doc='".$bol['serie'][3]."' and cdg_tip_doc='".$tip_doc."' and cdg_cod_emp='".$emp."'";
+                  $update = "update cab_doc_gen SET cdg_sun_env='S', cdg_cod_snt='0001' WHERE cdg_num_doc >= '".$bol['first']."' and cdg_num_doc <= '".$bol['last']."' and cdg_ser_doc='".$bol['serie'][3]."' and cdg_tip_doc='".$tip_doc."' ";
                   $stmt = oci_parse($conn, $update);
                   oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
                   oci_free_statement($stmt);
@@ -255,7 +260,7 @@
 
                   //RESUMENES ACTUALIZA
                   // consulta los anteriores para los ticket
-                  $sql_anterior = "select * from resumenes where serie='".$bol['serie']."' and  inicio='".$bol['first']."' and emp='".$emp."' ";
+                  $sql_anterior = "select * from resumenes where serie='".$bol['serie']."' and  inicio='".$bol['first']."' ";
                   $sql_parse = oci_parse($conn,$sql_anterior);
                   oci_execute($sql_parse);
                   oci_fetch_all($sql_parse, $anteriores, null, null, OCI_FETCHSTATEMENT_BY_ROW);
@@ -266,7 +271,7 @@
                       oci_execute($stmt_delete);
                   }
 
-                  $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$_GET['fecha']."','yyyy-mm-dd'),'".$ticket."','".$bol['serie']."','".$bol['first']."','".$bol['last']."','".$bol['sub']."','".$bol['descuentos']."','".$bol['gravadas']."','".$bol['igv']."','".$bol['total']."','".$codigo."','".$emp."')";
+                  $sql_insert = "insert into resumenes (FECHA,TICKET,SERIE,INICIO,FINAL,SUBTOTAL,DESCUENTO,GRAVADA,IGV,TOTAL,CODIGO,EMP) values (to_date('".$fecha."','dd-mm-yyyy'),'".$ticket."','".$bol['serie']."','".$bol['first']."','".$bol['last']."','".$bol['sub']."','".$bol['descuentos']."','".$bol['gravadas']."','".$bol['igv']."','".$bol['total']."','".$codigo."','".$bol['emp']."')";
                   $stmt_insert = oci_parse($conn, $sql_insert);
                   oci_execute($stmt_insert);
 

@@ -36,7 +36,7 @@
         </soapenv:Envelope>';
 
         try {
-            $result = soapCall($wsdlURL, $callFunction = "getStatusCdr", $XMLString);
+            $result = soapCall($wsdlURL, $callFunction = "getStatus", $XMLString);
         } catch (Exception $e){
             echo "Error en conexion con sunat, espere y vuelva a intentarlo";
         }

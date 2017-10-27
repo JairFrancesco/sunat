@@ -14,8 +14,7 @@
     /*Parametros
     **********************/
     $gen = '02';
-    $emp = '02';
-    $fecha = '21-10-2017';
+    $fecha = '26-10-2017';
 
 
     /*Conexion
@@ -57,7 +56,7 @@
 
     /*Funcion enviar resumen
     **************************/
-    function enviar_resumen($gen,$emp,$fecha){
+    function enviar_resumen($gen,$fecha){
       include "__enviar_resumen.php";
     }
 
@@ -70,10 +69,10 @@
 
     /*Consulta Facturas
     **********************/
-    $sql_facturas_dia = "select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' and cdg_cod_emp='".$emp."'
+    $sql_facturas_dia = "select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' 
       and cdg_tip_doc in ('A') and  cdg_tip_ref in ('FS','FR','FC')
       union
-      select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' and cdg_cod_emp='01' and cdg_tip_doc in ('F')";
+      select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' and cdg_tip_doc in ('F')";
     $sql_parse = oci_parse($conn,$sql_facturas_dia);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $documentos, null, null, OCI_FETCHSTATEMENT_BY_ROW); //sin array numeros
@@ -85,9 +84,9 @@
         $crear_tip = $documento['CDG_TIP_DOC'];
         $crear_num = $documento['CDG_NUM_DOC'];
         if ($documento['CDG_TIP_DOC']=='F'){
-            crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            //crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }elseif ($documento['CDG_TIP_DOC']=='A'){
-            crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            //crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }
     }
 
@@ -134,7 +133,7 @@
     }
 
     // Envio de resumenes
-    //enviar_resumen($gen,$emp,$fecha);
+    //enviar_resumen($gen,$fecha);
 
 
 ?>
