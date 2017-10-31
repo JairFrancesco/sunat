@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ccts="urn:un:unece:uncefact:documentation:2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDatatypes-2" xmlns:sac="urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1" xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2">
+  <ext:UBLExtensions>
+    <ext:UBLExtension>
+      <ext:ExtensionContent>
+        <sac:AdditionalInformation>
+          <sac:AdditionalMonetaryTotal>
+            <cbc:ID>2005</cbc:ID>
+            <cbc:PayableAmount currencyID="PEN">0.00</cbc:PayableAmount>
+          </sac:AdditionalMonetaryTotal>
+          <sac:AdditionalMonetaryTotal>
+            <cbc:ID>1001</cbc:ID>
+            <cbc:PayableAmount currencyID="PEN">100.00</cbc:PayableAmount>
+          </sac:AdditionalMonetaryTotal>
+          <sac:AdditionalMonetaryTotal>
+            <cbc:ID>1002</cbc:ID>
+            <cbc:PayableAmount currencyID="PEN">0.00</cbc:PayableAmount>
+          </sac:AdditionalMonetaryTotal>
+          <sac:AdditionalMonetaryTotal>
+            <cbc:ID>1003</cbc:ID>
+            <cbc:PayableAmount currencyID="PEN">0.00</cbc:PayableAmount>
+          </sac:AdditionalMonetaryTotal>
+          <sac:AdditionalProperty>
+            <cbc:ID>1000</cbc:ID>
+            <cbc:Value>1000 AV BOLIVIA</cbc:Value>
+          </sac:AdditionalProperty>
+          <sac:AdditionalProperty>
+            <cbc:ID>1002</cbc:ID>
+            <cbc:Value>1002 AAAAA</cbc:Value>
+          </sac:AdditionalProperty>
+          <sac:AdditionalProperty>
+            <cbc:ID>2000</cbc:ID>
+            <cbc:Value>2000 BBBB</cbc:Value>
+          </sac:AdditionalProperty>
+          <sac:AdditionalProperty>
+            <cbc:ID>2002</cbc:ID>
+            <cbc:Value>2002 CCC</cbc:Value>
+          </sac:AdditionalProperty>
+          <sac:AdditionalProperty>
+            <cbc:ID>2003</cbc:ID>
+            <cbc:Value>2003 DDD</cbc:Value>
+          </sac:AdditionalProperty>
+          <sac:AdditionalProperty>
+            <cbc:ID>2005</cbc:ID>
+            <cbc:Value>2005 EEE</cbc:Value>
+          </sac:AdditionalProperty>
+          <sac:AdditionalProperty>
+            <cbc:ID>2006</cbc:ID>
+            <cbc:Value>2006 AAAAA</cbc:Value>
+          </sac:AdditionalProperty>
+          <sac:AdditionalProperty>
+            <cbc:ID>2007</cbc:ID>
+            <cbc:Value>2007 GGG</cbc:Value>
+          </sac:AdditionalProperty>
+          <sac:AdditionalProperty>
+            <cbc:ID>3000</cbc:ID>
+            <cbc:Value>3000 FOB</cbc:Value>
+          </sac:AdditionalProperty>
+          <sac:SUNATTransaction>
+            <cbc:ID>1</cbc:ID>
+          </sac:SUNATTransaction>
+        </sac:AdditionalInformation>
+      </ext:ExtensionContent>
+    </ext:UBLExtension>
+    <ext:UBLExtension>
+      <ext:ExtensionContent> <ds:Signature Id="SignSUNAT">
+  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <ds:Reference URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>s8ktD2LW7L1RGGaVcr2B2Psei9w=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>noK3eIb8tu1+mCG6dMgVXipL7LqblYjXqrUnmC+jaeNKDs1Gd5aXgSIVt1MhQKT8xISphT1NZ/2MYra3G+XnY8umX3n6RcDjS6gOyR+pTl3rm/br4NFyU7k/toFuBcwAcprGQkO5eNbj41jyexhLUCDm9wjQFM47Zv70yk8ichSy4qRfSaOYp3xIQTvt2Bz3vslA4wuIXuLLSEZl77jQxo7ZLWXG/faqBUK92GwJ6IDQfzwF1UwUtvffbyn+jclllUEoMrXdh+MegInP1WwN8XFf5ycFpslXQX9dSP8uDEx9ket7T4V6Kg11HG4woEMbmYBbv4Bjp9tkRzoD1h1nBQ==</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509SubjectName>emailAddress=sistemas@surmotriz.com,CN=LUIS EDUARDO AMES ZUÑIGA,OU=DNI 00431156 RUC 20532710066,OU=DNI 00431156 RUC 20532710066,O=SURMOTRIZ SRL,L=TACNA,ST=TACNA,C=PE</ds:X509SubjectName><ds:X509Certificate>MIIFiTCCBHGgAwIBAgIMEmBEggHEXE+3x+B9MA0GCSqGSIb3DQEBBQUAMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIFBlcnNvbmFsU2lnbiAyIENBIC0gRzMwHhcNMTYxMDE0MjAyODU4WhcNMTcxMDE1MjAyODU4WjCB3jELMAkGA1UEBhMCUEUxDjAMBgNVBAgTBVRBQ05BMQ4wDAYDVQQHEwVUQUNOQTEWMBQGA1UEChMNU1VSTU9UUklaIFNSTDElMCMGA1UECxMcRE5JIDAwNDMxMTU2IFJVQyAyMDUzMjcxMDA2NjElMCMGA1UECxMcRE5JIDAwNDMxMTU2IFJVQyAyMDUzMjcxMDA2NjEiMCAGA1UEAwwZTFVJUyBFRFVBUkRPIEFNRVMgWlXDkUlHQTElMCMGCSqGSIb3DQEJARYWc2lzdGVtYXNAc3VybW90cml6LmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJ9Yh0wIdXCb0v3kFt/3m/cDAtLzvZeWD4P83ITVLOqITyXb2x4FZbfKHRhExhhuA4wAzdRFIwtihSY2Oh/mWABmZB+f1SPMUHkE05lHyBn9gVkBoAJyiL3b0bjIk3vpf65MdhSwRA5Co+RspxSGDXBjUrUo35HOYX4aT1BtkSIqPh+grVm5BeXsgttYUZz7c0KmRTZWamXHEwq7e7b4/6xyz7HvGXSIION0MmeD3WcVg9cbjX/NVNHPpTnmwFdxe3Z5nvzfONPkhk/ckxzJGEPFmNZC8TdgfDZ18i2msqXRhFa/bJ/Wr+1no61jWbXsEoWC9eFfcrlQSVCtWsqKf8cCAwEAAaOCAc4wggHKMA4GA1UdDwEB/wQEAwIFoDCBlgYIKwYBBQUHAQEEgYkwgYYwSQYIKwYBBQUHMAKGPWh0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzcGVyc29uYWxzaWduMmczb2NzcC5jcnQwOQYIKwYBBQUHMAGGLWh0dHA6Ly9vY3NwMi5nbG9iYWxzaWduLmNvbS9nc3BlcnNvbmFsc2lnbjJnMzBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBDBgNVHR8EPDA6MDigNqA0hjJodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzL2dzcGVyc29uYWxzaWduMmczLmNybDAhBgNVHREEGjAYgRZzaXN0ZW1hc0BzdXJtb3RyaXouY29tMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDAdBgNVHQ4EFgQU2lnDEKJgebtWXhc+sAd25cX4KTAwHwYDVR0jBBgwFoAUZDeVt4FE41qdeCyyA1E5nb0ByVEwDQYJKoZIhvcNAQEFBQADggEBAGZ4HQD3TiDlVkF+na1kPMBFeSvkDSLOeK/MjugM/C+LUYyGNY3Kk6qmiC0VJCVDy15Nza+6/yYy1pyJRM454fpkjir2MKeVk9Ycw5Q2zjR72SncCP4v+R5U2sUv/3pyeEYMap8z+BAV0o5lDzGL5MqL/KiydulftOzz79kCX4SzVdc7dKxp60p/OJK4K6t4qKXOmLFjpcNVBV7qm8t1iN8q2qo9rfTaU4Oj54h0SiKcwM+opYTd41Pk7EWdktJsm6lRUF6mm8hyoob12lwNVl3pOUUIIVU3W+YmJpEvnS4I740LT+t/ivarogKF43ShA5GLLOUa0m2fmAvBqd9G+pE=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature></ext:ExtensionContent>
+    </ext:UBLExtension>
+  </ext:UBLExtensions>
+  <cbc:UBLVersionID>2.0</cbc:UBLVersionID>
+  <cbc:CustomizationID>1.0</cbc:CustomizationID>
+  <cbc:ID>F002-00000026</cbc:ID>
+  <cbc:IssueDate>2016-12-12</cbc:IssueDate>
+  <cbc:InvoiceTypeCode>01</cbc:InvoiceTypeCode>
+  <cbc:DocumentCurrencyCode>PEN</cbc:DocumentCurrencyCode>
+  <cac:Signature>
+    <cbc:ID>20532710066</cbc:ID>
+    <cbc:Note>Elaborado por Sistema de Emision Electronica Facturador SUNAT (SEE-SFS) 1.0.0</cbc:Note>
+    <cbc:ValidatorID>780086</cbc:ValidatorID>
+    <cac:SignatoryParty>
+      <cac:PartyIdentification>
+        <cbc:ID>20532710066</cbc:ID>
+      </cac:PartyIdentification>
+      <cac:PartyName>
+        <cbc:Name>DESARROLLO DE SISTEMAS INTEGRADOS DE GESTIÓN</cbc:Name>
+      </cac:PartyName>
+      <cac:AgentParty>
+        <cac:PartyIdentification>
+          <cbc:ID>20532710066</cbc:ID>
+        </cac:PartyIdentification>
+        <cac:PartyName>
+          <cbc:Name>FERNANDO CARMELO MAMANI BLAS </cbc:Name>
+        </cac:PartyName>
+        <cac:PartyLegalEntity>
+          <cbc:RegistrationName>FERNANDO CARMELO MAMANI BLAS </cbc:RegistrationName>
+        </cac:PartyLegalEntity>
+      </cac:AgentParty>
+    </cac:SignatoryParty>
+    <cac:DigitalSignatureAttachment>
+      <cac:ExternalReference>
+        <cbc:URI>SIGN</cbc:URI>
+      </cac:ExternalReference>
+    </cac:DigitalSignatureAttachment>
+  </cac:Signature>
+  <cac:AccountingSupplierParty>
+    <cbc:CustomerAssignedAccountID>20532710066</cbc:CustomerAssignedAccountID>
+    <cbc:AdditionalAccountID>6</cbc:AdditionalAccountID>
+    <cac:Party>
+      <cac:PartyName>
+        <cbc:Name>DESARROLLO DE SISTEMAS INTEGRADOS DE GESTIÓN</cbc:Name>
+      </cac:PartyName>
+      <cac:PostalAddress>
+        <cbc:ID>040101</cbc:ID>
+        <cbc:StreetName>Mercado 3 de Octubre Av-Brasil, B4, Comité 1 - JLB y Rivero</cbc:StreetName>
+        <cac:Country>
+          <cbc:IdentificationCode>PER</cbc:IdentificationCode>
+        </cac:Country>
+      </cac:PostalAddress>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>FERNANDO CARMELO MAMANI BLAS </cbc:RegistrationName>
+      </cac:PartyLegalEntity>
+    </cac:Party>
+  </cac:AccountingSupplierParty>
+  <cac:AccountingCustomerParty>
+    <cbc:CustomerAssignedAccountID>20455108757</cbc:CustomerAssignedAccountID>
+    <cbc:AdditionalAccountID>6</cbc:AdditionalAccountID>
+    <cac:Party>
+      <cac:PartyLegalEntity>
+        <cbc:RegistrationName>VIP</cbc:RegistrationName>
+      </cac:PartyLegalEntity>
+    </cac:Party>
+  </cac:AccountingCustomerParty>
+  <cac:SellerSupplierParty>
+    <cac:Party>
+      <cac:PostalAddress>
+        <cbc:AddressTypeCode>0</cbc:AddressTypeCode>
+      </cac:PostalAddress>
+    </cac:Party>
+  </cac:SellerSupplierParty>
+  <cac:TaxTotal>
+    <cbc:TaxAmount currencyID="PEN">18.00</cbc:TaxAmount>
+    <cac:TaxSubtotal>
+      <cbc:TaxAmount currencyID="PEN">18.00</cbc:TaxAmount>
+      <cac:TaxCategory>
+        <cac:TaxScheme>
+          <cbc:ID>1000</cbc:ID>
+          <cbc:Name>IGV</cbc:Name>
+          <cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+        </cac:TaxScheme>
+      </cac:TaxCategory>
+    </cac:TaxSubtotal>
+  </cac:TaxTotal>
+  <cac:LegalMonetaryTotal>
+    <cbc:AllowanceTotalAmount currencyID="PEN">0.00</cbc:AllowanceTotalAmount>
+    <cbc:ChargeTotalAmount currencyID="PEN">0.00</cbc:ChargeTotalAmount>
+    <cbc:PayableAmount currencyID="PEN">118.00</cbc:PayableAmount>
+  </cac:LegalMonetaryTotal>
+  <cac:InvoiceLine>
+    <cbc:ID>1</cbc:ID>
+    <cbc:InvoicedQuantity unitCode="ZZ">100.00</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="PEN">100.00</cbc:LineExtensionAmount>
+    <cac:PricingReference>
+      <cac:AlternativeConditionPrice>
+        <cbc:PriceAmount currencyID="PEN">118.00</cbc:PriceAmount>
+        <cbc:PriceTypeCode>01</cbc:PriceTypeCode>
+      </cac:AlternativeConditionPrice>
+    </cac:PricingReference>
+    <cac:AllowanceCharge>
+      <cbc:ChargeIndicator>false</cbc:ChargeIndicator>
+      <cbc:Amount currencyID="PEN">0.00</cbc:Amount>
+    </cac:AllowanceCharge>
+    <cac:TaxTotal>
+      <cbc:TaxAmount currencyID="PEN">18.00</cbc:TaxAmount>
+      <cac:TaxSubtotal>
+        <cbc:TaxableAmount currencyID="PEN">18.00</cbc:TaxableAmount>
+        <cbc:TaxAmount currencyID="PEN">18.00</cbc:TaxAmount>
+        <cac:TaxCategory>
+          <cbc:TaxExemptionReasonCode>10</cbc:TaxExemptionReasonCode>
+          <cac:TaxScheme>
+            <cbc:ID>1000</cbc:ID>
+            <cbc:Name>IGV</cbc:Name>
+            <cbc:TaxTypeCode>VAT</cbc:TaxTypeCode>
+          </cac:TaxScheme>
+        </cac:TaxCategory>
+      </cac:TaxSubtotal>
+    </cac:TaxTotal>
+    <cac:Item>
+      <cbc:Description>CLAVO PARA CONCRETO DE  2"</cbc:Description>
+      <cac:SellersItemIdentification>
+        <cbc:ID>ALM</cbc:ID>
+      </cac:SellersItemIdentification>
+      <cac:AdditionalItemIdentification>
+        <cbc:ID>A</cbc:ID>
+      </cac:AdditionalItemIdentification>
+    </cac:Item>
+    <cac:Price>
+      <cbc:PriceAmount currencyID="PEN">1.00</cbc:PriceAmount>
+    </cac:Price>
+  </cac:InvoiceLine>
+</Invoice>
