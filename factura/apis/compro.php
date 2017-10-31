@@ -20,6 +20,6 @@
         </ser:getStatus>
         </soapenv:Body>
         </soapenv:Envelope>';
-    $result = soapCall($wsdlURL, $callFunction = "getStatus", $XMLString);
+    $result = soapCall($wsdlURL, $callFunction = "getStatusCdr", $XMLString);
     print_r($result);
 ?>

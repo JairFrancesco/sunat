@@ -1,5 +1,7 @@
 <?php
 
+    set_time_limit (3000);
+
     /*condigurando try cash
     *****************************/
     function exception_error_handler($errno, $errstr, $errfile, $errline ) {
@@ -14,7 +16,7 @@
     /*Parametros
     **********************/
     $gen = '02';
-    $fecha = '26-10-2017';
+    $fecha = '29-10-2017';
 
 
     /*Conexion
@@ -84,9 +86,9 @@
         $crear_tip = $documento['CDG_TIP_DOC'];
         $crear_num = $documento['CDG_NUM_DOC'];
         if ($documento['CDG_TIP_DOC']=='F'){
-            //crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }elseif ($documento['CDG_TIP_DOC']=='A'){
-            //crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }
     }
 
@@ -133,7 +135,7 @@
     }
 
     // Envio de resumenes
-    //enviar_resumen($gen,$fecha);
+    enviar_resumen($gen,$fecha);
 
 
 ?>
