@@ -1,9 +1,9 @@
 <?php
 
-    set_time_limit (3000);
+    set_time_limit(0);
 
-    /*condigurando try cash
-    *****************************/
+/*condigurando try cash
+*****************************/
     function exception_error_handler($errno, $errstr, $errfile, $errline ) {
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
