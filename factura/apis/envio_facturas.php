@@ -16,7 +16,8 @@
     /*Parametros
     **********************/
     $gen = '02';
-    $fecha = '29-10-2017';
+    $fecha = $_GET['fecha'];
+    //$fecha = '29-10-2017';
 
 
     /*Conexion
