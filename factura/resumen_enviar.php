@@ -187,9 +187,9 @@
 
     $wsdlURL = "billService.wsdl";
     $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
-        <soapenv:Envelope 
+        <soapenv:Envelope
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-         xmlns:ser="http://service.sunat.gob.pe" 
+         xmlns:ser="http://service.sunat.gob.pe"
          xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
         <soapenv:Header>
         <wsse:Security>

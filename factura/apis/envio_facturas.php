@@ -1,5 +1,7 @@
 <?php
 
+    set_time_limit (3000);
+
     /*condigurando try cash
     *****************************/
     function exception_error_handler($errno, $errstr, $errfile, $errline ) {
@@ -13,8 +15,9 @@
 
     /*Parametros
     **********************/
-    $fecha = '13-10-2017';
-    $emp = '01';
+    $gen = '02';
+    $fecha = '29-10-2017';
+
 
     /*Conexion
     **********************/
@@ -53,6 +56,12 @@
         include "__baja_xml_factura.php";
     }
 
+    /*Funcion enviar resumen
+    **************************/
+    function enviar_resumen($gen,$fecha){
+      include "__enviar_resumen.php";
+    }
+
     /*Soap client
     *******************/
     include "../__soap.php";
@@ -62,10 +71,10 @@
 
     /*Consulta Facturas
     **********************/
-    $sql_facturas_dia = "select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' and cdg_cod_emp='".$emp."'
-      and cdg_tip_doc in ('A') and  cdg_tip_ref in ('FS','FR','FC') 
+    $sql_facturas_dia = "select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' 
+      and cdg_tip_doc in ('A') and  cdg_tip_ref in ('FS','FR','FC')
       union
-      select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' and cdg_cod_emp='01' and cdg_tip_doc in ('F')";
+      select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' and cdg_tip_doc in ('F')";
     $sql_parse = oci_parse($conn,$sql_facturas_dia);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $documentos, null, null, OCI_FETCHSTATEMENT_BY_ROW); //sin array numeros
@@ -79,7 +88,7 @@
         if ($documento['CDG_TIP_DOC']=='F'){
             crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }elseif ($documento['CDG_TIP_DOC']=='A'){
-            //crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }
     }
 
@@ -94,10 +103,10 @@
         $crear_gen = $documento['CDG_COD_GEN'];
         $crear_anu_sn = $documento['CDG_ANU_SN'];
         $crear_doc_anu = $documento['CDG_DOC_ANU'];
-        //comprobar_facturas($crear_tip,$crear_ser,$crear_num,$crear_cod,$crear_cla,$crear_emp,$crear_gen,$crear_anu_sn,$crear_doc_anu);
+        comprobar_facturas($crear_tip,$crear_ser,$crear_num,$crear_cod,$crear_cla,$crear_emp,$crear_gen,$crear_anu_sn,$crear_doc_anu);
     }
 
-    /*Bja de facturas cdg_cod_env=0003
+    /*Baja de facturas cdg_cod_env=0003
     *************************************/
     foreach ($documentos as $documento){
         if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_TIP_DOC']=='F' && $documento['CDG_COD_SNT']!='0003'){ //solo si no fue enviado
@@ -124,7 +133,9 @@
             //comprobar_facturas($crear_tip, $crear_ser, $crear_num, $crear_cod, $crear_cla, $crear_emp, $crear_gen, $crear_anu_sn, $crear_doc_anu);
         }
     }
-    $docs['completado'] = 'ok';
-    $docs['mensaje'] = 'El proceso se llevo correctamente';
-    print_r(json_encode($docs,JSON_UNESCAPED_UNICODE));
+
+    // Envio de resumenes
+    enviar_resumen($gen,$fecha);
+
+
 ?>
