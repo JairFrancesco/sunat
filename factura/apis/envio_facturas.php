@@ -17,7 +17,7 @@
     **********************/
     $gen = '02';
     $fecha = $_GET['fecha'];
-    //$fecha = '29-10-2017';
+    //$fecha = '31-10-2017';
 
 
     /*Conexion
@@ -93,19 +93,8 @@
         }
     }
 
-    /*Comprobacion sunat cdg_cod_env=0001*/
-    foreach ($documentos as $documento){
-        $crear_tip = $documento['CDG_TIP_DOC'];
-        $crear_ser = $documento['CDG_SER_DOC'];
-        $crear_num = $documento['CDG_NUM_DOC'];
-        $crear_cod = $documento['CDG_COD_SNT'];
-        $crear_cla = $documento['CDG_CLA_DOC'];
-        $crear_emp = $documento['CDG_COD_EMP'];
-        $crear_gen = $documento['CDG_COD_GEN'];
-        $crear_anu_sn = $documento['CDG_ANU_SN'];
-        $crear_doc_anu = $documento['CDG_DOC_ANU'];
-        comprobar_facturas($crear_tip,$crear_ser,$crear_num,$crear_cod,$crear_cla,$crear_emp,$crear_gen,$crear_anu_sn,$crear_doc_anu);
-    }
+    // Envio de resumenes
+    enviar_resumen($gen,$fecha);
 
     /*Baja de facturas cdg_cod_env=0003
     *************************************/
@@ -135,8 +124,22 @@
         }
     }
 
-    // Envio de resumenes
-    enviar_resumen($gen,$fecha);
+
+
+    /*Comprobacion sunat cdg_cod_env=0001*/
+    foreach ($documentos as $documento){
+        $crear_tip = $documento['CDG_TIP_DOC'];
+        $crear_ser = $documento['CDG_SER_DOC'];
+        $crear_num = $documento['CDG_NUM_DOC'];
+        $crear_cod = $documento['CDG_COD_SNT'];
+        $crear_cla = $documento['CDG_CLA_DOC'];
+        $crear_emp = $documento['CDG_COD_EMP'];
+        $crear_gen = $documento['CDG_COD_GEN'];
+        $crear_anu_sn = $documento['CDG_ANU_SN'];
+        $crear_doc_anu = $documento['CDG_DOC_ANU'];
+        comprobar_facturas($crear_tip,$crear_ser,$crear_num,$crear_cod,$crear_cla,$crear_emp,$crear_gen,$crear_anu_sn,$crear_doc_anu);
+    }
+
 
 
 ?>
