@@ -14,7 +14,7 @@
     $sql_parse = oci_parse($conn,$sql_cab_doc_gen);
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $cab_doc_gen, null, null, OCI_FETCHSTATEMENT_BY_ROW); $cab_doc_gen = $cab_doc_gen[0];
-    print_r($cab_doc_gen);
+    //print_r($cab_doc_gen);
 
     /*ruta*/
     $ruta = '../../app/bajas/'.date('Y').'/'.date('m').'/'.date('d').'/';
@@ -130,7 +130,7 @@
 
 
     //$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
-    $wsdlURL = 'billService.wsdl';
+    $wsdlURL = '../billService.wsdl';
     $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
         <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
          <soapenv:Header>
