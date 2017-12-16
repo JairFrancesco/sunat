@@ -80,7 +80,9 @@
     oci_execute($sql_parse);
     oci_fetch_all($sql_parse, $documentos, null, null, OCI_FETCHSTATEMENT_BY_ROW); //sin array numeros
 
-    /*Creacion del xml y envio a sunat cdg_sun_env=S */
+
+
+    //Creacion del xml y envio a sunat cdg_sun_env=S
     foreach ($documentos as $documento){
         $crear_gen = $documento['CDG_COD_GEN'];
         $crear_emp = $documento['CDG_COD_EMP'];
@@ -94,10 +96,11 @@
     }
 
     // Envio de resumenes
-    enviar_resumen($gen,$fecha);
+    //enviar_resumen($gen,$fecha);
 
-    /*Baja de facturas cdg_cod_env=0003
-    *************************************/
+    //Baja de facturas cdg_cod_env=0003
+    //*************************************
+/*
     foreach ($documentos as $documento){
         if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_TIP_DOC']=='F' && $documento['CDG_COD_SNT']!='0003'){ //solo si no fue enviado
             $crear_gen = $documento['CDG_COD_GEN'];
@@ -107,8 +110,8 @@
             crear_baja_factura($crear_gen,$crear_emp,$crear_num,$crear_cla);
         }
     }
-
-    /*Comprobacion sunat cdg_cod_env=0003*/
+*/
+    //Comprobacion sunat cdg_cod_env=0003
     foreach ($documentos as $documento){
         if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_TIP_DOC']=='F' && $documento['CDG_COD_SNT']!='0003') { //solo si no fue enviado
             $crear_tip = $documento['CDG_TIP_DOC'];
@@ -126,7 +129,7 @@
 
 
 
-    /*Comprobacion sunat cdg_cod_env=0001*/
+    //Comprobacion sunat cdg_cod_env=0001
     foreach ($documentos as $documento){
         $crear_tip = $documento['CDG_TIP_DOC'];
         $crear_ser = $documento['CDG_SER_DOC'];
