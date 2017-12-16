@@ -104,7 +104,7 @@
             $crear_emp = $documento['CDG_COD_EMP'];
             $crear_num = $documento['CDG_NUM_DOC'];
             $crear_cla = $documento['CDG_CLA_DOC'];
-            //crear_baja_factura($crear_gen,$crear_emp,$crear_num,$crear_cla);
+            crear_baja_factura($crear_gen,$crear_emp,$crear_num,$crear_cla);
         }
     }
 
@@ -120,7 +120,7 @@
             $crear_gen = $documento['CDG_COD_GEN'];
             $crear_anu_sn = $documento['CDG_ANU_SN'];
             $crear_doc_anu = $documento['CDG_DOC_ANU'];
-            //comprobar_facturas($crear_tip, $crear_ser, $crear_num, $crear_cod, $crear_cla, $crear_emp, $crear_gen, $crear_anu_sn, $crear_doc_anu);
+            comprobar_facturas($crear_tip, $crear_ser, $crear_num, $crear_cod, $crear_cla, $crear_emp, $crear_gen, $crear_anu_sn, $crear_doc_anu);
         }
     }
 
