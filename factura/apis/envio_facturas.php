@@ -100,7 +100,7 @@
 
     //Baja de facturas cdg_cod_env=0003
     //*************************************
-/*
+
     foreach ($documentos as $documento){
         if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_TIP_DOC']=='F' && $documento['CDG_COD_SNT']!='0003'){ //solo si no fue enviado
             $crear_gen = $documento['CDG_COD_GEN'];
@@ -110,24 +110,6 @@
             crear_baja_factura($crear_gen,$crear_emp,$crear_num,$crear_cla);
         }
     }
-*/
-    //Comprobacion sunat cdg_cod_env=0003
-    foreach ($documentos as $documento){
-        if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_TIP_DOC']=='F' && $documento['CDG_COD_SNT']!='0003') { //solo si no fue enviado
-            $crear_tip = $documento['CDG_TIP_DOC'];
-            $crear_ser = $documento['CDG_SER_DOC'];
-            $crear_num = $documento['CDG_NUM_DOC'];
-            $crear_cod = $documento['CDG_COD_SNT'];
-            $crear_cla = $documento['CDG_CLA_DOC'];
-            $crear_emp = $documento['CDG_COD_EMP'];
-            $crear_gen = $documento['CDG_COD_GEN'];
-            $crear_anu_sn = $documento['CDG_ANU_SN'];
-            $crear_doc_anu = $documento['CDG_DOC_ANU'];
-            comprobar_facturas($crear_tip, $crear_ser, $crear_num, $crear_cod, $crear_cla, $crear_emp, $crear_gen, $crear_anu_sn, $crear_doc_anu);
-        }
-    }
-
-
 
     //Comprobacion sunat cdg_cod_env=0001
     foreach ($documentos as $documento){
@@ -143,6 +125,21 @@
         comprobar_facturas($crear_tip,$crear_ser,$crear_num,$crear_cod,$crear_cla,$crear_emp,$crear_gen,$crear_anu_sn,$crear_doc_anu);
     }
 
+    //Comprobacion sunat cdg_cod_env=0003
+    foreach ($documentos as $documento){
+        if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_TIP_DOC']=='F' && $documento['CDG_COD_SNT']!='0003') { //solo si no fue enviado
+            $crear_tip = $documento['CDG_TIP_DOC'];
+            $crear_ser = $documento['CDG_SER_DOC'];
+            $crear_num = $documento['CDG_NUM_DOC'];
+            $crear_cod = $documento['CDG_COD_SNT'];
+            $crear_cla = $documento['CDG_CLA_DOC'];
+            $crear_emp = $documento['CDG_COD_EMP'];
+            $crear_gen = $documento['CDG_COD_GEN'];
+            $crear_anu_sn = $documento['CDG_ANU_SN'];
+            $crear_doc_anu = $documento['CDG_DOC_ANU'];
+            comprobar_facturas($crear_tip, $crear_ser, $crear_num, $crear_cod, $crear_cla, $crear_emp, $crear_gen, $crear_anu_sn, $crear_doc_anu);
+        }
+    }
 
 
 ?>
