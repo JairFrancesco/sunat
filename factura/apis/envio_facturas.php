@@ -96,7 +96,7 @@
     }
 
     // Envio de resumenes
-    //enviar_resumen($gen,$fecha);
+    enviar_resumen($gen,$fecha);
 
     //Baja de facturas cdg_cod_env=0003
     //*************************************
