@@ -100,7 +100,6 @@
 
     //Baja de facturas cdg_cod_env=0003
     //*************************************
-
     foreach ($documentos as $documento){
         if ($documento['CDG_ANU_SN']=='S' && $documento['CDG_DOC_ANU']=='S' && $documento['CDG_TIP_DOC']=='F' && $documento['CDG_COD_SNT']!='0003'){ //solo si no fue enviado
             $crear_gen = $documento['CDG_COD_GEN'];

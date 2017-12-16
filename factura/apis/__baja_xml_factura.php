@@ -20,7 +20,7 @@
     $ruta = '../../app/bajas/'.date('Y').'/'.date('m').'/'.date('d').'/';
     if (!file_exists($ruta)) { mkdir($ruta, 0777, true); }
     $i=1;
-    while(file_exists($ruta.'20532710066-RA-'.date('Ymd').'-'.$i.'.xml')){
+    while(file_exists($ruta.'20532710066-RA-'.date('Ymd').'-'.$i.'.zip')){
         $i++; // el valor de i es el actual que se va crear
     }
 
@@ -129,26 +129,32 @@
 
 
 
-    //$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+    //20532710066SURMOTR1      TOYOTA2051
     $wsdlURL = '../billService.wsdl';
+    //$wsdlURL = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
     $XMLString = '<?xml version="1.0" encoding="UTF-8"?>
-        <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.sunat.gob.pe" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
-         <soapenv:Header>
-             <wsse:Security>
-                 <wsse:UsernameToken>
-                     <wsse:Username>20532710066SURMOTR1</wsse:Username>
-                     <wsse:Password>TOYOTA2051</wsse:Password>
-                 </wsse:UsernameToken>
-             </wsse:Security>
-         </soapenv:Header>
-         <soapenv:Body>
-             <ser:sendBill>
-                <fileName>'.$nom.'.zip</fileName>
-                <contentFile>'.base64_encode(file_get_contents($ruta.$nom.'.zip')).'</contentFile>
-             </ser:sendBill>
-         </soapenv:Body>
-        </soapenv:Envelope>';
+    <soapenv:Envelope 
+     xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+     xmlns:ser="http://service.sunat.gob.pe" 
+     xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+     <soapenv:Header>
+         <wsse:Security>
+             <wsse:UsernameToken>
+                 <wsse:Username>20532710066SURMOTR1</wsse:Username>
+                 <wsse:Password>TOYOTA2051</wsse:Password>
+             </wsse:UsernameToken>
+         </wsse:Security>
+     </soapenv:Header>
+     <soapenv:Body>
+         <ser:sendSummary>
+            <fileName>'.$nom.'.zip</fileName>
+            <contentFile>'.base64_encode(file_get_contents($ruta.$nom.'.zip')).'</contentFile>
+         </ser:sendSummary>
+     </soapenv:Body>
+    </soapenv:Envelope>';
 
+
+    //echo $XMLString;
     //Realizamos la llamada a nuestra función
     $result = soapCall($wsdlURL, $callFunction = "sendSummary", $XMLString);
     //print_r($result);
