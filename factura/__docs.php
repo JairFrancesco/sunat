@@ -136,6 +136,7 @@
         }
     }else{
         $cabezera_tipo = 0;
+        $cabezera_tipo = 0;
     }
 
 
@@ -145,12 +146,13 @@
         $reference = 1; //nota
     }elseif ($cab_doc_gen['CDG_EXI_FRA'] == 'S'  && $cab_doc_gen['CDG_EXI_ANT']!='AN' && $cab_doc_gen['CDG_TIP_DOC'] != 'A') {
         $reference = 2; // franquisia
-    }elseif ($cab_doc_gen['CDG_EXI_ANT'] == 'AN' && $cab_doc_gen['CDG_TIP_DOC'] != 'A') {
+    }elseif (($cab_doc_gen['CDG_EXI_ANT'] == 'AN' && $cab_doc_gen['CDG_TIP_DOC'] != 'A') || ($cab_doc_gen['CDG_DOC_FRA'] != '0' && $cab_doc_gen['CDG_TIP_DOC'] != 'A')) {
         $reference = 3; // anticipo
     }else {
         $reference = 0;
     }
 
+    //echo $reference;
     /* ITEMS
     ***********************************/
     $i = 0;
