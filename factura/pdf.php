@@ -213,6 +213,7 @@
     $html2pdf->writeHTML($content);
     $html2pdf->output($ruta.'20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.pdf','F');
     $html2pdf->output('20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.pdf');
+
     //unlink($ruta.'20532710066-'.$doc.'-'.$serie.'-'.$cab_doc_gen['CDG_NUM_DOC'].'.png');
 
     /*
