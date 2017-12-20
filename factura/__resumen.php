@@ -86,7 +86,7 @@
                 $reference = 1; //nota
             }elseif ($boleta['CDG_EXI_FRA'] == 'S'  && $boleta['CDG_EXI_ANT']!='AN' && $boleta['CDG_TIP_DOC'] != 'A') {
                 $reference = 2; // franquisia
-            }elseif ($boleta['CDG_EXI_ANT'] == 'AN' && $boleta['CDG_TIP_DOC'] != 'A') {
+            }elseif (($boleta['CDG_EXI_ANT'] == 'AN' && $boleta['CDG_TIP_DOC'] != 'A') || ($boleta['CDG_DOC_FRA'] != '0' && $boleta['CDG_TIP_DOC'] != 'A') ) {
                 $reference = 3; // anticipo
             }else {
                 $reference = 0;
