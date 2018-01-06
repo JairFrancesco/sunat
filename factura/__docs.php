@@ -290,10 +290,18 @@
         $igv = number_format(round(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2),2,'.','');        
     } else { // si es normal calcula la moneda
         if($moneda == 'PEN'){
-            $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
-            $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
-            $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
-            $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',''); // igv total
+            if ($reference == 1 && $cab_doc_gen['CDG_DOC_FRA'] != '0'){ // si tiene alguna franquicia o anticipo relacionado la nota de credito
+                $subtotal = number_format(round((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2),2,'.','');
+                $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
+                $gravadas = number_format((round((($cab_doc_gen['CDG_VVP_TOT'])-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))),2) - $cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
+                $igv = number_format(round(($cab_doc_gen['CDG_IGV_TOT'] -($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100))*($cab_doc_gen['CDG_POR_IGV']/100)),2),2,'.',''); // igv total
+            }else{
+                $subtotal = number_format($cab_doc_gen['CDG_VVP_TOT'],2,'.','');
+                $descuentos = number_format($cab_doc_gen['CDG_DES_TOT'],2,'.','');
+                $gravadas = number_format(($cab_doc_gen['CDG_VVP_TOT']-$cab_doc_gen['CDG_DES_TOT']),2,'.','');  // gravadas cdg_vvp_tot-cdg_des_tot
+                $igv = number_format($cab_doc_gen['CDG_IGV_TOT'],2,'.',''); // igv total
+            }
+
         }else{ // dolares
             $subtotal = number_format($cab_doc_gen['CDG_VVP_DOL'],2,'.','');
             $descuentos = number_format($cab_doc_gen['CDG_DES_DOL'],2,'.','');
@@ -317,7 +325,6 @@
     /*Nota refrencia
     *****************************************************/
     if ($reference == 1) {
-
         $sql_ref = "select * from cab_doc_gen where cdg_cod_gen='" . $cab_doc_gen['CDG_COD_GEN'] . "' and cdg_cod_emp='" . $cab_doc_gen['CDG_COD_EMP'] . "' and cdg_cla_doc='" . $cab_doc_gen['CDG_TIP_REF'] . "' and cdg_num_doc='" . $cab_doc_gen['CDG_DOC_REF'] . "'";
         $sql_ref_parse = oci_parse($conn, $sql_ref);
         oci_execute($sql_ref_parse);
