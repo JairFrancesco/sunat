@@ -101,9 +101,9 @@
 
 
         if ($documento['CDG_TIP_DOC']=='F'){
-        //    crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }elseif ($documento['CDG_TIP_DOC']=='A'){
-        //    crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
+            crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }
     }
 
