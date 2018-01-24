@@ -17,7 +17,7 @@
     **********************/
     $gen = '02';
     $fecha = $_GET['fecha'];
-    //$fecha = '31-10-2017';
+    //$fecha = '13-01-2018';
 
 
     /*Conexion
@@ -59,8 +59,8 @@
 
     /*Funcion enviar resumen
     **************************/
-    function enviar_resumen($gen,$fecha){
-      include "__enviar_resumen.php";
+    function enviar_resumen($gen,$fecha,$boletas_notas){
+      include "__resumen_1_1.php";
     }
 
     /*Soap client
@@ -81,6 +81,16 @@
     oci_fetch_all($sql_parse, $documentos, null, null, OCI_FETCHSTATEMENT_BY_ROW); //sin array numeros
 
 
+    $sql_boletas_notas_dia = "select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' 
+          and cdg_tip_doc in ('A') and  cdg_tip_ref in ('BS','BR','BC')
+          union
+          select * from cab_doc_gen where to_char(cdg_fec_gen,'dd-mm-yyyy')='".$fecha."' and cdg_tip_doc in ('B')";
+    $sql_parse_boletas_notas = oci_parse($conn,$sql_boletas_notas_dia);
+    oci_execute($sql_parse_boletas_notas);
+    oci_fetch_all($sql_parse_boletas_notas, $boletas_notas, null, null, OCI_FETCHSTATEMENT_BY_ROW); //sin array numeros
+
+    //print_r($boletas_notas);
+
 
     //Creacion del xml y envio a sunat cdg_sun_env=S
     foreach ($documentos as $documento){
@@ -88,15 +98,17 @@
         $crear_emp = $documento['CDG_COD_EMP'];
         $crear_tip = $documento['CDG_TIP_DOC'];
         $crear_num = $documento['CDG_NUM_DOC'];
+
+
         if ($documento['CDG_TIP_DOC']=='F'){
-            crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
+        //    crear_xml_factura($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }elseif ($documento['CDG_TIP_DOC']=='A'){
-            crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
+        //    crear_xml_nota($crear_gen,$crear_emp,$crear_tip,$crear_num);
         }
     }
 
     // Envio de resumenes
-    enviar_resumen($gen,$fecha);
+    enviar_resumen($gen,$fecha,$boletas_notas);
 
     //Baja de facturas cdg_cod_env=0003
     //*************************************
@@ -139,6 +151,5 @@
             comprobar_facturas($crear_tip, $crear_ser, $crear_num, $crear_cod, $crear_cla, $crear_emp, $crear_gen, $crear_anu_sn, $crear_doc_anu);
         }
     }
-
 
 ?>

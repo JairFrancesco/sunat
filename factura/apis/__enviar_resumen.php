@@ -7,7 +7,7 @@
   ************************/
   include "../conexion.php";
 
-  include "../__resumen.php";
+  //include "../__resumen.php";
 
   if (count($boletas) != 0){ // si existen boletas o notas entra
 

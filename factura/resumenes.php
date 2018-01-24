@@ -48,10 +48,6 @@
     $mes = substr($_GET['mes'],5,2);
     $anho = substr($_GET['mes'],0,4);
     $fin_mes = date("d",(mktime(0,0,0,$mes+1,1,$anho)-1));
-    $sql_resumen_item = "select * from resumenes where emp='".$emp."' and to_char(fecha,'mm-yyyy')='".$mes.'-'.$anho."'";
-    $sql_parse_item = oci_parse($conn,$sql_resumen_item);
-    oci_execute($sql_parse_item);
-    oci_fetch_all($sql_parse_item, $resumen_items, null, null, OCI_FETCHSTATEMENT_BY_ROW);    
     ($emp == '01') ? $local='Tacna':$local='Moquegua';
     echo '<h1>'.$local.' Resumen Mes '.date('F Y', strtotime($dia.'-'.$mes.'-'.$anho)).'</h1>';
     echo '<table class="table table-striped table-bordered table-condensed table-hover">';
@@ -60,8 +56,7 @@
     echo '<td class="well"><strong>&nbsp;&nbsp;F | &nbsp;B &nbsp;| &nbsp;A | &nbsp;E &nbsp;| C</strong></td>';
     echo '<td class="text-center well"><strong>Facturas</strong></td>';
     echo '<td class="text-center well"><strong>Boletas</strong></td>';
-    echo '<td class="text-center well"><strong>Notas</strong></td>';    
-    echo '<td><strong>Resumen</strong></td>';
+    echo '<td class="text-center well"><strong>Notas</strong></td>';
     echo '<td><strong>Acciones</strong></td>';
     echo '</tr>';
 
@@ -144,37 +139,11 @@
             }
                 
 
-            //resumen
-            $cierre = 0;                        
-            foreach ($resumen_items as $resumen_item) {                    
-                if($cierre == 0){
-                    if ($fecha_documentos == date('d-m-Y', strtotime($resumen_item['FECHA'])) && $resumen_item['CODIGO'] == '0'){
-                        $resumen_s = 'SI';
-                        $class_resumen = 'success';
-                        $cierre++;
-                    }else{                        
-                        $resumen_s = 'NO';
-                        $class_resumen = 'danger';                        
-                    }
-                }
-                
-            }
+
             
         }
 
-        if($can_B!=0 && $cierre!=0){
-            $resumen_s = 'SI';
-            $class_resumen = 'success';
-        }else{
-            if ($can_B==0) {
-                $resumen_s = '--';
-                $class_resumen = 'success';
-            }else{
-                $resumen_s = 'NO';
-                $class_resumen = 'danger';
-            }
-            
-        }
+
 
         $can_F_total = $can_F_total + $total_sf;
         $can_B_total = $can_B_total + $total_sb;
@@ -193,11 +162,11 @@
         echo '<td class="'.$class_can.'">'.str_pad($can_F,2,'0',STR_PAD_LEFT).' | '.str_pad($can_B,2,'0',STR_PAD_LEFT).' | '.str_pad($can_A,2,'0',STR_PAD_LEFT).' | '.str_pad($can_E,2,'0',STR_PAD_LEFT).' | '.str_pad(($can_T-$can_SNT),2,'0',STR_PAD_LEFT).'</td>';
         echo '<td class="text-center '.$class_f.'">'.number_format($total_sf,2,'.','').' | '.number_format($total_ef,2,'.','').'</td>';
         echo '<td class="text-center '.$class_b.'">'.number_format($total_sb,2,'.','').' | '.number_format($total_eb,2,'.','').'</td>';
-        echo '<td class="text-center '.$class_a.'">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';        
-        echo '<td class="text-center '.$class_resumen.'">'.$resumen_s.'</td>';
+        echo '<td class="text-center '.$class_a.'">'.number_format($total_sa,2,'.','').' | '.number_format($total_ea,2,'.','').'</td>';
+
         echo '<td>';
         echo '<a href="../index.php?fecha_inicio='.$fecha_documentos.'&fecha_final='.$fecha_documentos.'&pagina=1&emp='.$emp.'" target="_blank" class="btn btn-default btn-xs">Dia</a> ';
-        echo '<a href="../resumen.php?h=0&gen=02&emp='.$emp.'&fecha='.date('Y-m-d', strtotime($fecha_documentos)).'" target="_blank" class="btn btn-default btn-xs">Resumen</a> ';        
+        echo '<a href="../factura/apis/envio_facturas.php?fecha='.$fecha_documentos.'" target="_blank" class="btn btn-default btn-xs">Enviar</a> ';
         echo '</td>';
         echo '</tr>';
     }
