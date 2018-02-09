@@ -158,7 +158,7 @@
             //relacionado o anticipo
             if ($boletas_nota['CDG_DOC_FRA'] != '0') {
                 // gravadas
-                $gravadas = number_format($boletas_nota['CDG_VVP_TOT']-($boletas_nota['CDG_TOT_FRA']/(1+$boletas_nota['CDG_POR_IGV']/100)) - $boletas_nota['CDG_DES_TOT'],2,'.','');
+                $gravadas = number_format(round($boletas_nota['CDG_VVP_TOT']-($boletas_nota['CDG_TOT_FRA']/(1+$boletas_nota['CDG_POR_IGV']/100)) - $boletas_nota['CDG_DES_TOT'],2),2,'.','');
                 //number_format($boletas_nota['CDG_VVP_TOT'] - $boletas_nota['CDG_DES_TOT'], 2, '.', '');
                 //number_format($cab_doc_gen['CDG_VVP_TOT']-($cab_doc_gen['CDG_TOT_FRA']/(1+$cab_doc_gen['CDG_POR_IGV']/100)) - $cab_doc_gen['CDG_DES_TOT'],2,'.','')
 
