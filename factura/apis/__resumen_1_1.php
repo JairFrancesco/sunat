@@ -65,41 +65,40 @@
         $xml = new DomDocument('1.0', 'UTF-8');
         //$xml->preserveWhiteSpace = false;
 
-        $xml->appendChild(
-            $xml->createElementNS('urn:sunat:names:specification:ubl:peru:schema:xsd:SummaryDocuments-1','p:SummaryDocuments'))
-            ->setAttribute('xmlns:ext', 'urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2')->parentNode
-            ->setAttribute('xmlns:cbc', 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2')->parentNode
-            ->setAttribute('xmlns:cac', 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2')->parentNode
-            ->setAttribute('xmlns:sac', 'urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1')->parentNode
+        $Summary = $xml->appendChild($xml->createElement('p:SummaryDocuments'));
+        $Summary->setAttribute('xmlns:p', 'urn:sunat:names:specification:ubl:peru:schema:xsd:SummaryDocuments-1');
+        $Summary->setAttribute('xmlns:ext', 'urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2');
+        $Summary->setAttribute('xmlns:cbc', 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2');
+        $Summary->setAttribute('xmlns:cac', 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2');
+        $Summary->setAttribute('xmlns:sac', 'urn:sunat:names:specification:ubl:peru:schema:xsd:SunatAggregateComponents-1');
 
-            ->appendChild($xml->createElement('ext:UBLExtensions'))
-                ->appendChild($xml->createElement('ext:UBLExtension'))
-                    ->appendChild($xml->createElement('ext:ExtensionContent'))->parentNode->parentNode->parentNode
+        $UBLExtensions = $Summary->appendChild($xml->createElement('ext:UBLExtensions'));
+            $UBLExtension = $UBLExtensions->appendChild($xml->createElement('ext:UBLExtension'));
+                $ExtensionContent = $UBLExtension->appendChild($xml->createElement('ext:ExtensionContent'));
 
-            ->appendChild($xml->createElement('cbc:UBLVersionID','2.0'))->parentNode
-            ->appendChild($xml->createElement('cbc:CustomizationID','1.1'))->parentNode
-            ->appendChild($xml->createElement('cbc:ID','RC-'.date('Ymd').'-'.$j))->parentNode
-            ->appendChild($xml->createElement('cbc:ReferenceDate',$fecha_antigua))->parentNode
-            ->appendChild($xml->createElement('cbc:IssueDate',$fecha_actual))->parentNode
+        $UBLVersionID = $Summary->appendChild($xml->createElement('cbc:UBLVersionID','2.0'));
+        $CustomizationID = $Summary->appendChild($xml->createElement('cbc:CustomizationID','1.1'));
+        $ID = $Summary->appendChild($xml->createElement('cbc:ID','RC-'.date('Ymd').'-'.$j));
+        $ReferenceDate = $Summary->appendChild($xml->createElement('cbc:ReferenceDate',$fecha_antigua));
+        $IssueDate = $Summary->appendChild($xml->createElement('cbc:IssueDate',$fecha_actual));
 
-            ->appendChild($xml->createElement('cac:Signature'))
-                ->appendChild($xml->createElement('cbc:ID','SRC-'.$fecha_actual.'-'.$j))->parentNode
-                ->appendChild($xml->createElement('cac:SignatoryParty'))
-                    ->appendChild($xml->createElement('cac:PartyIdentification'))
-                        ->appendChild($xml->createElement('cbc:ID','20532710066'))->parentNode->parentNode
-                    ->appendChild($xml->createElement('cac:PartyName'))
-                        ->appendChild($xml->createElement('cbc:Name','sunat'))->parentNode->parentNode->parentNode
-                ->appendChild($xml->createElement('cac:DigitalSignatureAttachment'))
-                    ->appendChild($xml->createElement('cac:ExternalReference'))
-                        ->appendChild($xml->createElement('cbc:URI','#SRC-20171218-900'))->parentNode->parentNode->parentNode->parentNode
+        $Signature = $Summary->appendChild($xml->createElement('cac:Signature'));
+            $ID = $Signature->appendChild($xml->createElement('cbc:ID','SRC-'.$fecha_actual.'-'.$j));
+            $SignatoryParty = $Signature->appendChild($xml->createElement('cac:SignatoryParty'));
+                $PartyIdentification = $SignatoryParty->appendChild($xml->createElement('cac:PartyIdentification'));
+                    $ID = $PartyIdentification->appendChild($xml->createElement('cbc:ID','20532710066'));
+                $PartyName = $SignatoryParty->appendChild($xml->createElement('cac:PartyName'));
+                    $Name = $PartyName->appendChild($xml->createElement('cbc:Name','sunat'));
+            $DigitalSignatureAttachment = $Signature->appendChild($xml->createElement('cac:DigitalSignatureAttachment'));
+                $ExternalReference = $DigitalSignatureAttachment->appendChild($xml->createElement('cac:ExternalReference'));
+                    $URI = $ExternalReference->appendChild($xml->createElement('cbc:URI','#SRC-20171218-900'));
 
-            ->appendChild($xml->createElement('cac:AccountingSupplierParty'))
-                ->appendChild($xml->createElement('cbc:CustomerAssignedAccountID','20532710066'))->parentNode
-                ->appendChild($xml->createElement('cbc:AdditionalAccountID','6'))->parentNode
-                ->appendChild($xml->createElement('cac:Party'))
-                    ->appendChild($xml->createElement('cac:PartyLegalEntity'))
-                        ->appendChild($xml->createElement('cbc:RegistrationName','SURMOTRIZ SRL'))->parentNode->parentNode->parentNode->parentNode;
-
+        $AccountingSupplierParty = $Summary->appendChild($xml->createElement('cac:AccountingSupplierParty'));
+            $CustomerAssignedAccountID = $AccountingSupplierParty->appendChild($xml->createElement('cbc:CustomerAssignedAccountID','20532710066'));
+            $AdditionalAccountID = $AccountingSupplierParty->appendChild($xml->createElement('cbc:AdditionalAccountID','6'));
+            $Party = $AccountingSupplierParty->appendChild($xml->createElement('cac:Party'));
+                $PartyLegalEntity = $Party->appendChild($xml->createElement('cac:PartyLegalEntity'));
+                    $PartyLegalEntity = $PartyLegalEntity->appendChild($xml->createElement('cbc:RegistrationName','SURMOTRIZ SRL'));
 
 
         $i = 1;
@@ -172,102 +171,43 @@
                 //igv
                 $igv = number_format($boletas_nota['CDG_IGV_TOT'],2,'.','');
             }
-            if($cbc_DocumentTypeCode=='03'){ // boleta
-                $xml->lastChild
-                    ->appendChild($xml->createElement('sac:SummaryDocumentsLine'))
-                        ->appendChild($xml->createElement('cbc:LineID',$i))->parentNode
-                        //<!-- Tipo de documento - Catalogo No. 01 -->
-                        ->appendChild($xml->createElement('cbc:DocumentTypeCode',$cbc_DocumentTypeCode))->parentNode
-                        //<!-- Serie y número de comprobante -->
-                        ->appendChild($xml->createElement('cbc:ID',$serieNumero))->parentNode
-                        ->appendChild($xml->createElement('cac:AccountingCustomerParty'))
-                            //<!-- Numero de documento de identidad -->
-                            ->appendChild($xml->createElement('cbc:CustomerAssignedAccountID',trim($boletas_nota['CDG_DOC_CLI'])))->parentNode
-                            //<!-- Tipo de documento de identidad - Catalogo No. 06 : 1 dni, 6 ruc
-                            ->appendChild($xml->createElement('cbc:AdditionalAccountID',$tipo_doc_num))->parentNode->parentNode
-                        ->appendChild($xml->createElement('cac:Status'))
-                            //<!-- (Codigo de operacion del item - catalogo No. 19) 1
-                            ->appendChild($xml->createElement('cbc:ConditionCode',$cbc_ConditionCode))->parentNode->parentNode
+
+            $SummaryDocumentsLine = $Summary->appendChild($xml->createElement('sac:SummaryDocumentsLine'));
+                $LineID = $SummaryDocumentsLine->appendChild($xml->createElement('cbc:LineID',$i));
+                $DocumentTypeCode = $SummaryDocumentsLine->appendChild($xml->createElement('cbc:DocumentTypeCode',$cbc_DocumentTypeCode));
+                $ID = $SummaryDocumentsLine->appendChild($xml->createElement('cbc:ID',$serieNumero));
+                $AccountingCustomerParty = $SummaryDocumentsLine->appendChild($xml->createElement('cac:AccountingCustomerParty'));
+                    $CustomerAssignedAccountID = $AccountingCustomerParty->appendChild($xml->createElement('cbc:CustomerAssignedAccountID',trim($boletas_nota['CDG_DOC_CLI'])));
+                    $AdditionalAccountID = $AccountingCustomerParty->appendChild($xml->createElement('cbc:AdditionalAccountID',$tipo_doc_num));
+
+                if($cbc_DocumentTypeCode=='07'){ // Nota Credito
+                    $BillingReference = $SummaryDocumentsLine->appendChild($xml->createElement('cac:BillingReference'));
+                        $InvoiceDocumentReference = $BillingReference->appendChild($xml->createElement('cac:InvoiceDocumentReference'));
+                            $ID = $InvoiceDocumentReference->appendChild($xml->createElement('cbc:ID',$serienumero_ref));
+                            $DocumentTypeCode = $InvoiceDocumentReference->appendChild($xml->createElement('cbc:DocumentTypeCode','03'));
+                }
+
+                $Status = $SummaryDocumentsLine->appendChild($xml->createElement('cac:Status'));
+                    $ConditionCode = $Status->appendChild($xml->createElement('cbc:ConditionCode',$cbc_ConditionCode));
+                $TotalAmount = $SummaryDocumentsLine->appendChild($xml->createElement('sac:TotalAmount',$sac_TotalAmount));
+                if($gravadas!='0.00'){
+                    $BillingPayment = $SummaryDocumentsLine->appendChild($xml->createElement('sac:BillingPayment'));
+                        $PaidAmount = $BillingPayment->appendChild($xml->createElement('cbc:PaidAmount',$gravadas));
+                        $InstructionID = $BillingPayment->appendChild($xml->createElement('cbc:InstructionID','01'));
+                }
+                $TaxTotal = $SummaryDocumentsLine->appendChild($xml->createElement('cac:TaxTotal'));
+                    $TaxAmount = $TaxTotal->appendChild($xml->createElement('cbc:TaxAmount',$igv));
+                    $TaxSubtotal = $TaxTotal->appendChild($xml->createElement('cac:TaxSubtotal'));
+                        $TaxAmount = $TaxSubtotal->appendChild($xml->createElement('cbc:TaxAmount',$igv));
+                        $TaxCategory = $TaxSubtotal->appendChild($xml->createElement('cac:TaxCategory'));
+                            $TaxScheme = $TaxCategory->appendChild($xml->createElement('cac:TaxScheme'));
+                                $ID = $TaxScheme->appendChild($xml->createElement('cbc:ID','1000'));
+                                $Name = $TaxScheme->appendChild($xml->createElement('cbc:Name','IGV'));
+                                $TaxTypeCode = $TaxScheme->appendChild($xml->createElement('cbc:TaxTypeCode','VAT'));
 
 
-                        //Importe total de la venta, cesion en uso o del servicio prestado
-                        ->appendChild($xml->createElement('sac:TotalAmount',$sac_TotalAmount))->setAttribute('currencyID','PEN')->parentNode->parentNode
 
 
-                        //Total valor de venta - operaciones gravadas
-                        ->appendChild($xml->createElement('sac:BillingPayment'))
-                            ->appendChild($xml->createElement('cbc:PaidAmount',$gravadas))->setAttribute('currencyID','PEN')->parentNode->parentNode
-                            ->appendChild($xml->createElement('cbc:InstructionID','01'))->parentNode->parentNode
-
-                        //Total IGV
-                        ->appendChild($xml->createElement('cac:TaxTotal'))
-                            //Monto Total y Moneda
-                            ->appendChild($xml->createElement('cbc:TaxAmount',$igv))->setAttribute('currencyID','PEN')->parentNode->parentNode
-                            ->appendChild($xml->createElement('cac:TaxSubtotal'))
-                                //Monto Total y Moneda
-                                ->appendChild($xml->createElement('cbc:TaxAmount',$igv))->setAttribute('currencyID','PEN')->parentNode->parentNode
-                                ->appendChild($xml->createElement('cac:TaxCategory'))
-                                    ->appendChild($xml->createElement('cac:TaxScheme'))
-                                        //Codigo de tributo - Catalogo No. 05
-                                        ->appendChild($xml->createElement('cbc:ID','1000'))->parentNode
-                                        //Nombre de tributo - Catalogo No. 05
-                                        ->appendChild($xml->createElement('cbc:Name','IGV'))->parentNode
-                                        //Codigo internacional tributo - Catalogo No. 05
-                                        ->appendChild($xml->createElement('cbc:TaxTypeCode','VAT'))->parentNode->parentNode->parentNode->parentNode->parentNode;
-
-            }elseif ($cbc_DocumentTypeCode=='07'){ //nota credito
-                $xml->lastChild
-                    ->appendChild($xml->createElement('sac:SummaryDocumentsLine'))
-                        ->appendChild($xml->createElement('cbc:LineID',$i))->parentNode
-                        //<!-- Tipo de documento - Catalogo No. 01 -->
-                        ->appendChild($xml->createElement('cbc:DocumentTypeCode',$cbc_DocumentTypeCode))->parentNode
-                        //<!-- Serie y número de comprobante -->
-                        ->appendChild($xml->createElement('cbc:ID',$serieNumero))->parentNode
-                        ->appendChild($xml->createElement('cac:AccountingCustomerParty'))
-                            //<!-- Numero de documento de identidad -->
-                            ->appendChild($xml->createElement('cbc:CustomerAssignedAccountID',trim($boletas_nota['CDG_DOC_CLI'])))->parentNode
-                            //<!-- Tipo de documento de identidad - Catalogo No. 06 : 1 dni, 6 ruc
-                            ->appendChild($xml->createElement('cbc:AdditionalAccountID',$tipo_doc_num))->parentNode->parentNode
-
-                        ->appendChild($xml->createElement('cac:BillingReference'))
-                            ->appendChild($xml->createElement('cac:InvoiceDocumentReference'))
-                                //Serie y numero de comprobante modificado
-                                ->appendChild($xml->createElement('cbc:ID',$serienumero_ref))->parentNode
-                                //Tipo de comprobante modificado - Catalogo No. 01
-                                ->appendChild($xml->createElement('cbc:DocumentTypeCode','03'))->parentNode->parentNode->parentNode
-
-
-                        ->appendChild($xml->createElement('cac:Status'))
-                            //<!-- (Codigo de operacion del item - catalogo No. 19) 1
-                            ->appendChild($xml->createElement('cbc:ConditionCode',$cbc_ConditionCode))->parentNode->parentNode
-
-
-                        //Importe total de la venta, cesion en uso o del servicio prestado
-                        ->appendChild($xml->createElement('sac:TotalAmount',$sac_TotalAmount))->setAttribute('currencyID','PEN')->parentNode->parentNode
-
-
-                        //Total valor de venta - operaciones gravadas
-                        ->appendChild($xml->createElement('sac:BillingPayment'))
-                            ->appendChild($xml->createElement('cbc:PaidAmount',$gravadas))->setAttribute('currencyID','PEN')->parentNode->parentNode
-                            ->appendChild($xml->createElement('cbc:InstructionID','01'))->parentNode->parentNode
-
-                        //Total IGV
-                        ->appendChild($xml->createElement('cac:TaxTotal'))
-                            //Monto Total y Moneda
-                            ->appendChild($xml->createElement('cbc:TaxAmount',$igv))->setAttribute('currencyID','PEN')->parentNode->parentNode
-                            ->appendChild($xml->createElement('cac:TaxSubtotal'))
-                                //Monto Total y Moneda
-                                ->appendChild($xml->createElement('cbc:TaxAmount',$igv))->setAttribute('currencyID','PEN')->parentNode->parentNode
-                                ->appendChild($xml->createElement('cac:TaxCategory'))
-                                    ->appendChild($xml->createElement('cac:TaxScheme'))
-                                        //Codigo de tributo - Catalogo No. 05
-                                        ->appendChild($xml->createElement('cbc:ID','1000'))->parentNode
-                                        //Nombre de tributo - Catalogo No. 05
-                                        ->appendChild($xml->createElement('cbc:Name','IGV'))->parentNode
-                                        //Codigo internacional tributo - Catalogo No. 05
-                                        ->appendChild($xml->createElement('cbc:TaxTypeCode','VAT'))->parentNode->parentNode->parentNode->parentNode->parentNode;
-
-            }
             $i++;
 
         }//end foreach
@@ -305,6 +245,7 @@
         // Anexar la firma al XML
         $objDSig->appendSignature($doc->getElementsByTagName('ExtensionContent')->item(0));
         $strings_xml = $doc->saveXML();
+
 
 
 
@@ -397,6 +338,7 @@
         fputs($archivo,$cdr);
         fclose($archivo);
 
+
     }
 
     //si hay codigo 98
@@ -443,6 +385,5 @@
         //echo $result;
 
     }
-
 
 ?>
