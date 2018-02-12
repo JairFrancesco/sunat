@@ -189,16 +189,16 @@
 
                 $Status = $SummaryDocumentsLine->appendChild($xml->createElement('cac:Status'));
                     $ConditionCode = $Status->appendChild($xml->createElement('cbc:ConditionCode',$cbc_ConditionCode));
-                $TotalAmount = $SummaryDocumentsLine->appendChild($xml->createElement('sac:TotalAmount',$sac_TotalAmount));
+                $TotalAmount = $SummaryDocumentsLine->appendChild($xml->createElement('sac:TotalAmount',$sac_TotalAmount)); $TotalAmount->setAttribute('currencyID', 'PEN');
                 if($gravadas!='0.00'){
                     $BillingPayment = $SummaryDocumentsLine->appendChild($xml->createElement('sac:BillingPayment'));
-                        $PaidAmount = $BillingPayment->appendChild($xml->createElement('cbc:PaidAmount',$gravadas));
+                        $PaidAmount = $BillingPayment->appendChild($xml->createElement('cbc:PaidAmount',$gravadas)); $PaidAmount->setAttribute('currencyID', 'PEN');
                         $InstructionID = $BillingPayment->appendChild($xml->createElement('cbc:InstructionID','01'));
                 }
                 $TaxTotal = $SummaryDocumentsLine->appendChild($xml->createElement('cac:TaxTotal'));
-                    $TaxAmount = $TaxTotal->appendChild($xml->createElement('cbc:TaxAmount',$igv));
+                    $TaxAmount = $TaxTotal->appendChild($xml->createElement('cbc:TaxAmount',$igv)); $TaxAmount->setAttribute('currencyID', 'PEN');
                     $TaxSubtotal = $TaxTotal->appendChild($xml->createElement('cac:TaxSubtotal'));
-                        $TaxAmount = $TaxSubtotal->appendChild($xml->createElement('cbc:TaxAmount',$igv));
+                        $TaxAmount = $TaxSubtotal->appendChild($xml->createElement('cbc:TaxAmount',$igv)); $TaxAmount->setAttribute('currencyID', 'PEN');
                         $TaxCategory = $TaxSubtotal->appendChild($xml->createElement('cac:TaxCategory'));
                             $TaxScheme = $TaxCategory->appendChild($xml->createElement('cac:TaxScheme'));
                                 $ID = $TaxScheme->appendChild($xml->createElement('cbc:ID','1000'));
