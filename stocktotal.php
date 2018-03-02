@@ -3,12 +3,19 @@
 ini_set('memory_limit', '-1');
 //$conn = oci_connect("dti", "dti", "54.202.12.82/xe");
 //$csv = array_map('str_getcsv', file('C:\Users\sistemas\Desktop\StockTotal.csv'));
-$csv  = array_map(function($v){return str_getcsv($v, "\t");}, file('C:\Users\sistemas\Desktop\StockTotal.txt'));
+$csv  = array_map(
+	function($v){
+		return str_getcsv($v, "\t");
+	}, 
+	file('/home/ubuntu/stocktotal_sonia.txt')
+);
+
+//print_r($csv);
 
 $i=1;
 foreach ($csv as $key) {
 
-	
+		
 	$sql_factura_detalle_resumen = "select * from lis_pre_rep where lpr_cod_gen=02 and lpr_cod_pro='".$key[0]."'";
     $factura_detalle_resumen = oci_parse($conn, $sql_factura_detalle_resumen);
     oci_execute($factura_detalle_resumen);
@@ -20,11 +27,17 @@ foreach ($csv as $key) {
 
 
 	if(isset($cod_pro) || isset($vvd_sol) || isset($vvp_sol)){
+	
+		// si encuentra un . en key 4 entra, si es una cantidad
 		$pos = strpos($key[4], '.');
 
+		//si no es entra para comprobar el key5
 		if ($pos === false) {
-			// si no se encontro un punto
+
+			// si no se encontro un punto.
 			$pos2 = strpos($key[5], '.');
+			
+			// parece que si es falso hasta el segundo nivel lo actualiza al tercero por que no hace una comprobacion mas
 			if ($pos2 === false) {
 				$update = "update lis_pre_rep set LPR_VVD_SOL=".$key[6].", LPR_VVP_SOL=".$key[7].", LPR_POR_DES=".$key[8].", LPR_MAR_PRO='".$key[9]."' where LPR_COD_PRO='".$key[0]."' and LPR_COD_GEN=02";
 			} else {
@@ -38,10 +51,15 @@ foreach ($csv as $key) {
 		$stmt = oci_parse($conn, $update);
 		oci_execute($stmt, OCI_COMMIT_ON_SUCCESS);
 		oci_free_statement($stmt);
-    	
+	 	
     	echo $i.' | '.$key[0].' | '.$key[4].' | '.$key[5].' | '.$key[6].' | '.$key[7].' | '.$key[1].'<br>';
 		$i++;
-    }	
+	}else{ // si no encontro el codigo de repuesto
+
+		//echo $i.' | '.$key[0].' | '.$key[4].' | '.$key[5].' | '.$key[6].' | '.$key[7].' | '.$key[1].'<br>';	
+		//$i++;
+
+	}	
 }
 
 ?>
